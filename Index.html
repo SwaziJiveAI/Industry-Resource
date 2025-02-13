@@ -137,17 +137,6 @@
             display: block;
         }
 
-        /* Tooltip */
-        .tooltip {
-            visibility: hidden;
-            position: absolute;
-            background-color: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            z-index: 10;
-        }
-
         /* Countdown Timer */
         #countdown {
             font-size: 1.2rem;
@@ -173,9 +162,7 @@
         <a href="#artist-spotlight">Artist Spotlight</a>
         <a href="#podcast">Podcast & Blog</a>
         <a href="#events">Events</a>
-        <a href="#merchandise">Merchandise</a>
         <a href="#leaderboard">Leaderboard</a>
-        <a href="#forum">Forum</a>
         <a href="#social-media">Social Media</a>
         <a href="#newsletter">Newsletter</a>
         <a href="#contact">Contact Us</a>
@@ -192,7 +179,7 @@
         <!-- Home Section -->
         <section id="home" class="section">
             <h2>About Us</h2>
-            <p>This platform supports budding artists, artist managers, labels, and other stakeholders in the local music industry.</p>
+            <p>This platform supports budding artists, artist managers, labels, and other stakeholders in the local Eswatini music industry.</p>
         </section>
 
         <!-- Education & Resources Section -->
@@ -273,39 +260,13 @@
         <!-- Podcast & Blog Section -->
         <section id="podcast" class="section">
             <h2>Podcast & Blog</h2>
-            <ul>
-                <li>
-                    <h3>Episode 1: The Future of Music in Eswatini</h3>
-                    <audio controls>
-                        <source src="episode1.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </li>
-                <li>
-                    <h3>Article: How to Market Your Music Online</h3>
-                    <p>Learn how to leverage social media and digital platforms...</p>
-                    <a href="blog-post.html">Read More</a>
-                </li>
-            </ul>
+            <ul id="blog-list"></ul>
         </section>
 
         <!-- Events Section -->
         <section id="events" class="section">
             <h2>Upcoming Events</h2>
-            <ul>
-                <li>
-                    <h3>Music Workshop: Songwriting Essentials</h3>
-                    <p>Date: October 15, 2023 | Time: 10:00 AM</p>
-                    <p>Location: Mbabane Arts Center</p>
-                    <a href="https://example.com/rsvp">RSVP Now</a>
-                </li>
-                <li>
-                    <h3>Eswatini Music Awards</h3>
-                    <p>Date: November 5, 2023 | Time: 7:00 PM</p>
-                    <p>Location: Royal Convention Center</p>
-                    <a href="https://example.com/tickets">Buy Tickets</a>
-                </li>
-            </ul>
+            <ul id="events-list"></ul>
             <div id="countdown">
                 <span id="days"></span> Days <span id="hours"></span> Hours <span id="minutes"></span> Minutes
             </div>
@@ -314,26 +275,13 @@
         <!-- Leaderboard -->
         <section id="leaderboard" class="section">
             <h2>Top Tracks This Month</h2>
-            <select id="leaderboard-sort">
-                <option value="streams">Sort by Streams</option>
-                <option value="votes">Sort by Votes</option>
-            </select>
-            <ul id="leaderboard-list">
-                <li data-streams="10000" data-votes="500">Track 1</li>
-                <li data-streams="8500" data-votes="700">Track 2</li>
-            </ul>
+            <ul id="leaderboard-list"></ul>
         </section>
 
         <!-- Social Media Wall -->
         <section id="social-media" class="section">
             <h2>Social Media Highlights</h2>
-            <div class="social-feed">
-                <blockquote class="twitter-tweet">
-                    <p lang="en" dir="ltr">Check out my new track! 🎶 #SwaziJive</p>
-                    — Artist (@artist) <a href="https://twitter.com/artist/status/1234567890">Date</a>
-                </blockquote>
-                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            </div>
+            <div class="social-feed"></div>
         </section>
 
         <!-- Newsletter Subscription -->
@@ -411,18 +359,116 @@
         }
         setInterval(showNextItem, 5000); // Change every 5 seconds
 
-        // Interactive Leaderboard Sorting
-        document.getElementById('leaderboard-sort').addEventListener('change', (e) => {
-            const sortBy = e.target.value;
-            const list = Array.from(document.querySelectorAll('#leaderboard-list li'));
-            list.sort((a, b) => {
-                return parseInt(b.dataset[sortBy]) - parseInt(a.dataset[sortBy]);
+        // Fetch Top Tracks from Spotify (Eswatini Artists)
+        async function fetchTopTracks() {
+            const response = await fetch('https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF', {
+                headers: { 'Authorization': 'Bearer YOUR_SPOTIFY_API_TOKEN' }
             });
-            document.getElementById('leaderboard-list').innerHTML = '';
-            list.forEach(item => document.getElementById('leaderboard-list').appendChild(item));
-        });
+            const data = await response.json();
+            return data.tracks.items.map(track => ({
+                name: track.track.name,
+                artist: track.track.artists[0].name,
+                url: track.track.external_urls.spotify
+            })).filter(track => track.artist.includes('Eswatini')); // Filter Eswatini artists
+        }
 
-        // Countdown Timer
+        function updateLeaderboard(tracks) {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+            tracks.forEach((track, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${track.name} by ${track.artist}`;
+                listItem.innerHTML += `<a href="${track.url}" target="_blank">Listen</a>`;
+                leaderboardList.appendChild(listItem);
+            });
+        }
+
+        setInterval(async () => {
+            const tracks = await fetchTopTracks();
+            updateLeaderboard(tracks);
+        }, 60 * 60 * 1000);
+
+        // Fetch Music News (Eswatini Music Industry)
+        async function fetchMusicNews() {
+            const response = await fetch('https://newsapi.org/v2/everything?q=Eswatini%20music&apiKey=YOUR_NEWS_API_KEY');
+            const data = await response.json();
+            return data.articles.slice(0, 5);
+        }
+
+        function updateBlogSection(articles) {
+            const blogSection = document.getElementById('blog-list');
+            blogSection.innerHTML = '';
+            articles.forEach(article => {
+                const articleItem = document.createElement('li');
+                articleItem.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <p>${article.description}</p>
+                    <a href="${article.url}" target="_blank">Read More</a>
+                `;
+                blogSection.appendChild(articleItem);
+            });
+        }
+
+        setInterval(async () => {
+            const articles = await fetchMusicNews();
+            updateBlogSection(articles);
+        }, 60 * 60 * 1000);
+
+        // Fetch Tweets with #SwaziJive Hashtag
+        async function fetchTweets() {
+            const response = await fetch('https://api.twitter.com/2/tweets/search/recent?query=%23SwaziJive', {
+                headers: { 'Authorization': 'Bearer YOUR_TWITTER_API_BEARER_TOKEN' }
+            });
+            const data = await response.json();
+            return data.data;
+        }
+
+        function updateSocialMediaFeed(tweets) {
+            const feed = document.querySelector('.social-feed');
+            feed.innerHTML = '';
+            tweets.forEach(tweet => {
+                const tweetItem = document.createElement('blockquote');
+                tweetItem.classList.add('twitter-tweet');
+                tweetItem.innerHTML = `
+                    <p>${tweet.text}</p>
+                    — @${tweet.author.username}
+                `;
+                feed.appendChild(tweetItem);
+            });
+        }
+
+        setInterval(async () => {
+            const tweets = await fetchTweets();
+            updateSocialMediaFeed(tweets);
+        }, 60 * 60 * 1000);
+
+        // Fetch Upcoming Events in Eswatini
+        async function fetchEvents() {
+            const response = await fetch('https://your-events-api.com/eswatini-events');
+            const data = await response.json();
+            return data.events.filter(event => new Date(event.date) > new Date()).slice(0, 5);
+        }
+
+        function updateEventsSection(events) {
+            const eventsList = document.getElementById('events-list');
+            eventsList.innerHTML = '';
+            events.forEach(event => {
+                const eventItem = document.createElement('li');
+                eventItem.innerHTML = `
+                    <h3>${event.title}</h3>
+                    <p>Date: ${event.date} | Location: ${event.location}</p>
+                    <a href="${event.url}" target="_blank">RSVP</a>
+                `;
+                eventsList.appendChild(eventItem);
+            });
+        }
+
+        setInterval(async () => {
+            const events = await fetchEvents();
+            updateEventsSection(events);
+        }, 60 * 60 * 1000);
+
+        // Countdown Timer for Next Event
         function updateCountdown() {
             const eventDate = new Date("November 5, 2023 19:00:00").getTime();
             const now = new Date().getTime();
@@ -443,18 +489,6 @@
         }
         const countdownInterval = setInterval(updateCountdown, 1000);
         updateCountdown();
-
-        // Tooltips
-        document.querySelectorAll('.tooltip-btn').forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                const tooltip = button.nextElementSibling;
-                tooltip.style.visibility = 'visible';
-            });
-            button.addEventListener('mouseleave', () => {
-                const tooltip = button.nextElementSibling;
-                tooltip.style.visibility = 'hidden';
-            });
-        });
     </script>
 </body>
 </html>
