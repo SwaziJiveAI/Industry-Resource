@@ -122,42 +122,36 @@
             margin: 0;
         }
 
-        /* Artist Spotlight */
-        .artist-profile {
+        /* Artist Spotlight Carousel */
+        .carousel {
             display: flex;
-            align-items: center;
-            gap: 20px;
+            overflow: hidden;
         }
 
-        .artist-profile img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
+        .carousel-item {
+            display: none;
+            text-align: center;
         }
 
-        /* Event Calendar */
-        .event-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
+        .carousel-item.active {
+            display: block;
         }
 
-        /* Social Media Wall */
-        .social-feed {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* Tooltip */
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10;
         }
 
-        /* Newsletter */
-        #newsletter form {
-            display: flex;
-            gap: 10px;
-        }
-
-        #newsletter input {
-            padding: 10px;
-            flex: 1;
+        /* Countdown Timer */
+        #countdown {
+            font-size: 1.2rem;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -259,16 +253,19 @@
             </form>
         </section>
 
-        <!-- Artist Spotlight -->
+        <!-- Artist Spotlight Carousel -->
         <section id="artist-spotlight" class="section">
             <h2>Artist Spotlight</h2>
-            <div class="artist-profile">
-                <img src="https://via.placeholder.com/150x150" alt="Featured Artist">
-                <div>
+            <div class="carousel">
+                <div class="carousel-item active">
+                    <img src="https://via.placeholder.com/300x300" alt="Artist 1">
                     <h3>John Doe</h3>
-                    <p>Genre: Afrobeat | Location: Mbabane, Eswatini</p>
-                    <p>John Doe is a rising star in the Eswatini music scene...</p>
-                    <a href="https://soundcloud.com/johndoe">Listen Now</a>
+                    <p>Genre: Afrobeat</p>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/300x300" alt="Artist 2">
+                    <h3>Jane Smith</h3>
+                    <p>Genre: Hip-Hop</p>
                 </div>
             </div>
         </section>
@@ -296,71 +293,34 @@
         <section id="events" class="section">
             <h2>Upcoming Events</h2>
             <ul>
-                <li class="event-item">
+                <li>
                     <h3>Music Workshop: Songwriting Essentials</h3>
                     <p>Date: October 15, 2023 | Time: 10:00 AM</p>
                     <p>Location: Mbabane Arts Center</p>
                     <a href="https://example.com/rsvp">RSVP Now</a>
                 </li>
-                <li class="event-item">
+                <li>
                     <h3>Eswatini Music Awards</h3>
                     <p>Date: November 5, 2023 | Time: 7:00 PM</p>
                     <p>Location: Royal Convention Center</p>
                     <a href="https://example.com/tickets">Buy Tickets</a>
                 </li>
             </ul>
-        </section>
-
-        <!-- Merchandise Store -->
-        <section id="merchandise" class="section">
-            <h2>Official Merchandise</h2>
-            <ul>
-                <li>
-                    <img src="https://via.placeholder.com/200x200" alt="T-Shirt">
-                    <h3>Swazi Jive T-Shirt</h3>
-                    <p>$20</p>
-                    <button onclick="location.href='checkout.html'">Buy Now</button>
-                </li>
-                <li>
-                    <img src="https://via.placeholder.com/200x200" alt="Poster">
-                    <h3>Concert Poster</h3>
-                    <p>$10</p>
-                    <button onclick="location.href='checkout.html'">Buy Now</button>
-                </li>
-            </ul>
+            <div id="countdown">
+                <span id="days"></span> Days <span id="hours"></span> Hours <span id="minutes"></span> Minutes
+            </div>
         </section>
 
         <!-- Leaderboard -->
         <section id="leaderboard" class="section">
             <h2>Top Tracks This Month</h2>
-            <ol>
-                <li>
-                    <h3>"Song Title" by Artist Name</h3>
-                    <p>Streams: 10,000</p>
-                    <a href="https://soundcloud.com/song">Listen Now</a>
-                </li>
-                <li>
-                    <h3>"Another Hit" by Another Artist</h3>
-                    <p>Streams: 8,500</p>
-                    <a href="https://soundcloud.com/song2">Listen Now</a>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Forum -->
-        <section id="forum" class="section">
-            <h2>Community Forum</h2>
-            <ul>
-                <li>
-                    <h3>Thread: Best Recording Studios in Eswatini</h3>
-                    <p>Started by UserX | 15 Replies</p>
-                    <a href="thread.html">Join the Discussion</a>
-                </li>
-                <li>
-                    <h3>Thread: How to Promote My Music?</h3>
-                    <p>Started by Newbie | 23 Replies</p>
-                    <a href="thread.html">Join the Discussion</a>
-                </li>
+            <select id="leaderboard-sort">
+                <option value="streams">Sort by Streams</option>
+                <option value="votes">Sort by Votes</option>
+            </select>
+            <ul id="leaderboard-list">
+                <li data-streams="10000" data-votes="500">Track 1</li>
+                <li data-streams="8500" data-votes="700">Track 2</li>
             </ul>
         </section>
 
@@ -407,9 +367,94 @@
         <p>&copy; 2023 Eswatini Music Resource Center.</p>
     </footer>
 
+    <!-- JavaScript -->
+    <script>
+        // Smooth Scrolling Navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Lazy Loading Images
+        document.addEventListener("DOMContentLoaded", function () {
+            const lazyImages = [].slice.call(document.querySelectorAll("img.lazyload"));
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazyload");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                lazyImages.forEach(function (lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+
+        // Artist Spotlight Carousel
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.carousel-item');
+        function showNextItem() {
+            items[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % items.length;
+            items[currentIndex].classList.add('active');
+        }
+        setInterval(showNextItem, 5000); // Change every 5 seconds
+
+        // Interactive Leaderboard Sorting
+        document.getElementById('leaderboard-sort').addEventListener('change', (e) => {
+            const sortBy = e.target.value;
+            const list = Array.from(document.querySelectorAll('#leaderboard-list li'));
+            list.sort((a, b) => {
+                return parseInt(b.dataset[sortBy]) - parseInt(a.dataset[sortBy]);
+            });
+            document.getElementById('leaderboard-list').innerHTML = '';
+            list.forEach(item => document.getElementById('leaderboard-list').appendChild(item));
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const eventDate = new Date("November 5, 2023 19:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = "Event has started!";
+            }
+        }
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Tooltips
+        document.querySelectorAll('.tooltip-btn').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                const tooltip = button.nextElementSibling;
+                tooltip.style.visibility = 'visible';
+            });
+            button.addEventListener('mouseleave', () => {
+                const tooltip = button.nextElementSibling;
+                tooltip.style.visibility = 'hidden';
+            });
+        });
+    </script>
 </body>
 </html>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2023 Eswatini Music Resource Center.
