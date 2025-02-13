@@ -6,149 +6,159 @@
     <title>Eswatini Music Resource Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      /* General Styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
 
-header {
-    background: linear-gradient(135deg, #2c3e50, #1abc9c);
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        header {
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-nav {
-    background: #34495e;
-    overflow: hidden;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+        nav {
+            background: #34495e;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-nav a {
-    float: left;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
 
-nav a:hover {
-    background-color: #1abc9c;
-}
+        nav a:hover {
+            background-color: #1abc9c;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
 
-h1, h2, h3 {
-    color: #2c3e50;
-}
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
 
-footer {
-    text-align: center;
-    padding: 10px;
-    background: linear-gradient(135deg, #2c3e50, #1abc9c);
-    color: white;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
 
-.section {
-    margin-bottom: 20px;
-}
+        .section {
+            margin-bottom: 20px;
+        }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-li {
-    margin: 10px 0;
-}
+        li {
+            margin: 10px 0;
+        }
 
-a {
-    color: #1abc9c;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-a:hover {
-    color: #2c3e50;
-    text-decoration: underline;
-}
+        a:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
 
-button {
-    background-color: #1abc9c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
+        button {
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
 
-button:hover {
-    background-color: #2c3e50;
-}
+        button:hover {
+            background-color: #2c3e50;
+        }
 
-/* Hero Section */
-.hero {
-    background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
+        /* Hero Section */
+        .hero {
+            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-.hero h1 {
-    font-size: 3rem;
-    margin: 0;
-}
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
 
-/* Music Submission Portal */
-.music-submission {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        /* Artist Spotlight */
+        .artist-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-.music-submission h2 {
-    margin-bottom: 15px;
-}
+        .artist-profile img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
 
-.music-submission form {
-    display: flex;
-    flex-direction: column;
-}
+        /* Event Calendar */
+        .event-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
 
-.music-submission input, .music-submission textarea {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
+        /* Social Media Wall */
+        .social-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.music-submission button {
-    align-self: flex-end;
-}
+        /* Newsletter */
+        #newsletter form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #newsletter input {
+            padding: 10px;
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +176,14 @@ button:hover {
         <a href="#services">Industry Services</a>
         <a href="#community">Community Engagement</a>
         <a href="#submission">Music Submission</a>
+        <a href="#artist-spotlight">Artist Spotlight</a>
+        <a href="#podcast">Podcast & Blog</a>
+        <a href="#events">Events</a>
+        <a href="#merchandise">Merchandise</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#forum">Forum</a>
+        <a href="#social-media">Social Media</a>
+        <a href="#newsletter">Newsletter</a>
         <a href="#contact">Contact Us</a>
     </nav>
 
@@ -241,6 +259,132 @@ button:hover {
             </form>
         </section>
 
+        <!-- Artist Spotlight -->
+        <section id="artist-spotlight" class="section">
+            <h2>Artist Spotlight</h2>
+            <div class="artist-profile">
+                <img src="https://via.placeholder.com/150x150" alt="Featured Artist">
+                <div>
+                    <h3>John Doe</h3>
+                    <p>Genre: Afrobeat | Location: Mbabane, Eswatini</p>
+                    <p>John Doe is a rising star in the Eswatini music scene...</p>
+                    <a href="https://soundcloud.com/johndoe">Listen Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Podcast & Blog Section -->
+        <section id="podcast" class="section">
+            <h2>Podcast & Blog</h2>
+            <ul>
+                <li>
+                    <h3>Episode 1: The Future of Music in Eswatini</h3>
+                    <audio controls>
+                        <source src="episode1.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+                <li>
+                    <h3>Article: How to Market Your Music Online</h3>
+                    <p>Learn how to leverage social media and digital platforms...</p>
+                    <a href="blog-post.html">Read More</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="section">
+            <h2>Upcoming Events</h2>
+            <ul>
+                <li class="event-item">
+                    <h3>Music Workshop: Songwriting Essentials</h3>
+                    <p>Date: October 15, 2023 | Time: 10:00 AM</p>
+                    <p>Location: Mbabane Arts Center</p>
+                    <a href="https://example.com/rsvp">RSVP Now</a>
+                </li>
+                <li class="event-item">
+                    <h3>Eswatini Music Awards</h3>
+                    <p>Date: November 5, 2023 | Time: 7:00 PM</p>
+                    <p>Location: Royal Convention Center</p>
+                    <a href="https://example.com/tickets">Buy Tickets</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Merchandise Store -->
+        <section id="merchandise" class="section">
+            <h2>Official Merchandise</h2>
+            <ul>
+                <li>
+                    <img src="https://via.placeholder.com/200x200" alt="T-Shirt">
+                    <h3>Swazi Jive T-Shirt</h3>
+                    <p>$20</p>
+                    <button onclick="location.href='checkout.html'">Buy Now</button>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/200x200" alt="Poster">
+                    <h3>Concert Poster</h3>
+                    <p>$10</p>
+                    <button onclick="location.href='checkout.html'">Buy Now</button>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Leaderboard -->
+        <section id="leaderboard" class="section">
+            <h2>Top Tracks This Month</h2>
+            <ol>
+                <li>
+                    <h3>"Song Title" by Artist Name</h3>
+                    <p>Streams: 10,000</p>
+                    <a href="https://soundcloud.com/song">Listen Now</a>
+                </li>
+                <li>
+                    <h3>"Another Hit" by Another Artist</h3>
+                    <p>Streams: 8,500</p>
+                    <a href="https://soundcloud.com/song2">Listen Now</a>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Forum -->
+        <section id="forum" class="section">
+            <h2>Community Forum</h2>
+            <ul>
+                <li>
+                    <h3>Thread: Best Recording Studios in Eswatini</h3>
+                    <p>Started by UserX | 15 Replies</p>
+                    <a href="thread.html">Join the Discussion</a>
+                </li>
+                <li>
+                    <h3>Thread: How to Promote My Music?</h3>
+                    <p>Started by Newbie | 23 Replies</p>
+                    <a href="thread.html">Join the Discussion</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Social Media Wall -->
+        <section id="social-media" class="section">
+            <h2>Social Media Highlights</h2>
+            <div class="social-feed">
+                <blockquote class="twitter-tweet">
+                    <p lang="en" dir="ltr">Check out my new track! 🎶 #SwaziJive</p>
+                    — Artist (@artist) <a href="https://twitter.com/artist/status/1234567890">Date</a>
+                </blockquote>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </section>
+
+        <!-- Newsletter Subscription -->
+        <section id="newsletter" class="section">
+            <h2>Subscribe to Our Newsletter</h2>
+            <form action="https://formspree.io/f/mayyqjzr" method="POST">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+
         <!-- Contact Us Section -->
         <section id="contact" class="section">
             <h2>Contact Us</h2>
@@ -257,6 +401,14 @@ button:hover {
         </section>
 
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Eswatini Music Resource Center.</p>
+    </footer>
+
+</body>
+</html>
 
     <!-- Footer -->
     <footer>
