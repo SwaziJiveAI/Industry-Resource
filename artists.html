@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eswatini Artists | EMRC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Inherit main site styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            background: #34495e;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #1abc9c;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Artist Grid Styles */
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .artist-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .artist-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #1abc9c;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #2c3e50;
+        }
+
+        /* Genre Filter */
+        .genre-filter {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .filter-btn {
+            background: #1abc9c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #2c3e50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .artist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Eswatini Music Artists</h1>
+        <p>Discover & Support Local Talent</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="artists.html">Artists</a>
+        <a href="events.html">Events</a>
+        <a href="venues.html">Venues</a>
+        <a href="merchandica-store.html">Store</a>
+    </nav>
+
+    <div class="container">
+        <!-- Genre Filter -->
+        <div class="genre-filter">
+            <button class="filter-btn active" onclick="filterArtists('all')">All</button>
+            <button class="filter-btn" onclick="filterArtists('afrobeat')">Afrobeat</button>
+            <button class="filter-btn" onclick="filterArtists('hiphop')">Hip-Hop</button>
+            <button class="filter-btn" onclick="filterArtists('gospel')">Gospel</button>
+            <button class="filter-btn" onclick="filterArtists('traditional')">Traditional</button>
+        </div>
+
+        <!-- Artist Grid -->
+        <div class="artist-grid">
+            <!-- Artist 1 -->
+            <div class="artist-card" data-genre="afrobeat">
+                <img src="https://via.placeholder.com/300x250" alt="Bongiwe Dlamini" class="artist-image">
+                <h3>Bongiwe Dlamini</h3>
+                <p><strong>Genre:</strong> Afrobeat</p>
+                <p>Rising star from Manzini blending modern Afrobeat with Swazi rhythms. Featured on BBC Introducing Africa.</p>
+                <div class="social-links">
+                    <a href="#" target="_blank">Spotify</a>
+                    <a href="#" target="_blank">Instagram</a>
+                    <a href="#" target="_blank">YouTube</a>
+                </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="artist-card" data-genre="hiphop">
+                <img src="https://via.placeholder.com/300x250" alt="Sipho Khumalo" class="artist-image">
+                <h3>Sipho Khumalo</h3>
+                <p><strong>Genre:</strong> Hip-Hop</p>
+                <p>Mbabane-based rapper focusing on social issues. Winner of 2023 Eswatini Hip-Hop Awards.</p>
+                <div class="social-links">
+                    <a href="#" target="_blank">Apple Music</a>
+                    <a href="#" target="_blank">Twitter</a>
+                    <a href="#" target="_blank">SoundCloud</a>
+                </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="artist-card" data-genre="gospel">
+                <img src="https://via.placeholder.com/300x250" alt="Thandeka Mamba" class="artist-image">
+                <h3>Thandeka Mamba</h3>
+                <p><strong>Genre:</strong> Gospel</p>
+                <p>Powerful vocalist with 3 SAMA nominations. Hosts monthly worship nights in Lobamba.</p>
+                <div class="social-links">
+                    <a href="#" target="_blank">Deezer</a>
+                    <a href="#" target="_blank">Facebook</a>
+                    <a href="#" target="_blank">Website</a>
+                </div>
+            </div>
+
+            <!-- Add more artist cards following the same structure -->
+        </div>
+
+        <!-- Artist Submission CTA -->
+        <section class="section" style="text-align: center; margin-top: 3rem;">
+            <h2>Are You an Eswatini Artist?</h2>
+            <p>Get featured on our platform and reach new audiences!</p>
+            <button onclick="window.location.href='artist-submission.html'">Submit Your Profile →</button>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Eswatini Music Resource Center</p>
+        <div class="footer-cta">
+            <p>Follow local talent: <a href="https://wa.me/+268XXXXXXXX">Join Music WhatsApp Group</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Genre Filter Functionality
+        function filterArtists(genre) {
+            const cards = document.querySelectorAll('.artist-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase() === genre) btn.classList.add('active');
+            });
+
+            cards.forEach(card => {
+                if(genre === 'all' || card.dataset.genre === genre) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize all artists visible
+        filterArtists('all');
+    </script>
+</body>
+</html>
