@@ -101,10 +101,181 @@
     const scoreDiv = document.getElementById("score");
 
     const simulationScenarios = [
-      { text: "A gallery offers you an exhibition but wants a 70% commission.", options: [
-          { text: "Negotiate for 50%", feedback: "They agree to 50%. Well done!", points: 1 },
-          { text: "Accept 70%", feedback: "You lose too much profit.", points: 0 }
-        ]},
+      {
+  text: "A music label offers you a contract with no royalties.",
+  options: [
+    { text: "Negotiate for at least 10% royalties", feedback: "The label agrees. Smart choice!", points: 1 },
+    { text: "Sign the contract", feedback: "You miss out on long-term income.", points: 0 }
+  ]
+},
+{
+  text: "The label offers a low advance but promises exposure.",
+  options: [
+    { text: "Negotiate for a higher advance", feedback: "The label increases the offer. Great move!", points: 1 },
+    { text: "Accept it and trust the label's plan", feedback: "Exposure alone may not pay the bills.", points: 0 }
+  ]
+},
+{
+  text: "The contract limits your ability to perform independently.",
+  options: [
+    { text: "Insist on performance flexibility", feedback: "The label agrees to loosen restrictions.", points: 1 },
+    { text: "Accept the restriction for label backing", feedback: "This could limit your career growth.", points: 0 }
+  ]
+},
+{
+  text: "The label wants control over your social media.",
+  options: [
+    { text: "Negotiate to retain control", feedback: "You maintain your online presence.", points: 1 },
+    { text: "Agree to focus only on music", feedback: "Losing control of your image can be risky.", points: 0 }
+  ]
+},
+{
+  text: "Your music rights are unclear in the contract.",
+  options: [
+    { text: "Clarify and secure ownership of your masters", feedback: "You protect your intellectual property.", points: 1 },
+    { text: "Ignore it to finalize the deal quickly", feedback: "This could lead to future disputes.", points: 0 }
+  ]
+},
+{
+  text: "The label wants a 360 deal.",
+  options: [
+    { text: "Negotiate for a standard recording contract", feedback: "The label agrees to a fairer deal.", points: 1 },
+    { text: "Agree to the 360 deal for better support", feedback: "A 360 deal takes a bigger cut of your earnings.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests changing your artistic style.",
+  options: [
+    { text: "Stay true to your original style", feedback: "Authenticity resonates with fans.", points: 1 },
+    { text: "Adapt to the label's suggested style", feedback: "Changing styles might alienate your audience.", points: 0 }
+  ]
+},
+{
+  text: "The label delays your album release.",
+  options: [
+    { text: "Push for a new release date", feedback: "The label sets a more reasonable timeline.", points: 1 },
+    { text: "Wait patiently for the label's decision", feedback: "Delaying releases can hurt momentum.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to own your publishing rights.",
+  options: [
+    { text: "Retain your publishing rights", feedback: "You keep earning from songwriting.", points: 1 },
+    { text: "Agree to give up publishing rights", feedback: "Giving up publishing rights reduces future income.", points: 0 }
+  ]
+},
+{
+  text: "The label offers a small royalty percentage.",
+  options: [
+    { text: "Negotiate for a higher royalty rate", feedback: "The label raises the royalty percentage.", points: 1 },
+    { text: "Accept the offer to get started", feedback: "Low royalties mean less profit per sale.", points: 0 }
+  ]
+},
+{
+  text: "The label wants you to sign a long-term contract.",
+  options: [
+    { text: "Request a shorter contract term", feedback: "Shorter terms provide more flexibility.", points: 1 },
+    { text: "Agree to the long-term contract", feedback: "Long-term contracts lock you into one label.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests hiring their preferred producer.",
+  options: [
+    { text: "Insist on choosing your own producer", feedback: "Collaborating with trusted producers enhances creativity.", points: 1 },
+    { text: "Agree to work with their producer", feedback: "Using the label's producer might compromise your vision.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to control your merchandise sales.",
+  options: [
+    { text: "Negotiate to retain control of merchandise", feedback: "Merchandise is a significant revenue stream.", points: 1 },
+    { text: "Agree to let the label handle merchandise", feedback: "Losing control of merch means losing profits.", points: 0 }
+  ]
+},
+{
+  text: "The label asks for exclusivity on your next album.",
+  options: [
+    { text: "Negotiate for non-exclusive terms", feedback: "Non-exclusive terms allow for more opportunities.", points: 1 },
+    { text: "Agree to exclusivity for better support", feedback: "Exclusivity limits your reach.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to take a percentage of your touring revenue.",
+  options: [
+    { text: "Negotiate to keep touring revenue separate", feedback: "Touring revenue should remain yours.", points: 1 },
+    { text: "Agree to share touring revenue", feedback: "Sharing touring revenue reduces your earnings.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests a joint venture for your music.",
+  options: [
+    { text: "Negotiate for a standard recording deal", feedback: "A standard deal gives you more control.", points: 1 },
+    { text: "Agree to the joint venture", feedback: "Joint ventures often favor the label.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to own your master recordings.",
+  options: [
+    { text: "Retain ownership of your masters", feedback: "Owning your masters ensures long-term value.", points: 1 },
+    { text: "Agree to let the label own your masters", feedback: "Without masters, you lose control of your music.", points: 0 }
+  ]
+},
+{
+  text: "The label asks for a non-refundable advance.",
+  options: [
+    { text: "Negotiate for a refundable advance", feedback: "Refundable advances protect you if the deal fails.", points: 1 },
+    { text: "Agree to the non-refundable advance", feedback: "Non-refundable advances are risky.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to control your creative direction.",
+  options: [
+    { text: "Insist on maintaining creative control", feedback: "Creative freedom is key to authenticity.", points: 1 },
+    { text: "Agree to let the label guide your direction", feedback: "Losing creative control can harm your art.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests a co-writing agreement.",
+  options: [
+    { text: "Negotiate to retain full writing credits", feedback: "Full credits ensure maximum earnings.", points: 1 },
+    { text: "Agree to co-writing for better exposure", feedback: "Co-writing splits earnings and credits.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to extend your contract.",
+  options: [
+    { text: "Negotiate for a fair extension", feedback: "Fair extensions balance both parties' needs.", points: 1 },
+    { text: "Agree to the extension without negotiation", feedback: "Blindly extending contracts can be costly.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests a marketing campaign you don’t agree with.",
+  options: [
+    { text: "Propose an alternative campaign", feedback: "The label adopts your ideas.", points: 1 },
+    { text: "Agree to the label's campaign", feedback: "Campaigns misaligned with your brand can backfire.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to take a percentage of your sync licensing revenue.",
+  options: [
+    { text: "Negotiate to keep sync licensing revenue separate", feedback: "Sync licensing is a lucrative revenue source.", points: 1 },
+    { text: "Agree to share sync licensing revenue", feedback: "Sharing sync revenue reduces earnings.", points: 0 }
+  ]
+},
+{
+  text: "The label asks for a non-compete clause.",
+  options: [
+    { text: "Negotiate to remove the non-compete clause", feedback: "Non-compete clauses limit future opportunities.", points: 1 },
+    { text: "Agree to the non-compete clause", feedback: "Non-compete clauses restrict your career.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to control your public image.",
+  options: [
+    { text: "Insist on controlling your own image", feedback: "Controlling your image builds authenticity.", points: 1 },
+    { text: "Agree to let the label manage your image", feedback: "Losing control of your image can harm your brand.", points: 0 }
+  ]
+},
       { text: "A client wants a custom painting but refuses to pay upfront.", options: [
           { text: "Request a 50% deposit", feedback: "The client agrees. Good move!", points: 1 },
           { text: "Accept and start work", feedback: "The client disappears without paying.", points: 0 }
