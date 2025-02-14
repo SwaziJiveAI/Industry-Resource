@@ -126,19 +126,20 @@
         #submit-btn:hover {
             background-color: #2c3e50;
         }
-            /* Score Display */
+
+        /* Score Display */
         #score-display {
             font-size: 1.2rem;
             font-weight: bold;
             margin: 10px 0;
             color: #2c3e50;
-        } 
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Eswatini Music Resource Center</h1>
-       
+        <div id="score-display">Score: 0</div>
     </header>
 
     <main>
@@ -155,24 +156,24 @@
             <input type="text" id="user-input" placeholder="Type your answer here...">
             <button id="submit-btn">Send</button>
         </section>
-    <!-- Chatbot Script -->
-    <script>
-    const chatBot = document.getElementById('chatbot');
-    const userInput = document.getElementById('user-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const retryBtn = document.createElement("button");
-    const scoreDisplay = document.getElementById('score-display');
-    
-    retryBtn.innerText = "Retry Quiz";
-    retryBtn.style.display = "none";
-    retryBtn.style.marginTop = "10px";
-    retryBtn.onclick = startQuiz;
-    chatBot.parentNode.appendChild(retryBtn);
-    
+    </main>
 
-    let score = 0;
-    let questionIndex = 0;
-    const maxCorrectAnswers = 20;
+    <script>
+        const chatBot = document.getElementById('chatbot');
+        const userInput = document.getElementById('user-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const retryBtn = document.createElement("button");
+        const scoreDisplay = document.getElementById('score-display');
+
+        retryBtn.innerText = "Retry Quiz";
+        retryBtn.style.display = "none";
+        retryBtn.style.marginTop = "10px";
+        retryBtn.onclick = startQuiz;
+        chatBot.parentNode.appendChild(retryBtn);
+
+        let score = 0;
+        let questionIndex = 0;
+        const maxCorrectAnswers = 20;
 
         const quizData = [
             {
@@ -813,73 +814,78 @@
         ];
 
         function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    function appendMessage(text, sender) {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", sender);
-        messageDiv.textContent = text;
-        chatBot.appendChild(messageDiv);
-        chatBot.scrollTop = chatBot.scrollHeight;
-    }
-         function updateScore() {
-            scoreDiv.innerText = `Score: ${score}`;
-        }
-    function askQuestion() {
-        if (score >= maxCorrectAnswers) {
-            appendMessage(`🎉 Quiz completed! You got ${score} correct answers. Well done!`, "bot");
-            submitBtn.disabled = true;
-            userInput.disabled = true;
-            retryBtn.style.display = "block";
-            return;
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
 
-        if (questionIndex < quizData.length) {
-            appendMessage(quizData[questionIndex].question, "bot");
-        } else {
-            appendMessage("Quiz finished! Restart to try again.", "bot");
-            submitBtn.disabled = true;
-            userInput.disabled = true;
-            retryBtn.style.display = "block";
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+            messageDiv.textContent = text;
+            chatBot.appendChild(messageDiv);
+            chatBot.scrollTop = chatBot.scrollHeight;
         }
-    }
 
-    submitBtn.addEventListener("click", () => {
-        const userAnswer = userInput.value.trim();
-        if (userAnswer === "") return;
-        
-        appendMessage(userAnswer, "user");
-        const correctAnswer = quizData[questionIndex].answer;
-        const explanation = quizData[questionIndex].explanation;
+        function updateScore() {
+            scoreDisplay.innerText = `Score: ${score}`;
+        }
 
-        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-            score++;
+        function askQuestion() {
+            if (score >= maxCorrectAnswers) {
+                appendMessage(`🎉 Quiz completed! You got ${score} correct answers. Well done!`, "bot");
+                submitBtn.disabled = true;
+                userInput.disabled = true;
+                retryBtn.style.display = "block";
+                return;
+            }
+
+            if (questionIndex < quizData.length) {
+                appendMessage(quizData[questionIndex].question, "bot");
+            } else {
+                appendMessage("Quiz finished! Restart to try again.", "bot");
+                submitBtn.disabled = true;
+                userInput.disabled = true;
+                retryBtn.style.display = "block";
+            }
+        }
+
+        submitBtn.addEventListener("click", () => {
+            const userAnswer = userInput.value.trim();
+            if (userAnswer === "") return;
+
+            appendMessage(userAnswer, "user");
+            const correctAnswer = quizData[questionIndex].answer;
+            const explanation = quizData[questionIndex].explanation;
+
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                score++;
                 updateScore(); // Update the score display
-            appendMessage(`✅ Correct! ${explanation}`, "bot");
-        } else {
-            appendMessage(`❌ Incorrect. ${explanation}`, "bot");
+                appendMessage(`✅ Correct! ${explanation}`, "bot");
+            } else {
+                appendMessage(`❌ Incorrect. ${explanation}`, "bot");
+            }
+
+            userInput.value = "";
+            questionIndex++;
+            setTimeout(askQuestion, 1500);
+        });
+
+        function startQuiz() {
+            shuffleArray(quizData);
+            score = 0;
+            questionIndex = 0;
+            chatBot.innerHTML = "";
+            submitBtn.disabled = false;
+            userInput.disabled = false;
+            retryBtn.style.display = "none";
+            updateScore(); // Reset score display
+            appendMessage("🎵 Welcome to the Music Industry Quiz! Answer 20 questions correctly to win.", "bot");
+            setTimeout(askQuestion, 1000);
         }
 
-        userInput.value = "";
-        questionIndex++;
-        setTimeout(askQuestion, 1500);
-    });
-
-    function startQuiz() {
-        shuffleArray(quizData);
-        score = 0;
-        questionIndex = 0;
-        chatBot.innerHTML = "";
-        submitBtn.disabled = false;
-        userInput.disabled = false;
-        retryBtn.style.display = "none";
-        appendMessage("🎵 Welcome to the Music Industry Quiz! Answer 20 questions correctly to win.", "bot");
-        setTimeout(askQuestion, 1000);
-    }
-
-    window.onload = startQuiz;
-</script>
+        window.onload = startQuiz;
+    </script>
+</body>
+</html>
