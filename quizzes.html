@@ -5,36 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eswatini Music Resource Center</title>
     <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            background: #34495e;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            color: #1abc9c;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
         /* Chatbot Styling */
         #chatbot {
-            width: 300px;
-            height: 400px;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
             border: 1px solid #ccc;
             padding: 10px;
             overflow-y: auto;
             margin-bottom: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .message {
             margin: 5px 0;
-            padding: 5px;
+            padding: 8px;
             border-radius: 5px;
-            max-width: 70%;
+            max-width: 80%;
+            word-wrap: break-word;
         }
+
         .bot {
             background-color: #f0f0f0;
             align-self: flex-start;
         }
+
         .user {
             background-color: #d1e7dd;
             align-self: flex-end;
+            margin-left: auto;
         }
+
         #user-input {
-            width: 75%;
-            padding: 5px;
+            width: calc(100% - 90px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
+
         #submit-btn {
-            width: 20%;
-            padding: 5px;
+            width: 80px;
+            padding: 8px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submit-btn:hover {
+            background-color: #2c3e50;
         }
     </style>
 </head>
@@ -48,7 +138,7 @@
                 <li><a href="industry-services.html">Industry Services</a></li>
                 <li><a href="superfan-hub.html">SuperFan Hub</a></li>
                 <li><a href="artist-spotlight.html">Artist Spotlight</a></li>
-                <li><a href="event.html">Events</a></li> <!-- Updated Event Link -->
+                <li><a href="event.html">Events</a></li>
             </ul>
         </nav>
     </header>
@@ -57,7 +147,7 @@
         <section>
             <h2>Welcome to the Eswatini Music Resource Center</h2>
             <p>This platform supports budding artists, artist managers, labels, and other stakeholders in the local Eswatini music industry.</p>
-            <a href="event.html">Support Local Artists →</a> <!-- Updated Event Link -->
+            <a href="event.html">Support Local Artists →</a>
         </section>
 
         <!-- Chatbot Section -->
@@ -67,69 +157,6 @@
             <input type="text" id="user-input" placeholder="Type your answer here...">
             <button id="submit-btn">Send</button>
         </section>
-
-        <!-- Other Sections -->
-        <section>
-            <h2>About Us</h2>
-            <p>Empowering Artists, Managers, and Labels in Eswatini.</p>
-        </section>
-
-        <section>
-            <h2>Latest News</h2>
-            <ul>
-                <li><a href="#">AI-Generated News</a></li>
-                <li><a href="#">Aggregated Local News</a></li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Highlighted Tracks</h2>
-            <p>Top tracks from our community this month.</p>
-        </section>
-
-        <section>
-            <h2>Education & Resources</h2>
-            <p>Access books, articles, and guides to help you navigate the music business:</p>
-            <ul>
-                <li>"This Business of Music" by TomC. Kelly</li>
-                <li>"Music 3.0" by Bobby Owsinski</li>
-                <li><a href="#">AI in Music: Ethical Guidelines</a></li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Community Engagement</h2>
-            <p>Join our forums, participate in discussions, and stay updated with events:</p>
-            <ul>
-                <li><a href="#">Discussion Forums</a></li>
-                <li><a href="event.html">Event Calendar</a></li> <!-- Updated Event Link -->
-                <li><a href="#">Local Venues Map</a></li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Upcoming Events</h2>
-            <p><a href="event.html">Submit Your Event →</a></p> <!-- Updated Event Link -->
-            <div>
-                Days Hours Minutes
-            </div>
-        </section>
-
-        <section>
-            <h2>Social Media Highlights</h2>
-            <blockquote class="twitter-tweet">
-                <p>Tweets by YourLocalArtistHandle</p>
-            </blockquote>
-        </section>
-
-        <section>
-            <h2>Subscribe to Our Newsletter</h2>
-            <form>
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
-        </section>
-    </main>
 
     <footer>
         <p>© 2025 Eswatini Music Resource Center | A Swazi Jive Entertainment Initiative</p>
@@ -143,278 +170,59 @@
         const userInput = document.getElementById('user-input');
         const submitBtn = document.getElementById('submit-btn');
         let currentQuestionIndex = 0;
-         const quizData = [
-      {
-  question: "True or False: Digital streaming has reduced physical album sales?",
-  answer: "True",
-  explanation: "Digital streaming has largely supplanted physical album sales in today's market."
-},
-{
-  question: "Yes or No: Do record labels typically require exclusive contracts?",
-  answer: "Yes",
-  explanation: "Exclusive contracts are common to secure the artist's full commitment."
-},
-{
-  question: "What term refers to the fee for using a song in ads?",
-  answer: "Sync",
-  explanation: "A sync fee is charged when music is synchronized with visual media."
-},
-{
-  question: "True or False: An artist's back catalog has little value.",
-  answer: "False",
-  explanation: "Back catalogs generate revenue through licensing and streaming."
-},
-{
-  question: "Yes or No: Are music publishers responsible for songwriting royalties?",
-  answer: "Yes",
-  explanation: "Publishers manage the rights and royalties for songwriters."
-},
-{
-  question: "What is the upfront payment from a label called?",
-  answer: "Advance",
-  explanation: "Advances provide funds to an artist before royalties are earned."
-},
-{
-  question: "True or False: '360 deals' involve revenue sharing across multiple streams?",
-  answer: "True",
-  explanation: "360 deals allow labels to share revenue from touring, merchandising, etc."
-},
-{
-  question: "Yes or No: Do artists usually own their masters?",
-  answer: "No",
-  explanation: "Typically, record labels retain ownership of master recordings unless negotiated otherwise."
-},
-{
-  question: "What term describes regaining rights to music after a contract?",
-  answer: "Reversion",
-  explanation: "Rights reversion lets artists reclaim their work after contractual obligations expire."
-},
-{
-  question: "True or False: Royalties come only from album sales?",
-  answer: "False",
-  explanation: "Royalties are generated from streaming, radio, licensing, and more."
-},
-{
-  question: "Yes or No: Do independent artists often use crowdfunding?",
-  answer: "Yes",
-  explanation: "Crowdfunding is a popular way for independent artists to finance their projects."
-},
-{
-  question: "What term describes splitting revenue between parties?",
-  answer: "Split",
-  explanation: "A royalty split divides earnings between the artist and the label."
-},
-{
-  question: "True or False: Merchandising is an important income stream?",
-  answer: "True",
-  explanation: "Merchandising provides additional revenue through branded products."
-},
-{
-  question: "Yes or No: Is licensing a key revenue source for artists?",
-  answer: "Yes",
-  explanation: "Licensing deals generate income by allowing music usage in various media."
-},
-{
-  question: "What term describes an agreement for live event bookings?",
-  answer: "Booking",
-  explanation: "Booking agreements set the terms for an artist's live performances."
-},
-{
-  question: "True or False: Music contracts never include performance bonuses.",
-  answer: "False",
-  explanation: "Performance bonuses are often included to reward commercial success."
-},
-{
-  question: "Yes or No: Can artists renegotiate for higher royalties after a hit release?",
-  answer: "Yes",
-  explanation: "Successful releases give artists more leverage to renegotiate better terms."
-},
-{
-  question: "What term describes revenue from streaming services?",
-  answer: "Streams",
-  explanation: "Streaming revenue is calculated based on the number of streams an artist receives."
-},
-{
-  question: "True or False: Sync licensing only applies to films.",
-  answer: "False",
-  explanation: "Sync licensing covers films, TV shows, commercials, and online media."
-},
-{
-  question: "Yes or No: Are digital platforms essential for music distribution?",
-  answer: "Yes",
-  explanation: "Digital platforms are critical for reaching a global audience."
-},
-{
-  question: "What term refers to an artist's collection of previous releases?",
-  answer: "Backcatalog",
-  explanation: "A back catalog is a valuable asset generating ongoing revenue."
-},
-{
-  question: "True or False: Music festivals do not impact an artist’s marketability.",
-  answer: "False",
-  explanation: "Festivals enhance exposure and can significantly boost an artist’s profile."
-},
-{
-  question: "Yes or No: Do labels typically provide marketing support?",
-  answer: "Yes",
-  explanation: "Labels invest in marketing to promote the artist's music."
-},
-{
-  question: "What term describes recovering production costs from earnings?",
-  answer: "Recoupment",
-  explanation: "Recoupment is the process by which labels recover their initial investment from future royalties."
-},
-{
-  question: "True or False: Exclusive contracts restrict artists from working with other labels.",
-  answer: "True",
-  explanation: "Exclusive contracts limit an artist to a single record label."
-},
-{
-  question: "Yes or No: Do independent artists rely on social media for promotion?",
-  answer: "Yes",
-  explanation: "Social media is essential for independent artists to engage directly with fans."
-},
-{
-  question: "What term describes the promotional effort for an album?",
-  answer: "Campaign",
-  explanation: "A promotional campaign is planned to maximize an album's market impact."
-},
-{
-  question: "True or False: Music publishers secure sync deals for songwriters.",
-  answer: "True",
-  explanation: "Publishers actively pursue sync opportunities to generate extra revenue for songwriters."
-},
-{
-  question: "Yes or No: Is booking management part of an artist manager's role?",
-  answer: "Yes",
-  explanation: "Managers often handle the logistics and negotiations for live shows."
-},
-{
-  question: "What term describes the revenue division among collaborators?",
-  answer: "Split",
-  explanation: "Profit splits detail how earnings are shared among all parties involved."
-},
-{
-  question: "True or False: Copyrights last for the life of the artist.",
-  answer: "False",
-  explanation: "Copyrights typically extend beyond an artist's lifetime by several decades."
-},
-{
-  question: "Yes or No: Do music contracts often include touring support clauses?",
-  answer: "Yes",
-  explanation: "Touring support clauses allocate funds and resources for live performance tours."
-},
-{
-  question: "What term describes licensing music for digital platforms?",
-  answer: "Distribution",
-  explanation: "Digital distribution covers streaming and download services."
-},
-{
-  question: "True or False: Advances are always recoupable.",
-  answer: "True",
-  explanation: "Advances are typically recouped from future royalties as per contract terms."
-},
-{
-  question: "Yes or No: Are joint venture contracts used solely for solo projects?",
-  answer: "No",
-  explanation: "Joint ventures are designed for collaborative projects between multiple parties."
-},
-{
-  question: "What term protects original musical works?",
-  answer: "Copyright",
-  explanation: "Copyright law grants legal protection to original music compositions and recordings."
-},
-{
-  question: "True or False: Royalty rates are fixed and unchangeable.",
-  answer: "False",
-  explanation: "Royalty rates are negotiable and vary based on contract terms."
-},
-{
-  question: "Yes or No: Do contracts often include merchandising rights clauses?",
-  answer: "Yes",
-  explanation: "Merchandising rights clauses allow labels to manage product sales associated with an artist."
-},
-{
-  question: "What term describes a deal covering multiple revenue streams?",
-  answer: "360",
-  explanation: "A 360 deal spans recording, touring, merchandising, and more, sharing revenue across channels."
-},
-{
-  question: "True or False: Licensing deals benefit only record labels.",
-  answer: "False",
-  explanation: "Licensing deals generate revenue for both the label and the artist."
-},
-{
-  question: "Yes or No: Is recoupment used to recover an artist's advance?",
-  answer: "Yes",
-  explanation: "Recoupment ensures the label recovers its initial investment from the artist's earnings."
-},
-{
-  question: "What term describes the legal transfer of music rights?",
-  answer: "Assignment",
-  explanation: "Assignment involves transferring specific rights from one party to another."
-},
-{
-  question: "True or False: Streaming revenue significantly contributes to an artist's income.",
-  answer: "True",
-  explanation: "Streaming has become a major income source for many musicians."
-},
-{
-  question: "Yes or No: Do labels include audit clauses in contracts?",
-  answer: "Yes",
-  explanation: "Audit clauses allow artists to verify royalty calculations for accuracy."
-},
-{
-  question: "What term describes a promotional event for a new album?",
-  answer: "Launch",
-  explanation: "An album launch is a key event designed to generate buzz and sales for new releases."
-},
-{
-  question: "True or False: Escape clauses in contracts allow artists to exit under certain conditions.",
-  answer: "True",
-  explanation: "Escape clauses provide a way for artists to terminate contracts if specific conditions are met."
-},
-{
-  question: "Yes or No: Are sync licensing deals common among independent artists?",
-  answer: "Yes",
-  explanation: "Independent artists frequently pursue sync deals to diversify their revenue streams."
-},
-{
-  question: "What term describes a platform that aggregates streaming data?",
-  answer: "Aggregator",
-  explanation: "Aggregators compile data from various streaming services to help distribute royalties."
-},
-{
-  question: "True or False: Music business practices have evolved with digital technology.",
-  answer: "True",
-  explanation: "The digital era has significantly transformed how music is produced, distributed, and monetized."
-},
-{
-  question: "Yes or No: Is networking essential for success in the music industry?",
-  answer: "Yes",
-  explanation: "Networking is vital for building relationships and opening opportunities in the industry."
-}
-      {
-        question: "Traditional music genre?",
-        answer: "Traditional",
-        explanation: "Traditional music and dance are core to Eswatini’s cultural heritage."
-      },
-      {
-        question: "Famous Eswatini artist or band?",
-        answer: "Siyaya",
-        explanation: "Siyaya is known for bridging traditional and modern musical styles."
-      },
-      {
-        question: "Iconic Eswatini instrument?",
-        answer: "Mbira",
-        explanation: "The mbira, a thumb piano, is central to many traditional performances."
-      },
-      {
-        question: "Popular modern genre in Eswatini?",
-        answer: "Afro-pop",
-        explanation: "Afro-pop blends indigenous rhythms with contemporary sounds."
-      }
-    ];
+
+        const quizData = [
+            {
+                question: "True or False: Digital streaming has reduced physical album sales?",
+                answer: "True",
+                explanation: "Digital streaming has largely supplanted physical album sales in today's market."
+            },
+            {
+                question: "Yes or No: Do record labels typically require exclusive contracts?",
+                answer: "Yes",
+                explanation: "Exclusive contracts are common to secure the artist's full commitment."
+            },
+            {
+                question: "What term refers to the fee for using a song in ads?",
+                answer: "Sync",
+                explanation: "A sync fee is charged when music is synchronized with visual media."
+            },
+            {
+                question: "True or False: An artist's back catalog has little value.",
+                answer: "False",
+                explanation: "Back catalogs generate revenue through licensing and streaming."
+            },
+            {
+                question: "Yes or No: Are music publishers responsible for songwriting royalties?",
+                answer: "Yes",
+                explanation: "Publishers manage the rights and royalties for songwriters."
+            },
+            {
+                question: "What is the upfront payment from a label called?",
+                answer: "Advance",
+                explanation: "Advances provide funds to an artist before royalties are earned."
+            },
+            {
+                question: "True or False: '360 deals' involve revenue sharing across multiple streams?",
+                answer: "True",
+                explanation: "360 deals allow labels to share revenue from touring, merchandising, etc."
+            },
+            {
+                question: "Yes or No: Do artists usually own their masters?",
+                answer: "No",
+                explanation: "Typically, record labels retain ownership of master recordings unless negotiated otherwise."
+            },
+            {
+                question: "What term describes regaining rights to music after a contract?",
+                answer: "Reversion",
+                explanation: "Rights reversion lets artists reclaim their work after contractual obligations expire."
+            },
+            {
+                question: "True or False: Royalties come only from album sales?",
+                answer: "False",
+                explanation: "Royalties are generated from streaming, radio, licensing, and more."
+            }
+        ];
 
         function appendMessage(text, sender) {
             const messageDiv = document.createElement("div");
@@ -455,5 +263,3 @@
     </script>
 </body>
 </html>
-
-
