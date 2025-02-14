@@ -729,7 +729,7 @@
     question: "What is the term for a label's stake in an artist's branding?",
     answer: "Brand Partnership",
     explanation: "Brand partnerships involve commercial use of an artist's image."
-}
+},
 {
     question: "Yes or No: Can artists retain creative control in a standard record deal?",
     answer: "No",
@@ -816,7 +816,9 @@
         chatBot.appendChild(messageDiv);
         chatBot.scrollTop = chatBot.scrollHeight;
     }
-        
+         function updateScore() {
+            scoreDiv.innerText = `Score: ${score}`;
+        }
     function askQuestion() {
         if (score >= maxCorrectAnswers) {
             appendMessage(`🎉 Quiz completed! You got ${score} correct answers. Well done!`, "bot");
