@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Record Deal Negotiation Simulation</title>
+  <title>Artist Career Negotiation Simulation</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Basic Styles */
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f4f4f9;
@@ -76,6 +75,7 @@
     }
     #score {
       text-align: center;
+      font-size: 18px;
       font-weight: bold;
       margin-top: 10px;
     }
@@ -83,85 +83,57 @@
 </head>
 <body>
   <div class="container">
-    <h1>Record Deal Negotiation Simulation</h1>
+    <h1>Artist Career Negotiation Simulation</h1>
     <div id="simulation"></div>
-    <div id="score">Score: 0</div>
     <div id="options"></div>
     <button class="retry-btn" id="retry-btn">Retry</button>
+    <div id="score">Score: 0</div>
   </div>
+
   <script>
-    const simulationScenario = {
-      start: {
-        text: "You are an artist negotiating your first record deal in Eswatini. How do you start?",
-        options: [
-          { text: "Hire a lawyer to review the contract", next: "node1", points: 1 },
-          { text: "Sign immediately to secure the deal", next: "node1", points: -1 }
-        ]
-      },
-      node1: {
-        text: "The label offers a low advance but promises exposure. What do you do?",
-        options: [
-          { text: "Negotiate for a higher advance", next: "node2", points: 1 },
-          { text: "Accept it and trust the label's plan", next: "node2", points: -1 }
-        ]
-      },
-      node2: {
-        text: "The contract limits your ability to perform independently. How do you proceed?",
-        options: [
-          { text: "Insist on performance flexibility", next: "node3", points: 1 },
-          { text: "Accept the restriction for label backing", next: "node3", points: -1 }
-        ]
-      },
-      node3: {
-        text: "The label wants control over your social media. What’s your response?",
-        options: [
-          { text: "Negotiate to retain control", next: "node4", points: 1 },
-          { text: "Agree to focus only on music", next: "node4", points: -1 }
-        ]
-      },
-      node4: {
-        text: "The label offers a low advance but promises exposure. What do you do?",
+    const simulationScenarios = [
+      { text: "The label offers a low advance but promises exposure. What do you do?",
     options: [
       { text: "Negotiate for a higher advance", next: "node2", points: 1 },
       { text: "Accept it and trust the label's plan", next: "node2", points: -1 }
     ]
   },
-  node5: {
+  node2: {
     text: "The contract limits your ability to perform independently. How do you proceed?",
     options: [
       { text: "Insist on performance flexibility", next: "node3", points: 1 },
       { text: "Accept the restriction for label backing", next: "node3", points: -1 }
     ]
   },
-  node6: {
+  node3: {
     text: "The label wants control over your social media. What’s your response?",
     options: [
       { text: "Negotiate to retain control", next: "node4", points: 1 },
       { text: "Agree to focus only on music", next: "node4", points: -1 }
     ]
   },
-  node7: {
+  node4: {
     text: "Your music rights are unclear in the contract. What do you do?",
     options: [
       { text: "Clarify and secure ownership of your masters", next: "node5", points: 1 },
       { text: "Ignore it to finalize the deal quickly", next: "node5", points: -1 }
     ]
   },
-  node8: {
+  node5: {
     text: "The label wants a 360 deal. How do you respond?",
     options: [
       { text: "Negotiate for a standard recording contract", next: "node6", points: 1 },
       { text: "Agree to the 360 deal for better support", next: "node6", points: -1 }
     ]
   },
-  node9: {
+  node6: {
     text: "The label suggests changing your artistic style. What do you do?",
     options: [
       { text: "Stay true to your original style", next: "node7", points: 1 },
       { text: "Adapt to the label's suggested style", next: "node7", points: -1 }
     ]
   },
-  node10: {
+  node7: {
     text: "The label delays your album release. How do you handle it?",
     options: [
       { text: "Push for a new release date", next: "node8", points: 1 },
@@ -295,16 +267,45 @@
     ]
   }
 };
-    
-    let currentNodeKey = "start";
-    let simulationScore = 0;
+      { text: "A local promoter offers an unpaid gig promising exposure. Your choice?", options: [
+          { text: "Accept for visibility", points: 0 },
+          { text: "Demand payment or decline", points: 1 }
+        ]
+      },
+      { text: "A sponsor wants to fund your album but takes 50% of profits. What’s your move?", options: [
+          { text: "Negotiate a better deal", points: 1 },
+          { text: "Take the deal without changes", points: 0 }
+        ]
+      },
+      { text: "You’re invited to collaborate on a song, but the artist has bad industry rep. Do you proceed?", options: [
+          { text: "Decline to protect your brand", points: 1 },
+          { text: "Accept for potential reach", points: 0 }
+        ]
+      }
+    ];
+
+    let score = 0;
     let badDecisions = 0;
-    
+    const maxBadDecisions = 3;
+    let questionsAsked = [];
+
     const simulationDiv = document.getElementById("simulation");
     const optionsDiv = document.getElementById("options");
     const retryBtn = document.getElementById("retry-btn");
     const scoreDiv = document.getElementById("score");
-    
+
+    function getRandomScenario() {
+      let availableScenarios = simulationScenarios.filter((_, index) => !questionsAsked.includes(index));
+      if (availableScenarios.length === 0) {
+        finishSimulation();
+        return null;
+      }
+      let randomIndex = Math.floor(Math.random() * availableScenarios.length);
+      let scenarioIndex = simulationScenarios.indexOf(availableScenarios[randomIndex]);
+      questionsAsked.push(scenarioIndex);
+      return simulationScenarios[scenarioIndex];
+    }
+
     function addMessage(text, sender = "bot") {
       const msgDiv = document.createElement("div");
       msgDiv.classList.add("message", sender);
@@ -312,56 +313,55 @@
       simulationDiv.appendChild(msgDiv);
       simulationDiv.scrollTop = simulationDiv.scrollHeight;
     }
-    
-    function displayNode() {
-      const node = simulationScenario[currentNodeKey];
-      addMessage(node.text, "bot");
+
+    function displayScenario() {
+      let scenario = getRandomScenario();
+      if (!scenario) return;
+      addMessage(scenario.text, "bot");
       optionsDiv.innerHTML = "";
-      if (node.options) {
-        node.options.forEach(option => {
-          const btn = document.createElement("button");
-          btn.innerText = option.text;
-          btn.classList.add("option-btn");
-          btn.addEventListener("click", () => handleOption(option));
-          optionsDiv.appendChild(btn);
-        });
-      }
+      scenario.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option.text;
+        btn.classList.add("option-btn");
+        btn.addEventListener("click", () => handleOption(option));
+        optionsDiv.appendChild(btn);
+      });
     }
-    
+
     function handleOption(option) {
       addMessage(option.text, "user");
-      simulationScore += option.points;
-      scoreDiv.innerText = `Score: ${simulationScore}`;
-      if (option.points < 0) badDecisions++;
-      if (badDecisions >= 3) return finishSimulation("You made too many bad decisions!");
-      if (option.next && simulationScenario[option.next]) {
-        currentNodeKey = option.next;
-        setTimeout(displayNode, 1000);
+      score += option.points;
+      if (option.points === 0) badDecisions++;
+      scoreDiv.innerText = `Score: ${score}`;
+      if (badDecisions >= maxBadDecisions) {
+        finishSimulation();
       } else {
-        finishSimulation("Simulation complete.");
+        displayScenario();
       }
     }
-    
-    function finishSimulation(message) {
-      addMessage(message, "bot");
+
+    function finishSimulation() {
+      addMessage("Simulation complete.", "bot");
+      addMessage(`Final score: ${score}`, "bot");
       retryBtn.style.display = "inline-block";
     }
-    
+
     function startSimulation() {
       simulationDiv.innerHTML = "";
       optionsDiv.innerHTML = "";
       retryBtn.style.display = "none";
-      scoreDiv.innerText = "Score: 0";
-      currentNodeKey = "start";
-      simulationScore = 0;
+      score = 0;
       badDecisions = 0;
-      addMessage("Welcome to the Record Deal Negotiation Simulation. Let's begin.");
-      setTimeout(displayNode, 1000);
+      questionsAsked = [];
+      scoreDiv.innerText = "Score: 0";
+      addMessage("Welcome to the Artist Career Negotiation Simulation.");
+      setTimeout(displayScenario, 1000);
     }
-    
+
     retryBtn.addEventListener("click", startSimulation);
     startSimulation();
   </script>
 </body>
 </html>
+
 
