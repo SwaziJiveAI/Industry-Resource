@@ -63,7 +63,7 @@
       border-radius: 5px 0 0 5px;
       font-size: 16px;
     }
-    #submit-btn, #retry-btn {
+    #submit-btn {
       padding: 10px 20px;
       font-size: 16px;
       background-color: #1abc9c;
@@ -72,14 +72,9 @@
       color: #fff;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin-left: 5px;
     }
-    #submit-btn:hover, #retry-btn:hover {
+    #submit-btn:hover {
       background-color: #2c3e50;
-    }
-    /* Hide the retry button until needed */
-    #retry-btn {
-      display: none;
     }
   </style>
 </head>
@@ -90,9 +85,8 @@
       <!-- Chat messages will appear here -->
     </div>
     <div id="input-area">
-      <input type="text" id="user-input" placeholder="Type your answer here..." autofocus />
+      <input type="text" id="user-input" placeholder="Enter a one-word answer..." autofocus />
       <button id="submit-btn">Send</button>
-      <button id="retry-btn">Retry</button>
     </div>
   </div>
 
@@ -101,273 +95,283 @@
     const chatBot = document.getElementById('chatbot');
     const userInput = document.getElementById('user-input');
     const submitBtn = document.getElementById('submit-btn');
-    const retryBtn = document.getElementById('retry-btn');
 
-    // Pool of 50 quiz questions (Eswatini Music, Industry Business & Contract Related)
+    // Quiz data with one-word answers, relevant to Eswatini music & pop culture
     const quizData = [
       {
-        question: "Which city in Eswatini is renowned for its vibrant live music scene?",
-        answer: "Mbabane",
-        explanation: "Mbabane hosts numerous live music venues and events that showcase local talent."
+  question: "True or False: Digital streaming has reduced physical album sales?",
+  answer: "True",
+  explanation: "Digital streaming has largely supplanted physical album sales in today's market."
+},
+{
+  question: "Yes or No: Do record labels typically require exclusive contracts?",
+  answer: "Yes",
+  explanation: "Exclusive contracts are common to secure the artist's full commitment."
+},
+{
+  question: "What term refers to the fee for using a song in ads?",
+  answer: "Sync",
+  explanation: "A sync fee is charged when music is synchronized with visual media."
+},
+{
+  question: "True or False: An artist's back catalog has little value.",
+  answer: "False",
+  explanation: "Back catalogs generate revenue through licensing and streaming."
+},
+{
+  question: "Yes or No: Are music publishers responsible for songwriting royalties?",
+  answer: "Yes",
+  explanation: "Publishers manage the rights and royalties for songwriters."
+},
+{
+  question: "What is the upfront payment from a label called?",
+  answer: "Advance",
+  explanation: "Advances provide funds to an artist before royalties are earned."
+},
+{
+  question: "True or False: '360 deals' involve revenue sharing across multiple streams?",
+  answer: "True",
+  explanation: "360 deals allow labels to share revenue from touring, merchandising, etc."
+},
+{
+  question: "Yes or No: Do artists usually own their masters?",
+  answer: "No",
+  explanation: "Typically, record labels retain ownership of master recordings unless negotiated otherwise."
+},
+{
+  question: "What term describes regaining rights to music after a contract?",
+  answer: "Reversion",
+  explanation: "Rights reversion lets artists reclaim their work after contractual obligations expire."
+},
+{
+  question: "True or False: Royalties come only from album sales?",
+  answer: "False",
+  explanation: "Royalties are generated from streaming, radio, licensing, and more."
+},
+{
+  question: "Yes or No: Do independent artists often use crowdfunding?",
+  answer: "Yes",
+  explanation: "Crowdfunding is a popular way for independent artists to finance their projects."
+},
+{
+  question: "What term describes splitting revenue between parties?",
+  answer: "Split",
+  explanation: "A royalty split divides earnings between the artist and the label."
+},
+{
+  question: "True or False: Merchandising is an important income stream?",
+  answer: "True",
+  explanation: "Merchandising provides additional revenue through branded products."
+},
+{
+  question: "Yes or No: Is licensing a key revenue source for artists?",
+  answer: "Yes",
+  explanation: "Licensing deals generate income by allowing music usage in various media."
+},
+{
+  question: "What term describes an agreement for live event bookings?",
+  answer: "Booking",
+  explanation: "Booking agreements set the terms for an artist's live performances."
+},
+{
+  question: "True or False: Music contracts never include performance bonuses.",
+  answer: "False",
+  explanation: "Performance bonuses are often included to reward commercial success."
+},
+{
+  question: "Yes or No: Can artists renegotiate for higher royalties after a hit release?",
+  answer: "Yes",
+  explanation: "Successful releases give artists more leverage to renegotiate better terms."
+},
+{
+  question: "What term describes revenue from streaming services?",
+  answer: "Streams",
+  explanation: "Streaming revenue is calculated based on the number of streams an artist receives."
+},
+{
+  question: "True or False: Sync licensing only applies to films.",
+  answer: "False",
+  explanation: "Sync licensing covers films, TV shows, commercials, and online media."
+},
+{
+  question: "Yes or No: Are digital platforms essential for music distribution?",
+  answer: "Yes",
+  explanation: "Digital platforms are critical for reaching a global audience."
+},
+{
+  question: "What term refers to an artist's collection of previous releases?",
+  answer: "Backcatalog",
+  explanation: "A back catalog is a valuable asset generating ongoing revenue."
+},
+{
+  question: "True or False: Music festivals do not impact an artist’s marketability.",
+  answer: "False",
+  explanation: "Festivals enhance exposure and can significantly boost an artist’s profile."
+},
+{
+  question: "Yes or No: Do labels typically provide marketing support?",
+  answer: "Yes",
+  explanation: "Labels invest in marketing to promote the artist's music."
+},
+{
+  question: "What term describes recovering production costs from earnings?",
+  answer: "Recoupment",
+  explanation: "Recoupment is the process by which labels recover their initial investment from future royalties."
+},
+{
+  question: "True or False: Exclusive contracts restrict artists from working with other labels.",
+  answer: "True",
+  explanation: "Exclusive contracts limit an artist to a single record label."
+},
+{
+  question: "Yes or No: Do independent artists rely on social media for promotion?",
+  answer: "Yes",
+  explanation: "Social media is essential for independent artists to engage directly with fans."
+},
+{
+  question: "What term describes the promotional effort for an album?",
+  answer: "Campaign",
+  explanation: "A promotional campaign is planned to maximize an album's market impact."
+},
+{
+  question: "True or False: Music publishers secure sync deals for songwriters.",
+  answer: "True",
+  explanation: "Publishers actively pursue sync opportunities to generate extra revenue for songwriters."
+},
+{
+  question: "Yes or No: Is booking management part of an artist manager's role?",
+  answer: "Yes",
+  explanation: "Managers often handle the logistics and negotiations for live shows."
+},
+{
+  question: "What term describes the revenue division among collaborators?",
+  answer: "Split",
+  explanation: "Profit splits detail how earnings are shared among all parties involved."
+},
+{
+  question: "True or False: Copyrights last for the life of the artist.",
+  answer: "False",
+  explanation: "Copyrights typically extend beyond an artist's lifetime by several decades."
+},
+{
+  question: "Yes or No: Do music contracts often include touring support clauses?",
+  answer: "Yes",
+  explanation: "Touring support clauses allocate funds and resources for live performance tours."
+},
+{
+  question: "What term describes licensing music for digital platforms?",
+  answer: "Distribution",
+  explanation: "Digital distribution covers streaming and download services."
+},
+{
+  question: "True or False: Advances are always recoupable.",
+  answer: "True",
+  explanation: "Advances are typically recouped from future royalties as per contract terms."
+},
+{
+  question: "Yes or No: Are joint venture contracts used solely for solo projects?",
+  answer: "No",
+  explanation: "Joint ventures are designed for collaborative projects between multiple parties."
+},
+{
+  question: "What term protects original musical works?",
+  answer: "Copyright",
+  explanation: "Copyright law grants legal protection to original music compositions and recordings."
+},
+{
+  question: "True or False: Royalty rates are fixed and unchangeable.",
+  answer: "False",
+  explanation: "Royalty rates are negotiable and vary based on contract terms."
+},
+{
+  question: "Yes or No: Do contracts often include merchandising rights clauses?",
+  answer: "Yes",
+  explanation: "Merchandising rights clauses allow labels to manage product sales associated with an artist."
+},
+{
+  question: "What term describes a deal covering multiple revenue streams?",
+  answer: "360",
+  explanation: "A 360 deal spans recording, touring, merchandising, and more, sharing revenue across channels."
+},
+{
+  question: "True or False: Licensing deals benefit only record labels.",
+  answer: "False",
+  explanation: "Licensing deals generate revenue for both the label and the artist."
+},
+{
+  question: "Yes or No: Is recoupment used to recover an artist's advance?",
+  answer: "Yes",
+  explanation: "Recoupment ensures the label recovers its initial investment from the artist's earnings."
+},
+{
+  question: "What term describes the legal transfer of music rights?",
+  answer: "Assignment",
+  explanation: "Assignment involves transferring specific rights from one party to another."
+},
+{
+  question: "True or False: Streaming revenue significantly contributes to an artist's income.",
+  answer: "True",
+  explanation: "Streaming has become a major income source for many musicians."
+},
+{
+  question: "Yes or No: Do labels include audit clauses in contracts?",
+  answer: "Yes",
+  explanation: "Audit clauses allow artists to verify royalty calculations for accuracy."
+},
+{
+  question: "What term describes a promotional event for a new album?",
+  answer: "Launch",
+  explanation: "An album launch is a key event designed to generate buzz and sales for new releases."
+},
+{
+  question: "True or False: Escape clauses in contracts allow artists to exit under certain conditions.",
+  answer: "True",
+  explanation: "Escape clauses provide a way for artists to terminate contracts if specific conditions are met."
+},
+{
+  question: "Yes or No: Are sync licensing deals common among independent artists?",
+  answer: "Yes",
+  explanation: "Independent artists frequently pursue sync deals to diversify their revenue streams."
+},
+{
+  question: "What term describes a platform that aggregates streaming data?",
+  answer: "Aggregator",
+  explanation: "Aggregators compile data from various streaming services to help distribute royalties."
+},
+{
+  question: "True or False: Music business practices have evolved with digital technology.",
+  answer: "True",
+  explanation: "The digital era has significantly transformed how music is produced, distributed, and monetized."
+},
+{
+  question: "Yes or No: Is networking essential for success in the music industry?",
+  answer: "Yes",
+  explanation: "Networking is vital for building relationships and opening opportunities in the industry."
+}
+      {
+        question: "Traditional music genre?",
+        answer: "Traditional",
+        explanation: "Traditional music and dance are core to Eswatini’s cultural heritage."
       },
       {
-        question: "Name the traditional event that celebrates Eswatini heritage through music.",
-        answer: "Incwala",
-        explanation: "Incwala is a sacred ceremony featuring traditional music and dance."
-      },
-      {
-        question: "Which Eswatini artist is known for fusing traditional and modern sounds?",
+        question: "Famous Eswatini artist or band?",
         answer: "Siyaya",
-        explanation: "Siyaya is celebrated for bridging indigenous musical styles with contemporary influences."
+        explanation: "Siyaya is known for bridging traditional and modern musical styles."
       },
       {
-        question: "What traditional instrument is iconic in Eswatini music?",
+        question: "Iconic Eswatini instrument?",
         answer: "Mbira",
-        explanation: "The mbira, or thumb piano, is central to many traditional Eswatini music performances."
+        explanation: "The mbira, a thumb piano, is central to many traditional performances."
       },
       {
-        question: "Which genre is most associated with modern Eswatini pop music?",
+        question: "Popular modern genre in Eswatini?",
         answer: "Afro-pop",
-        explanation: "Afro-pop blends traditional African rhythms with contemporary pop influences."
-      },
-      {
-        question: "What is a common clause in music contracts to protect an artist's creative work?",
-        answer: "Copyright clause",
-        explanation: "A copyright clause ensures that the artist retains rights over their original music."
-      },
-      {
-        question: "Which term refers to the percentage of revenue an artist earns from record sales?",
-        answer: "Royalty",
-        explanation: "Royalties are the payments artists receive based on sales or usage of their music."
-      },
-      {
-        question: "What is a key focus during music contract negotiations in Eswatini?",
-        answer: "Royalty rates",
-        explanation: "Negotiating favorable royalty rates is essential for ensuring fair compensation for artists."
-      },
-      {
-        question: "Which document outlines the terms of an artist’s relationship with a record label?",
-        answer: "Record agreement",
-        explanation: "A record agreement details the rights, obligations, and compensation between an artist and a label."
-      },
-      {
-        question: "What is often negotiated to provide artists with upfront payment?",
-        answer: "Advance payment",
-        explanation: "An advance is paid to artists before royalties are earned, providing immediate funds."
-      },
-      {
-        question: "Which city is a hub for music industry professionals in Eswatini?",
-        answer: "Mbabane",
-        explanation: "Mbabane is a central location for industry activities, including negotiations and live performances."
-      },
-      {
-        question: "Name a contract clause that ensures timely royalty payments.",
-        answer: "Audit clause",
-        explanation: "An audit clause allows artists to verify that royalties are calculated and paid accurately."
-      },
-      {
-        question: "Which aspect of a music contract deals with distribution rights?",
-        answer: "Licensing",
-        explanation: "Licensing terms determine how and where an artist’s music can be distributed."
-      },
-      {
-        question: "What fee is paid when music is used in TV, films, or commercials?",
-        answer: "Sync fee",
-        explanation: "A sync fee is paid to the artist for synchronizing music with visual media."
-      },
-      {
-        question: "Which type of contract is typically used for individual music projects?",
-        answer: "Single deal",
-        explanation: "Single deals focus on individual tracks rather than full albums."
-      },
-      {
-        question: "What is a benefit of a well-negotiated music contract for an artist?",
-        answer: "Creative control",
-        explanation: "Securing creative control allows artists to maintain their artistic vision."
-      },
-      {
-        question: "Which event in Eswatini brings industry experts together for discussions on music business?",
-        answer: "Music Business Summit",
-        explanation: "The Music Business Summit offers insights into contract negotiations and industry trends."
-      },
-      {
-        question: "What is the purpose of a non-compete clause in music contracts?",
-        answer: "Prevent conflict of interest",
-        explanation: "A non-compete clause restricts artists from signing with competing labels for a period of time."
-      },
-      {
-        question: "Which revenue stream supplements record sales for many Eswatini artists?",
-        answer: "Merchandising",
-        explanation: "Merchandising involves selling branded products to fans, providing additional income."
-      },
-      {
-        question: "What method is often used to resolve disputes in music contracts?",
-        answer: "Arbitration",
-        explanation: "Arbitration is an alternative dispute resolution method outside the courtroom."
-      },
-      {
-        question: "Name a digital platform that has transformed music distribution in Eswatini.",
-        answer: "SwaziTunes",
-        explanation: "SwaziTunes supports digital distribution and streaming for local artists."
-      },
-      {
-        question: "Which contract clause outlines the promotional efforts the label must provide?",
-        answer: "Marketing clause",
-        explanation: "A marketing clause details how the label will promote the artist’s work."
-      },
-      {
-        question: "What does a '360 deal' typically involve?",
-        answer: "Revenue sharing across multiple streams",
-        explanation: "A 360 deal means the label shares revenue from various sources, not just record sales."
-      },
-      {
-        question: "Which term specifies the duration of a music contract?",
-        answer: "Term length",
-        explanation: "The term length defines how long the artist is committed to the contract."
-      },
-      {
-        question: "Name a key consideration for international music distribution rights.",
-        answer: "Territorial rights",
-        explanation: "Territorial rights determine the regions where the music can be legally distributed."
-      },
-      {
-        question: "Which Eswatini city is emerging as a center for music industry innovation?",
-        answer: "Manzini",
-        explanation: "Manzini is gaining recognition for its innovative contributions to the music business."
-      },
-      {
-        question: "What is a major benefit of signing with a reputable record label in Eswatini?",
-        answer: "Industry connections",
-        explanation: "Reputable labels provide valuable networking opportunities and resources."
-      },
-      {
-        question: "Which contract term outlines an artist's touring obligations?",
-        answer: "Touring clause",
-        explanation: "A touring clause specifies the requirements and commitments related to live performances."
-      },
-      {
-        question: "What is the primary purpose of a management contract in the music industry?",
-        answer: "Career guidance",
-        explanation: "Management contracts offer strategic advice and help shape an artist’s career path."
-      },
-      {
-        question: "Which financial term ensures an artist receives payment even if sales are low?",
-        answer: "Guarantee",
-        explanation: "A guarantee secures a minimum payment regardless of commercial performance."
-      },
-      {
-        question: "Name a provision in contracts that allows artists to regain rights over their work.",
-        answer: "Rights reversion clause",
-        explanation: "This clause lets artists reclaim rights to their music after a specified period."
-      },
-      {
-        question: "Which type of contract is commonly used for collaborations between artists?",
-        answer: "Joint venture",
-        explanation: "Joint ventures outline shared responsibilities and revenue for collaborative projects."
-      },
-      {
-        question: "What does 'sync licensing' enable an artist to do?",
-        answer: "License music for media use",
-        explanation: "Sync licensing permits the use of music in films, TV, and commercials."
-      },
-      {
-        question: "Which term refers to the upfront payment provided to an artist?",
-        answer: "Advance",
-        explanation: "An advance is an upfront payment against future earnings from music sales."
-      },
-      {
-        question: "What is a common challenge during contract negotiations in Eswatini?",
-        answer: "Fair royalty distribution",
-        explanation: "Ensuring a fair split of royalties is a frequent challenge for artists."
-      },
-      {
-        question: "What role does an attorney play in the music contract process?",
-        answer: "Legal advisor",
-        explanation: "Attorneys provide legal guidance and help protect the artist's interests."
-      },
-      {
-        question: "Which clause specifies the commercial use of an artist's image?",
-        answer: "Image rights clause",
-        explanation: "This clause governs how and where an artist's likeness can be used."
-      },
-      {
-        question: "What is a key benefit of digital distribution for Eswatini artists?",
-        answer: "Global reach",
-        explanation: "Digital platforms allow artists to connect with audiences worldwide."
-      },
-      {
-        question: "Name the revenue stream earned from live performances.",
-        answer: "Booking fees",
-        explanation: "Booking fees are payments received for live concerts and events."
-      },
-      {
-        question: "Which contract clause gives an artist control over promotional materials?",
-        answer: "Approval clause",
-        explanation: "An approval clause ensures that promotional content is vetted by the artist."
-      },
-      {
-        question: "What is a common challenge in music contract negotiations?",
-        answer: "Lack of transparency",
-        explanation: "Transparency is essential to ensure that contract terms are fair and clear."
-      },
-      {
-        question: "Which term describes transferring certain rights from the artist to the label?",
-        answer: "Assignment",
-        explanation: "Assignment transfers specific rights, such as distribution, to the label."
-      },
-      {
-        question: "What is a critical factor in negotiating a fair music contract?",
-        answer: "Mutual trust",
-        explanation: "A foundation of trust between the artist and label helps secure equitable terms."
-      },
-      {
-        question: "Name a clause that allows an artist to exit a contract under set conditions.",
-        answer: "Escape clause",
-        explanation: "An escape clause outlines the conditions under which the contract can be terminated."
-      },
-      {
-        question: "Which aspect of contract negotiations can greatly impact an artist's earnings?",
-        answer: "Royalty rate",
-        explanation: "A favorable royalty rate is key to long-term financial success for an artist."
-      },
-      {
-        question: "What term defines how revenue is split among collaborators?",
-        answer: "Profit sharing",
-        explanation: "Profit sharing specifies the division of earnings among those involved in a project."
-      },
-      {
-        question: "Name a provision that covers the use of an artist's music in advertising.",
-        answer: "Endorsement clause",
-        explanation: "An endorsement clause details the terms under which an artist’s music can be used in ads."
-      },
-      {
-        question: "Which factor is important when deciding the term length of a contract?",
-        answer: "Career stage",
-        explanation: "An artist’s career stage can influence the optimal duration of a contract."
-      },
-      {
-        question: "What is a benefit of renegotiating contract terms after a successful release?",
-        answer: "Increased leverage",
-        explanation: "Successful releases provide artists with more bargaining power for better terms."
-      },
-      {
-        question: "Name a common mistake artists should avoid during contract negotiations.",
-        answer: "Overlooking fine print",
-        explanation: "Failing to review the details of a contract can lead to unfavorable conditions."
+        explanation: "Afro-pop blends indigenous rhythms with contemporary sounds."
       }
     ];
 
-    // Configuration for each round
-    const QUESTIONS_PER_ROUND = 5;
-    let selectedQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-
-    // Function to get a random selection of questions from the pool
-    function getRandomQuestions(arr, num) {
-      const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, num);
-    }
 
     // Function to add a message to the chat window
     function addMessage(text, sender = 'bot') {
@@ -378,24 +382,16 @@
       chatBot.scrollTop = chatBot.scrollHeight;
     }
 
-    // Start the quiz round
+    // Start the quiz with a welcome message
     function startQuiz() {
-      // Reset state
-      chatBot.innerHTML = "";
-      userInput.value = "";
-      currentQuestionIndex = 0;
-      score = 0;
-      retryBtn.style.display = "none";
-      // Select 5 random questions from the 50-question pool
-      selectedQuestions = getRandomQuestions(quizData, QUESTIONS_PER_ROUND);
-      addMessage("Hello! Welcome to the Eswatini Music & Industry Quiz. Let's begin with 5 questions.");
+      addMessage("Welcome to the Eswatini Music & Pop Culture Quiz. Provide one-word answers.");
       setTimeout(askQuestion, 1000);
     }
 
     // Ask the current quiz question
     function askQuestion() {
-      if (currentQuestionIndex < selectedQuestions.length) {
-        addMessage(selectedQuestions[currentQuestionIndex].question);
+      if (currentQuestionIndex < quizData.length) {
+        addMessage(quizData[currentQuestionIndex].question);
       } else {
         finishQuiz();
       }
@@ -407,34 +403,33 @@
       if (answer === "") return;
       addMessage(answer, 'user');
       userInput.value = "";
-      
-      const currentQuestion = selectedQuestions[currentQuestionIndex];
+
+      // Compare user answer with the correct answer (case-insensitive)
+      const currentQuestion = quizData[currentQuestionIndex];
       if (answer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
         score++;
         addMessage("Correct! " + currentQuestion.explanation);
       } else {
-        addMessage("That's not correct. " + currentQuestion.explanation);
+        addMessage("That's not correct. The correct answer is: " + currentQuestion.answer + ". " + currentQuestion.explanation);
       }
       currentQuestionIndex++;
       setTimeout(askQuestion, 1500);
     }
 
-    // Finish the quiz round and show score with a retry button
+    // Finish the quiz and provide final score
     function finishQuiz() {
-      addMessage("Round complete! Your score: " + score + " out of " + QUESTIONS_PER_ROUND);
-      retryBtn.style.display = "inline-block";
+      addMessage("Quiz complete! Your score is: " + score + " out of " + quizData.length);
     }
 
-    // Event listeners for sending answers and retrying
+    // Event listeners for sending answers
     submitBtn.addEventListener('click', handleAnswer);
     userInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         handleAnswer();
       }
     });
-    retryBtn.addEventListener('click', startQuiz);
 
-    // Begin the first round when the page loads
+    // Begin the quiz when the page loads
     startQuiz();
   </script>
 </body>
