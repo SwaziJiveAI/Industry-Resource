@@ -78,6 +78,7 @@
     }
   </style>
 </head>
+</head>
 <body>
   <div class="container">
     <h1>Skill Assessment Quiz</h1>
@@ -91,12 +92,10 @@
   </div>
 
   <script>
-    // DOM elements
     const chatBot = document.getElementById('chatbot');
     const userInput = document.getElementById('user-input');
     const submitBtn = document.getElementById('submit-btn');
 
-    // Quiz data with one-word answers, relevant to Eswatini music & pop culture
     const quizData = [
       {
   question: "True or False: Digital streaming has reduced physical album sales?",
@@ -370,10 +369,9 @@
       }
     ];
 
-    let currentQuestionIndex = 0;
+     let currentQuestionIndex = 0;
     let score = 0;
 
-    // Function to add a message to the chat window
     function addMessage(text, sender = 'bot') {
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
@@ -382,54 +380,53 @@
       chatBot.scrollTop = chatBot.scrollHeight;
     }
 
-    // Start the quiz with a welcome message
     function startQuiz() {
-      addMessage("Welcome to the Eswatini Music & Pop Culture Quiz. Provide one-word answers.");
+      addMessage("Welcome to the Music Business Quiz! Answer with one-word responses.");
       setTimeout(askQuestion, 1000);
     }
 
-    // Ask the current quiz question
     function askQuestion() {
       if (currentQuestionIndex < quizData.length) {
-        addMessage(quizData[currentQuestionIndex].question);
+        addMessage(`Question ${currentQuestionIndex + 1}: ${quizData[currentQuestionIndex].question}`);
       } else {
         finishQuiz();
       }
     }
 
-    // Handle answer submission
     function handleAnswer() {
       const answer = userInput.value.trim();
       if (answer === "") return;
+      
       addMessage(answer, 'user');
       userInput.value = "";
 
-      // Compare user answer with the correct answer (case-insensitive)
       const currentQuestion = quizData[currentQuestionIndex];
-      if (answer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
+      const correctAnswer = currentQuestion.answer.toLowerCase();
+      const userAnswer = answer.toLowerCase();
+
+      if (userAnswer === correctAnswer) {
         score++;
-        addMessage("Correct! " + currentQuestion.explanation);
+        addMessage(`✅ Correct! ${currentQuestion.explanation}`);
       } else {
-        addMessage("That's not correct. The correct answer is: " + currentQuestion.answer + ". " + currentQuestion.explanation);
+        addMessage(`❌ Incorrect. The correct answer was: ${currentQuestion.answer}. ${currentQuestion.explanation}`);
       }
+
       currentQuestionIndex++;
       setTimeout(askQuestion, 1500);
     }
 
-    // Finish the quiz and provide final score
     function finishQuiz() {
-      addMessage("Quiz complete! Your score is: " + score + " out of " + quizData.length);
+      const percentage = Math.round((score / quizData.length) * 100);
+      addMessage(`🏁 Quiz Complete! Final Score: ${score}/${quizData.length} (${percentage}%)`);
+      addMessage("Refresh the page to try again!");
     }
 
-    // Event listeners for sending answers
     submitBtn.addEventListener('click', handleAnswer);
-    userInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        handleAnswer();
-      }
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleAnswer();
     });
 
-    // Begin the quiz when the page loads
+    // Start the quiz
     startQuiz();
   </script>
 </body>
