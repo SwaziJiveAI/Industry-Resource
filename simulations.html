@@ -11,12 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     header {
-            background: linear-gradient(135deg, #2c3e50, #1abc9c);
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+      background: linear-gradient(135deg, #2c3e50, #1abc9c);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f4f4f9;
@@ -25,12 +25,36 @@
       color: #333;
     }
     .container {
-      max-width: 800px;
-      margin: 40px auto;
+      max-width: 90%; /* Adjust to 90% of the screen width */
+      width: 100%; /* Ensure it takes full width on smaller screens */
+      margin: 20px auto; /* Reduce margin for smaller screens */
       padding: 20px;
       background-color: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box; /* Ensure padding is included in the width */
+    }
+    @media (max-width: 768px) {
+      .container {
+        max-width: 95%; /* Increase width for smaller screens */
+        margin: 10px auto; /* Reduce margin further */
+        padding: 15px; /* Reduce padding for smaller screens */
+      }
+    }
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%; /* Full width on very small screens */
+        margin: 5px auto; /* Minimal margin */
+        padding: 10px; /* Minimal padding */
+        border-radius: 0; /* Remove border-radius for full-width look */
+      }
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      .container {
+        max-width: 90%; /* Adjust width for landscape mode */
+        margin: 10px auto; /* Adjust margin for landscape mode */
+        padding: 10px; /* Adjust padding for landscape mode */
+      }
     }
     h1 {
       text-align: center;
@@ -998,63 +1022,46 @@
 },
     ];
     
-    function startSimulation() {
-      score = 0;
-      currentScenarioIndex = 0;
-      usedIndices.clear();
-      simulationDiv.innerHTML = "";
-      optionsDiv.innerHTML = "";
-      retryBtn.style.display = "none";
-      scoreDiv.innerText = "Score: 0";
-      displayScenario();
-    }
-
-    function getRandomScenario() {
-      if (usedIndices.size >= maxQuestions) return null;
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * simulationScenarios.length);
-      } while (usedIndices.has(randomIndex));
-      usedIndices.add(randomIndex);
-      return simulationScenarios[randomIndex];
-    }
-
-    function addMessage(text, sender = "bot") {
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("message", sender);
-      msgDiv.innerText = text;
-      simulationDiv.appendChild(msgDiv);
-      simulationDiv.scrollTop = simulationDiv.scrollHeight;
-    }
-
     function displayScenario() {
-      const scenario = getRandomScenario();
-      if (!scenario) {
-        finishSimulation();
+      if (currentScenarioIndex >= simulationScenarios.length || score >= maxQuestions) {
+        simulationDiv.innerHTML = `<div class="message bot">🎉 Simulation completed! You scored ${score} points. Well done!</div>`;
+        optionsDiv.innerHTML = "";
+        retryBtn.style.display = "block";
         return;
       }
-      addMessage(scenario.text, "bot");
-      optionsDiv.innerHTML = "";
-      scenario.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.innerText = option.text;
-        btn.classList.add("option-btn");
-        btn.addEventListener("click", () => handleOption(option));
-        optionsDiv.appendChild(btn);
-      });
+
+      const scenario = simulationScenarios[currentScenarioIndex];
+      simulationDiv.innerHTML = `<div class="message bot">${scenario.question}</div>`;
+      optionsDiv.innerHTML = scenario.options
+        .map(
+          (option) =>
+            `<button class="option-btn" onclick="handleAnswer('${option}')">${option}</button>`
+        )
+        .join("");
     }
 
-    function handleOption(option) {
-      addMessage(option.text, "user");
-      addMessage(option.feedback, "bot");
-      score += option.points;
-      scoreDiv.innerText = `Score: ${score}`;
+    function handleAnswer(selectedOption) {
+      const scenario = simulationScenarios[currentScenarioIndex];
+      if (selectedOption === scenario.correctAnswer) {
+        score++;
+        scoreDiv.textContent = `Score: ${score}`;
+        simulationDiv.innerHTML += `<div class="message bot">✅ Correct! ${scenario.explanation}</div>`;
+      } else {
+        simulationDiv.innerHTML += `<div class="message bot">❌ Incorrect. ${scenario.explanation}</div>`;
+      }
       currentScenarioIndex++;
-      setTimeout(displayScenario, 1000);
+      setTimeout(displayScenario, 1500);
     }
 
-    retryBtn.addEventListener("click", startSimulation);
-    startSimulation();
+    retryBtn.addEventListener("click", () => {
+      score = 0;
+      currentScenarioIndex = 0;
+      scoreDiv.textContent = `Score: ${score}`;
+      retryBtn.style.display = "none";
+      displayScenario();
+    });
+
+    window.onload = displayScenario;
   </script>
 </body>
 </html>
