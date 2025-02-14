@@ -150,10 +150,19 @@
         </section>
     <!-- Chatbot Script -->
     <script>
-        const chatBot = document.getElementById('chatbot');
-        const userInput = document.getElementById('user-input');
-        const submitBtn = document.getElementById('submit-btn');
-        let currentQuestionIndex = 0;
+    const chatBot = document.getElementById('chatbot');
+    const userInput = document.getElementById('user-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const retryBtn = document.createElement("button");
+    retryBtn.innerText = "Retry Quiz";
+    retryBtn.style.display = "none";
+    retryBtn.style.marginTop = "10px";
+    retryBtn.onclick = startQuiz;
+    chatBot.parentNode.appendChild(retryBtn);
+
+    let score = 0;
+    let questionIndex = 0;
+    const maxCorrectAnswers = 20;
 
         const quizData = [
             {
@@ -347,42 +356,71 @@
             }
         ];
 
-        function appendMessage(text, sender) {
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add("message", sender);
-            messageDiv.textContent = text;
-            chatBot.appendChild(messageDiv);
-            chatBot.scrollTop = chatBot.scrollHeight;
+        function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function appendMessage(text, sender) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", sender);
+        messageDiv.textContent = text;
+        chatBot.appendChild(messageDiv);
+        chatBot.scrollTop = chatBot.scrollHeight;
+    }
+
+    function askQuestion() {
+        if (score >= maxCorrectAnswers) {
+            appendMessage(`🎉 Quiz completed! You got ${score} correct answers. Well done!`, "bot");
+            submitBtn.disabled = true;
+            userInput.disabled = true;
+            retryBtn.style.display = "block";
+            return;
         }
 
-        function askQuestion() {
-            if (currentQuestionIndex < quizData.length) {
-                appendMessage(quizData[currentQuestionIndex].question, "bot");
-            } else {
-                appendMessage("Quiz completed! 🎉", "bot");
-                submitBtn.disabled = true;
-                userInput.disabled = true;
-            }
+        if (questionIndex < quizData.length) {
+            appendMessage(quizData[questionIndex].question, "bot");
+        } else {
+            appendMessage("Quiz finished! Restart to try again.", "bot");
+            submitBtn.disabled = true;
+            userInput.disabled = true;
+            retryBtn.style.display = "block";
+        }
+    }
+
+    submitBtn.addEventListener("click", () => {
+        const userAnswer = userInput.value.trim();
+        if (userAnswer === "") return;
+        
+        appendMessage(userAnswer, "user");
+        const correctAnswer = quizData[questionIndex].answer;
+        const explanation = quizData[questionIndex].explanation;
+
+        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+            score++;
+            appendMessage(`✅ Correct! ${explanation}`, "bot");
+        } else {
+            appendMessage(`❌ Incorrect. ${explanation}`, "bot");
         }
 
-        submitBtn.addEventListener("click", () => {
-            const userAnswer = userInput.value.trim();
-            if (userAnswer === "") return;
-            appendMessage(userAnswer, "user");
-            const correctAnswer = quizData[currentQuestionIndex].answer;
-            const explanation = quizData[currentQuestionIndex].explanation;
-            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-                appendMessage("✅ Correct! " + explanation, "bot");
-            } else {
-                appendMessage("❌ Incorrect. " + explanation, "bot");
-            }
-            userInput.value = "";
-            currentQuestionIndex++;
-            setTimeout(askQuestion, 1500);
-        });
+        userInput.value = "";
+        questionIndex++;
+        setTimeout(askQuestion, 1500);
+    });
 
-        // Start the quiz when the page loads
-        window.onload = askQuestion;
-    </script>
-</body>
-</html>
+    function startQuiz() {
+        shuffleArray(quizData);
+        score = 0;
+        questionIndex = 0;
+        chatBot.innerHTML = "";
+        submitBtn.disabled = false;
+        userInput.disabled = false;
+        retryBtn.style.display = "none";
+        appendMessage("🎵 Welcome to the Music Industry Quiz! Answer 20 questions correctly to win.", "bot");
+        setTimeout(askQuestion, 1000);
+    }
+
+    window.onload = startQuiz;
+</script>
