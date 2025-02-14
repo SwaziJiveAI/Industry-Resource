@@ -126,6 +126,13 @@
         #submit-btn:hover {
             background-color: #2c3e50;
         }
+            /* Score Display */
+        #score-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+        } 
     </style>
 </head>
 <body>
@@ -848,6 +855,7 @@
 
         if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
             score++;
+                updateScore(); // Update the score display
             appendMessage(`✅ Correct! ${explanation}`, "bot");
         } else {
             appendMessage(`❌ Incorrect. ${explanation}`, "bot");
