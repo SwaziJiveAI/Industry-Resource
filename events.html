@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upcoming Events - Eswatini Music Resource Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(135deg, #2c3e50, #1abc9c);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    nav {
+      background: #34495e;
+      overflow: hidden;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      float: left;
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    nav a:hover {
+      background-color: #1abc9c;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1,
+    h2,
+    h3 {
+      color: #2c3e50;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #2c3e50, #1abc9c);
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      color: #1abc9c;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #2c3e50;
+      text-decoration: underline;
+    }
+    button {
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2c3e50;
+    }
+    /* Event Grid Styles */
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .event-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .event-card:hover {
+      transform: translateY(-5px);
+    }
+    .event-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    /* Countdown Timer */
+    #countdown {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1.5rem;
+    }
+    #countdown span {
+      font-weight: bold;
+      color: #1abc9c;
+    }
+    /* Event Submission Form */
+    #event-submission {
+      margin-top: 2rem;
+    }
+    #event-submission form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #event-submission input,
+    #event-submission textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #event-submission button {
+      align-self: flex-start;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Upcoming Events</h1>
+    <p>Discover and participate in the latest music events in Eswatini</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="education.html">Education</a>
+    <a href="artists.html">Artist Spotlight</a>
+    <a href="events.html">Events</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Countdown Timer -->
+    <section id="countdown">
+      <h2>Next Big Event</h2>
+      <p>Time remaining: <span id="days"></span> Days <span id="hours"></span> Hours <span id="minutes"></span> Minutes</p>
+    </section>
+
+    <!-- Upcoming Events Grid -->
+    <section id="upcoming-events">
+      <h2>Upcoming Events</h2>
+      <div class="event-grid">
+        <!-- Event 1 -->
+        <div class="event-card">
+          <img src="https://via.placeholder.com/300x200" alt="Event 1" class="event-image" />
+          <h3>Eswatini Music Festival</h3>
+          <p><strong>Date:</strong> November 5, 2025</p>
+          <p><strong>Location:</strong> Mbabane Stadium</p>
+          <p>Join us for the biggest music festival in Eswatini featuring top local and international artists.</p>
+          <button onclick="window.location.href='event-details.html'">Learn More →</button>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="event-card">
+          <img src="https://via.placeholder.com/300x200" alt="Event 2" class="event-image" />
+          <h3>Afrobeat Night</h3>
+          <p><strong>Date:</strong> December 10, 2025</p>
+          <p><strong>Location:</strong> Manzini Club</p>
+          <p>A night of Afrobeat music and dance featuring the best DJs and live performers.</p>
+          <button onclick="window.location.href='event-details.html'">Learn More →</button>
+        </div>
+
+        <!-- Add more event cards as needed -->
+      </div>
+    </section>
+
+    <!-- Event Submission Section -->
+    <section id="event-submission">
+      <h2>Submit Your Event</h2>
+      <form action="https://formspree.io/f/mayyqjzr" method="POST">
+        <label for="event-name">Event Name:</label>
+        <input type="text" id="event-name" name="event-name" required />
+
+        <label for="event-date">Event Date:</label>
+        <input type="date" id="event-date" name="event-date" required />
+
+        <label for="event-location">Event Location:</label>
+        <input type="text" id="event-location" name="event-location" required />
+
+        <label for="event-description">Event Description:</label>
+        <textarea id="event-description" name="event-description" rows="4" required></textarea>
+
+        <button type="submit">Submit Event →</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Eswatini Music Resource Center | A Swazi Jive Entertainment Initiative</p>
+    <div class="footer-cta">
+      <p>Get live updates! <a href="https://wa.me/+268XXXXXXXX">Join our Eswatini Music WhatsApp Group</a>.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Countdown Timer for Next Event
+    function updateCountdown() {
+      const eventDate = new Date("November 5, 2025 19:00:00").getTime();
+      const now = new Date().getTime();
+      const distance = eventDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown').innerHTML = "Event has started!";
+      }
+    }
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Event Submission Form Handling
+    document.getElementById('event-submission').addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert('Thank you for submitting your event! We will review it and get back to you.');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
