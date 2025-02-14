@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Record Deal Negotiation Simulation</title>
+  <title>Eswatini Music Industry Simulation</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     /* Basic Styles */
@@ -20,7 +20,7 @@
       padding: 20px;
       background-color: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     h1 {
       text-align: center;
@@ -75,7 +75,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Record Deal Negotiation Simulation</h1>
+    <h1>Eswatini Music Industry Simulation</h1>
     <div id="simulation">
       <!-- Simulation messages will appear here -->
     </div>
@@ -85,50 +85,8 @@
   </div>
 
   <script>
-    // Simulation scenario data
-    const simulationScenario = {
-      start: {
-        text: "Welcome to the Record Deal Negotiation Simulation. You are an artist manager. A record label is interested in signing your artist. What do you do?",
-        options: [
-          { text: "Schedule a meeting to discuss details", next: "meeting" },
-          { text: "Decline the offer", next: "decline" }
-        ]
-      },
-      meeting: {
-        text: "You schedule a meeting. In the meeting, the label offers you a contract. What aspect do you focus on?",
-        options: [
-          { text: "Negotiate better royalty rates", next: "royalties" },
-          { text: "Secure strong marketing support", next: "marketing" }
-        ]
-      },
-      decline: {
-        text: "You declined the offer. The artist remains unsigned. Simulation ends.",
-        options: []
-      },
-      royalties: {
-        text: "The label offers low royalties. Do you negotiate for higher rates?",
-        options: [
-          { text: "Yes, negotiate for higher rates", next: "negotiation" },
-          { text: "Accept the low rates", next: "accept" }
-        ]
-      },
-      marketing: {
-        text: "The label offers strong marketing support. Do you ask for better royalty terms as well?",
-        options: [
-          { text: "Yes, negotiate for better royalties", next: "negotiation" },
-          { text: "Accept the offer as is", next: "accept" }
-        ]
-      },
-      negotiation: {
-        text: "After tough negotiations, you secure better terms. Your artist is happy and the deal is successful. Simulation ends.",
-        options: []
-      },
-      accept: {
-        text: "You accept the deal as-is. The artist signs the contract, but there might be room for future improvements. Simulation ends.",
-        options: []
-      }
-    };
-
+    // This object will hold our dynamic simulation data
+    let simulationScenario = {};
     let currentNodeKey = "start";
 
     const simulationDiv = document.getElementById("simulation");
@@ -143,40 +101,8 @@
       simulationDiv.scrollTop = simulationDiv.scrollHeight;
     }
 
-    // Function to display the current simulation node
-    function displayNode() {
-      const node = simulationScenario[currentNodeKey];
-      addMessage(node.text, "bot");
-      // Clear any previous options
-      optionsDiv.innerHTML = "";
-      // If options exist, display them as buttons
-      if (node.options && node.options.length > 0) {
-        node.options.forEach(option => {
-          const btn = document.createElement("button");
-          btn.innerText = option.text;
-          btn.classList.add("option-btn");
-          btn.addEventListener("click", () => handleOption(option));
-          optionsDiv.appendChild(btn);
-        });
-      }
-    }
-
-    // Handle user's option selection
-    function handleOption(option) {
-      // Display the user's choice
-      addMessage(option.text, "user");
-      // Transition to the next node
-      if (option.next && simulationScenario[option.next]) {
-        currentNodeKey = option.next;
-        setTimeout(displayNode, 1000);
-      } else {
-        addMessage("Simulation complete.", "bot");
-        optionsDiv.innerHTML = "";
-      }
-    }
-
-    // Start the simulation when the page loads
-    displayNode();
-  </script>
-</body>
-</html>
+    // Function to load dynamic simulation data from an AI endpoint
+    async function loadSimulationData() {
+      try {
+        // Replace the URL below with your actual API endpoint that returns simulation data
+        const response = await fetch('https://api.example.com/getSimulation
