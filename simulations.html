@@ -314,12 +314,6 @@
       usedIndices.add(randomIndex);
       return simulationScenarios[randomIndex];
     }
-    
-function checkMilestone() {
-    if (score > 0 && score % 5 === 0) {
-      addMessage("Well done! Keep going!", "bot");
-
-      }
 
     function addMessage(text, sender = "bot") {
       const msgDiv = document.createElement("div");
