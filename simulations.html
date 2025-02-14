@@ -74,111 +74,69 @@
     .retry-btn {
       display: none;
     }
+    #score {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Record Deal Negotiation Simulation</h1>
-    <div id="simulation">
-      <!-- Simulation messages will appear here -->
-    </div>
-    <div id="options">
-      <!-- Option buttons will appear here -->
-      <button class="retry-btn" id="retry-btn">Retry</button>
-    </div>
+    <div id="simulation"></div>
+    <div id="score">Score: 0</div>
+    <div id="options"></div>
+    <button class="retry-btn" id="retry-btn">Retry</button>
   </div>
-
   <script>
-    // Simulation scenario data with 10 decisions (nodes)
     const simulationScenario = {
       start: {
-        text: "Welcome to the Record Deal Negotiation Simulation. You are an artist manager and a record label is interested in signing your artist. What do you do?",
+        text: "Welcome to the Record Deal Negotiation Simulation. You are an artist negotiating your first record deal in Eswatini. How do you start?",
         options: [
-          { text: "Schedule a meeting to discuss details", next: "node1", points: 1 },
-          { text: "Decline the offer outright", next: "node1", points: 0 }
+          { text: "Hire a lawyer to review the contract", next: "node1", points: 1 },
+          { text: "Sign immediately to secure the deal", next: "node1", points: -1 }
         ]
       },
       node1: {
-        text: "During the meeting, the label presents a contract with standard terms. How do you respond?",
+        text: "The label offers a low advance but promises exposure. What do you do?",
         options: [
-          { text: "Negotiate for higher royalty rates", next: "node2", points: 1 },
-          { text: "Accept the terms as presented", next: "node2", points: 0 }
+          { text: "Negotiate for a higher advance", next: "node2", points: 1 },
+          { text: "Accept it and trust the label's plan", next: "node2", points: -1 }
         ]
       },
       node2: {
-        text: "The label proposes an advance payment that's lower than expected. What is your next step?",
+        text: "The contract limits your ability to perform independently. How do you proceed?",
         options: [
-          { text: "Request a higher advance payment", next: "node3", points: 1 },
-          { text: "Accept the advance and focus on future royalties", next: "node3", points: 0 }
+          { text: "Insist on performance flexibility", next: "node3", points: 1 },
+          { text: "Accept the restriction for label backing", next: "node3", points: -1 }
         ]
       },
       node3: {
-        text: "The contract includes a clause that limits creative control. What do you do?",
+        text: "The label wants control over your social media. What’s your response?",
         options: [
-          { text: "Negotiate to include creative control", next: "node4", points: 1 },
-          { text: "Accept the clause to secure the deal", next: "node4", points: 0 }
+          { text: "Negotiate to retain control", next: "node4", points: 1 },
+          { text: "Agree to focus only on music", next: "node4", points: -1 }
         ]
       },
       node4: {
-        text: "The record label wants exclusive distribution rights. How do you proceed?",
+        text: "Your music rights are unclear in the contract. What do you do?",
         options: [
-          { text: "Negotiate for non-exclusive distribution", next: "node5", points: 1 },
-          { text: "Agree to exclusive rights for increased exposure", next: "node5", points: 0 }
-        ]
-      },
-      node5: {
-        text: "A clause restricts the artist from collaborating with other labels. What is your decision?",
-        options: [
-          { text: "Insist on removing the restrictive clause", next: "node6", points: 1 },
-          { text: "Agree to the restriction in exchange for better terms", next: "node6", points: 0 }
-        ]
-      },
-      node6: {
-        text: "The label proposes a marketing campaign that is below expectations. How do you respond?",
-        options: [
-          { text: "Request a more robust marketing plan", next: "node7", points: 1 },
-          { text: "Accept the plan to avoid delaying the deal", next: "node7", points: 0 }
-        ]
-      },
-      node7: {
-        text: "Negotiations are dragging on. How do you manage the process?",
-        options: [
-          { text: "Maintain a firm stance and continue negotiations", next: "node8", points: 1 },
-          { text: "Agree to expedite the process even if terms suffer", next: "node8", points: 0 }
-        ]
-      },
-      node8: {
-        text: "The label offers additional touring support. How do you evaluate this benefit?",
-        options: [
-          { text: "Leverage touring support to boost the artist's profile", next: "node9", points: 1 },
-          { text: "Focus solely on contract terms and ignore touring support", next: "node9", points: 0 }
-        ]
-      },
-      node9: {
-        text: "A final contract draft is ready. What is your final step?",
-        options: [
-          { text: "Review the contract thoroughly with legal counsel", next: "node10", points: 1 },
-          { text: "Sign quickly to secure the deal", next: "node10", points: 0 }
-        ]
-      },
-      node10: {
-        text: "The final contract is signed. Reflect on your decisions: How do you assess your negotiation strategy?",
-        options: [
-          { text: "I made strong decisions that prioritized the artist's interests", next: null, points: 1 },
-          { text: "I compromised more than I should have", next: null, points: 0 }
+          { text: "Clarify and secure ownership of your masters", next: "node5", points: 1 },
+          { text: "Ignore it to finalize the deal quickly", next: "node5", points: -1 }
         ]
       }
     };
-
+    
     let currentNodeKey = "start";
     let simulationScore = 0;
-    let decisionsMade = 0; // Count decisions
-
+    let badDecisions = 0;
+    
     const simulationDiv = document.getElementById("simulation");
     const optionsDiv = document.getElementById("options");
     const retryBtn = document.getElementById("retry-btn");
-
-    // Function to add a message to the simulation area
+    const scoreDiv = document.getElementById("score");
+    
     function addMessage(text, sender = "bot") {
       const msgDiv = document.createElement("div");
       msgDiv.classList.add("message", sender);
@@ -186,15 +144,12 @@
       simulationDiv.appendChild(msgDiv);
       simulationDiv.scrollTop = simulationDiv.scrollHeight;
     }
-
-    // Function to display the current simulation node
+    
     function displayNode() {
       const node = simulationScenario[currentNodeKey];
       addMessage(node.text, "bot");
-      // Clear previous options
       optionsDiv.innerHTML = "";
-      // If options exist, create buttons for each option
-      if (node.options && node.options.length > 0) {
+      if (node.options) {
         node.options.forEach(option => {
           const btn = document.createElement("button");
           btn.innerText = option.text;
@@ -204,49 +159,41 @@
         });
       }
     }
-
-    // Handle the user's option selection
+    
     function handleOption(option) {
-      // Display the user's choice
       addMessage(option.text, "user");
-      // Add points for a "good" decision
       simulationScore += option.points;
-      decisionsMade++;
-      // Transition to the next node if it exists
+      scoreDiv.innerText = `Score: ${simulationScore}`;
+      if (option.points < 0) badDecisions++;
+      if (badDecisions >= 3) return finishSimulation("You made too many bad decisions!");
       if (option.next && simulationScenario[option.next]) {
         currentNodeKey = option.next;
         setTimeout(displayNode, 1000);
       } else {
-        // No further node, simulation ends
-        setTimeout(finishSimulation, 1000);
+        finishSimulation("Simulation complete.");
       }
     }
-
-    // Finish the simulation and display the final score
-    function finishSimulation() {
-      addMessage("Simulation complete.", "bot");
-      addMessage("Total points: " + simulationScore + " out of 10", "bot");
-      // Show the retry button so the user can start a new round
+    
+    function finishSimulation(message) {
+      addMessage(message, "bot");
       retryBtn.style.display = "inline-block";
     }
-
-    // Reset and start the simulation round
+    
     function startSimulation() {
       simulationDiv.innerHTML = "";
       optionsDiv.innerHTML = "";
       retryBtn.style.display = "none";
+      scoreDiv.innerText = "Score: 0";
       currentNodeKey = "start";
       simulationScore = 0;
-      decisionsMade = 0;
+      badDecisions = 0;
       addMessage("Welcome to the Record Deal Negotiation Simulation. Let's begin.");
       setTimeout(displayNode, 1000);
     }
-
-    // Add event listener to the Retry button
+    
     retryBtn.addEventListener("click", startSimulation);
-
-    // Start simulation when the page loads
     startSimulation();
   </script>
 </body>
 </html>
+
