@@ -1,102 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skill Assessment Quiz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    /* Basic Styles */
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    #chatbot {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      height: 400px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      background-color: #e8f5e9;
-    }
-    .message {
-      margin: 10px 0;
-      padding: 8px;
-      border-radius: 5px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-    .message.bot {
-      background-color: #1abc9c;
-      color: #fff;
-      text-align: left;
-    }
-    .message.user {
-      background-color: #f1f1f1;
-      color: #333;
-      text-align: right;
-      margin-left: auto;
-    }
-    #input-area {
-      display: flex;
-    }
-    #user-input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px 0 0 5px;
-      font-size: 16px;
-    }
-    #submit-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #1abc9c;
-      border: none;
-      border-radius: 0 5px 5px 0;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #submit-btn:hover {
-      background-color: #2c3e50;
-    }
-  </style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eswatini Music Resource Center</title>
+    <style>
+        /* Chatbot Styling */
+        #chatbot {
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+        .bot {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+        }
+        .user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+        }
+        #user-input {
+            width: 75%;
+            padding: 5px;
+        }
+        #submit-btn {
+            width: 20%;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Skill Assessment Quiz</h1>
-    <div id="chatbot">
-      <!-- Chat messages will appear here -->
-    </div>
-    <div id="input-area">
-      <input type="text" id="user-input" placeholder="Enter a one-word answer..." autofocus />
-      <button id="submit-btn">Send</button>
-    </div>
-  </div>
+    <header>
+        <h1>Eswatini Music Resource Center</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="industry-services.html">Industry Services</a></li>
+                <li><a href="superfan-hub.html">SuperFan Hub</a></li>
+                <li><a href="artist-spotlight.html">Artist Spotlight</a></li>
+                <li><a href="event.html">Events</a></li> <!-- Updated Event Link -->
+            </ul>
+        </nav>
+    </header>
 
-  <script>
-    const chatBot = document.getElementById('chatbot');
-    const userInput = document.getElementById('user-input');
-    const submitBtn = document.getElementById('submit-btn');
+    <main>
+        <section>
+            <h2>Welcome to the Eswatini Music Resource Center</h2>
+            <p>This platform supports budding artists, artist managers, labels, and other stakeholders in the local Eswatini music industry.</p>
+            <a href="event.html">Support Local Artists →</a> <!-- Updated Event Link -->
+        </section>
 
-    const quizData = [
+        <!-- Chatbot Section -->
+        <section>
+            <h2>Skill Assessment Quiz</h2>
+            <div id="chatbot"></div>
+            <input type="text" id="user-input" placeholder="Type your answer here...">
+            <button id="submit-btn">Send</button>
+        </section>
+
+        <!-- Other Sections -->
+        <section>
+            <h2>About Us</h2>
+            <p>Empowering Artists, Managers, and Labels in Eswatini.</p>
+        </section>
+
+        <section>
+            <h2>Latest News</h2>
+            <ul>
+                <li><a href="#">AI-Generated News</a></li>
+                <li><a href="#">Aggregated Local News</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Highlighted Tracks</h2>
+            <p>Top tracks from our community this month.</p>
+        </section>
+
+        <section>
+            <h2>Education & Resources</h2>
+            <p>Access books, articles, and guides to help you navigate the music business:</p>
+            <ul>
+                <li>"This Business of Music" by TomC. Kelly</li>
+                <li>"Music 3.0" by Bobby Owsinski</li>
+                <li><a href="#">AI in Music: Ethical Guidelines</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Community Engagement</h2>
+            <p>Join our forums, participate in discussions, and stay updated with events:</p>
+            <ul>
+                <li><a href="#">Discussion Forums</a></li>
+                <li><a href="event.html">Event Calendar</a></li> <!-- Updated Event Link -->
+                <li><a href="#">Local Venues Map</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Upcoming Events</h2>
+            <p><a href="event.html">Submit Your Event →</a></p> <!-- Updated Event Link -->
+            <div>
+                Days Hours Minutes
+            </div>
+        </section>
+
+        <section>
+            <h2>Social Media Highlights</h2>
+            <blockquote class="twitter-tweet">
+                <p>Tweets by YourLocalArtistHandle</p>
+            </blockquote>
+        </section>
+
+        <section>
+            <h2>Subscribe to Our Newsletter</h2>
+            <form>
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Eswatini Music Resource Center | A Swazi Jive Entertainment Initiative</p>
+        <p>Get live updates! Join our <a href="#">Eswatini Music WhatsApp Group</a>.</p>
+        <p><a href="#">Chat with us</a></p>
+    </footer>
+
+    <!-- Chatbot Script -->
+    <script>
+        const chatBot = document.getElementById('chatbot');
+        const userInput = document.getElementById('user-input');
+        const submitBtn = document.getElementById('submit-btn');
+        let currentQuestionIndex = 0;
+         const quizData = [
       {
   question: "True or False: Digital streaming has reduced physical album sales?",
   answer: "True",
@@ -369,65 +416,44 @@
       }
     ];
 
-     let currentQuestionIndex = 0;
-    let score = 0;
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+            messageDiv.textContent = text;
+            chatBot.appendChild(messageDiv);
+            chatBot.scrollTop = chatBot.scrollHeight;
+        }
 
-    function addMessage(text, sender = 'bot') {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message', sender);
-      messageDiv.innerText = text;
-      chatBot.appendChild(messageDiv);
-      chatBot.scrollTop = chatBot.scrollHeight;
-    }
+        function askQuestion() {
+            if (currentQuestionIndex < quizData.length) {
+                appendMessage(quizData[currentQuestionIndex].question, "bot");
+            } else {
+                appendMessage("Quiz completed! 🎉", "bot");
+                submitBtn.disabled = true;
+                userInput.disabled = true;
+            }
+        }
 
-    function startQuiz() {
-      addMessage("Welcome to the Music Business Quiz! Answer with one-word responses.");
-      setTimeout(askQuestion, 1000);
-    }
+        submitBtn.addEventListener("click", () => {
+            const userAnswer = userInput.value.trim();
+            if (userAnswer === "") return;
+            appendMessage(userAnswer, "user");
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            const explanation = quizData[currentQuestionIndex].explanation;
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                appendMessage("✅ Correct! " + explanation, "bot");
+            } else {
+                appendMessage("❌ Incorrect. " + explanation, "bot");
+            }
+            userInput.value = "";
+            currentQuestionIndex++;
+            setTimeout(askQuestion, 1500);
+        });
 
-    function askQuestion() {
-      if (currentQuestionIndex < quizData.length) {
-        addMessage(`Question ${currentQuestionIndex + 1}: ${quizData[currentQuestionIndex].question}`);
-      } else {
-        finishQuiz();
-      }
-    }
-
-    function handleAnswer() {
-      const answer = userInput.value.trim();
-      if (answer === "") return;
-      
-      addMessage(answer, 'user');
-      userInput.value = "";
-
-      const currentQuestion = quizData[currentQuestionIndex];
-      const correctAnswer = currentQuestion.answer.toLowerCase();
-      const userAnswer = answer.toLowerCase();
-
-      if (userAnswer === correctAnswer) {
-        score++;
-        addMessage(`✅ Correct! ${currentQuestion.explanation}`);
-      } else {
-        addMessage(`❌ Incorrect. The correct answer was: ${currentQuestion.answer}. ${currentQuestion.explanation}`);
-      }
-
-      currentQuestionIndex++;
-      setTimeout(askQuestion, 1500);
-    }
-
-    function finishQuiz() {
-      const percentage = Math.round((score / quizData.length) * 100);
-      addMessage(`🏁 Quiz Complete! Final Score: ${score}/${quizData.length} (${percentage}%)`);
-      addMessage("Refresh the page to try again!");
-    }
-
-    submitBtn.addEventListener('click', handleAnswer);
-    userInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleAnswer();
-    });
-
-    // Start the quiz
-    startQuiz();
-  </script>
+        // Start the quiz when the page loads
+        window.onload = askQuestion;
+    </script>
 </body>
 </html>
+
+
