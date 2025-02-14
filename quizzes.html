@@ -63,7 +63,7 @@
       border-radius: 5px 0 0 5px;
       font-size: 16px;
     }
-    #submit-btn {
+    #submit-btn, #retry-btn {
       padding: 10px 20px;
       font-size: 16px;
       background-color: #1abc9c;
@@ -72,9 +72,14 @@
       color: #fff;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-left: 5px;
     }
-    #submit-btn:hover {
+    #submit-btn:hover, #retry-btn:hover {
       background-color: #2c3e50;
+    }
+    /* Hide the retry button until needed */
+    #retry-btn {
+      display: none;
     }
   </style>
 </head>
@@ -87,6 +92,7 @@
     <div id="input-area">
       <input type="text" id="user-input" placeholder="Type your answer here..." autofocus />
       <button id="submit-btn">Send</button>
+      <button id="retry-btn">Retry</button>
     </div>
   </div>
 
@@ -95,525 +101,273 @@
     const chatBot = document.getElementById('chatbot');
     const userInput = document.getElementById('user-input');
     const submitBtn = document.getElementById('submit-btn');
+    const retryBtn = document.getElementById('retry-btn');
 
-    // Quiz data (this can later be dynamically generated via AI)
+    // Pool of 50 quiz questions (Eswatini Music, Industry Business & Contract Related)
     const quizData = [
       {
-        question: "What is the administrative capital of Eswatini?",
+        question: "Which city in Eswatini is renowned for its vibrant live music scene?",
         answer: "Mbabane",
-        explanation: "Mbabane is the administrative capital, while Lobamba is the royal and legislative capital."
+        explanation: "Mbabane hosts numerous live music venues and events that showcase local talent."
       },
-  {
-    question: "Which city in Eswatini is celebrated for its vibrant traditional music scene?",
-    answer: "Lobamba",
-    explanation: "Lobamba is renowned for its deep cultural roots and rich musical traditions."
-  },
-  {
-    question: "Name a notable figure in Eswatini pop culture known for modern music contributions.",
-    answer: "Siyaya",
-    explanation: "Siyaya is recognized for bridging traditional sounds with contemporary music trends."
-  },
-  {
-    question: "What traditional instrument is iconic in Eswatini music?",
-    answer: "Mbira",
-    explanation: "The mbira, a thumb piano, plays a significant role in traditional Eswatini music."
-  },
-  {
-    question: "In which town is the annual Incwala ceremony, a major cultural event, celebrated?",
-    answer: "Lobamba",
-    explanation: "Lobamba hosts the Incwala ceremony, a celebration of Eswatini's heritage."
-  },
-  {
-    question: "Which genre of music is most associated with modern Eswatini pop culture?",
-    answer: "Afro-pop",
-    explanation: "Afro-pop has become increasingly popular in Eswatini, blending traditional and modern sounds."
-  },
-  {
-    question: "What is the capital city of Eswatini known for its contemporary music scene?",
-    answer: "Mbabane",
-    explanation: "Mbabane is not only the administrative capital but also a hub for modern music trends."
-  },
-  {
-    question: "Which event celebrates Eswatini's youth and music each year?",
-    answer: "Reed Dance",
-    explanation: "The Reed Dance is a traditional celebration that also highlights the country's musical heritage."
-  },
-  {
-    question: "Which instrument, often made from animal skin, is used in traditional Eswatini dance music?",
-    answer: "Sibhaca",
-    explanation: "The sibhaca is a traditional percussion instrument integral to dance music in Eswatini."
-  },
-  {
-    question: "Name a popular Eswatini radio station that promotes local music.",
-    answer: "Radio Eswatini",
-    explanation: "Radio Eswatini plays a significant role in broadcasting and promoting local artists."
-  },
-  {
-    question: "What dance form is integral to Eswatini cultural performances?",
-    answer: "Umhlanga",
-    explanation: "The Umhlanga (Reed Dance) is a traditional dance that showcases the grace and heritage of Eswatini."
-  },
-  {
-    question: "Which modern genre blends traditional rhythms with electronic beats in Eswatini?",
-    answer: "Afro-electronic",
-    explanation: "Afro-electronic fuses traditional African sounds with modern electronic music."
-  },
-  {
-    question: "Name a festival in Eswatini that features live music and cultural exhibitions.",
-    answer: "Swazi Music Fest",
-    explanation: "Swazi Music Fest is an event that highlights both traditional and contemporary music."
-  },
-  {
-    question: "Which Eswatini artist is known for fusing traditional and modern sounds?",
-    answer: "Siyaya",
-    explanation: "Siyaya has gained acclaim for blending indigenous musical styles with modern pop influences."
-  },
-  {
-    question: "What popular musical instrument is used in both traditional and contemporary Eswatini music?",
-    answer: "Guitar",
-    explanation: "The guitar is versatile and appears in a variety of musical genres across Eswatini."
-  },
-  {
-    question: "Which annual event in Eswatini celebrates local music talents?",
-    answer: "Eswatini Music Awards",
-    explanation: "The Eswatini Music Awards honor outstanding achievements by local artists."
-  },
-  {
-    question: "Name the event where Eswatini artists perform at the national level.",
-    answer: "Eswatini National Music Festival",
-    explanation: "This festival gathers artists from across the country for performances and competitions."
-  },
-  {
-    question: "Which musical style in Eswatini is known for its storytelling?",
-    answer: "Folk",
-    explanation: "Folk music in Eswatini often recounts traditional stories and cultural values."
-  },
-  {
-    question: "Which instrument, resembling a xylophone, is used in traditional Eswatini music?",
-    answer: "Likembe",
-    explanation: "The likembe produces melodic sounds and is commonly used in traditional performances."
-  },
-  {
-    question: "What type of music is often played during Eswatini wedding ceremonies?",
-    answer: "Traditional",
-    explanation: "Traditional music is an essential part of wedding ceremonies in Eswatini."
-  },
-  {
-    question: "Which Eswatini city is known for its vibrant street music scene?",
-    answer: "Mbabane",
-    explanation: "Mbabane's streets often feature live performances by local musicians."
-  },
-  {
-    question: "Name a contemporary Eswatini music producer known for his innovative beats.",
-    answer: "Dineo",
-    explanation: "Dineo is celebrated for incorporating unique sounds into modern Eswatini music."
-  },
-  {
-    question: "Which traditional dance performance in Eswatini involves elaborate costumes and music?",
-    answer: "Umhlanga Reed Dance",
-    explanation: "The Umhlanga Reed Dance is famous for its vibrant costumes and traditional music."
-  },
-  {
-    question: "What modern Eswatini music genre is gaining international attention?",
-    answer: "Afrobeat",
-    explanation: "Afrobeat, with its energetic rhythms, is making waves both locally and internationally."
-  },
-  {
-    question: "Which popular instrument is commonly featured in Eswatini pop tracks?",
-    answer: "Keyboard",
-    explanation: "Keyboards add modern layers and textures to Eswatini pop music."
-  },
-  {
-    question: "Name an influential record label that promotes Eswatini music.",
-    answer: "Swazi Sound Records",
-    explanation: "Swazi Sound Records has been pivotal in bringing local music to a broader audience."
-  },
-  {
-    question: "Which Eswatini music event is known for its fusion of genres?",
-    answer: "Fusion Fest",
-    explanation: "Fusion Fest showcases a blend of traditional and contemporary musical styles."
-  },
-  {
-    question: "What is a common theme in Eswatini music lyrics?",
-    answer: "Heritage",
-    explanation: "Many Eswatini songs celebrate cultural heritage and traditions."
-  },
-  {
-    question: "Which instrument is used to create rhythmic beats in traditional Eswatini music?",
-    answer: "Djembe",
-    explanation: "The djembe is a hand drum widely used in various African musical traditions, including in Eswatini."
-  },
-  {
-    question: "Name a traditional Eswatini percussion instrument.",
-    answer: "Ngoma",
-    explanation: "Ngoma drums are essential in many traditional ceremonies and music performances."
-  },
-  {
-    question: "What is the name of the annual event celebrating Eswatini’s cultural heritage through music and dance?",
-    answer: "Incwala",
-    explanation: "Incwala is a sacred ceremony that plays a central role in Eswatini culture."
-  },
-  {
-    question: "Which Eswatini pop artist is celebrated for blending traditional music with hip-hop elements?",
-    answer: "Siyaya",
-    explanation: "Siyaya has successfully merged indigenous sounds with modern hip-hop to create a unique style."
-  },
-  {
-    question: "What is a common venue for live Eswatini music performances?",
-    answer: "Music Hall",
-    explanation: "Music Halls in Eswatini provide a space for both traditional and contemporary live music."
-  },
-  {
-    question: "Which Eswatini festival features competitions among local musicians?",
-    answer: "Music Battle Royale",
-    explanation: "Music Battle Royale is a competitive event that highlights the talents of emerging artists."
-  },
-  {
-    question: "Name a popular Eswatini music streaming platform.",
-    answer: "SwaziTunes",
-    explanation: "SwaziTunes is known for its extensive catalog of local music."
-  },
-  {
-    question: "Which instrument is synonymous with the soulful sounds of Eswatini gospel music?",
-    answer: "Piano",
-    explanation: "The piano is a key instrument in many gospel choirs and ballads in Eswatini."
-  },
-  {
-    question: "What traditional stringed instrument is unique to Eswatini?",
-    answer: "Silimba",
-    explanation: "The silimba is a lesser-known traditional string instrument with a distinctive sound."
-  },
-  {
-    question: "Which Eswatini cultural event incorporates both music and traditional crafts?",
-    answer: "Culture Fest",
-    explanation: "Culture Fest celebrates the diverse heritage of Eswatini through music, art, and craft."
-  },
-  {
-    question: "Name a prominent Eswatini music blogger or influencer.",
-    answer: "Mzwandile",
-    explanation: "Mzwandile is known for promoting local music and cultural events online."
-  },
-  {
-    question: "Which genre in Eswatini music is characterized by its energetic beats and dance moves?",
-    answer: "Dancehall",
-    explanation: "Dancehall music has become popular among the youth for its lively rhythms."
-  },
-  {
-    question: "What traditional Eswatini rhythm is often used in ceremonies?",
-    answer: "Swazi Drumming",
-    explanation: "Swazi Drumming provides the heartbeat for many ceremonial performances."
-  },
-  {
-    question: "Name a popular music video channel in Eswatini.",
-    answer: "Swazi TV Music",
-    explanation: "Swazi TV Music showcases music videos and live performances from local artists."
-  },
-  {
-    question: "Which Eswatini musician is known for their soulful ballads?",
-    answer: "Thandi",
-    explanation: "Thandi has earned a reputation for her emotive vocal style and heartfelt lyrics."
-  },
-  {
-    question: "What type of music is frequently performed at Eswatini public celebrations?",
-    answer: "Traditional",
-    explanation: "Traditional music is a staple at many public events, reflecting the country’s cultural roots."
-  },
-  {
-    question: "Which modern instrument has become popular among young Eswatini musicians?",
-    answer: "Synthesizer",
-    explanation: "Synthesizers offer a range of sounds that are widely embraced in modern music production."
-  },
-  {
-    question: "Name the annual competition that showcases emerging Eswatini music talent.",
-    answer: "Swazi Star Search",
-    explanation: "Swazi Star Search is known for discovering and promoting new musical talent."
-  },
-  {
-    question: "Which Eswatini pop song is known for its catchy chorus and upbeat tempo?",
-    answer: "'Vibes of Swaziland'",
-    explanation: "The track 'Vibes of Swaziland' has become a local hit thanks to its infectious energy."
-  },
-  {
-    question: "What cultural dance in Eswatini is accompanied by traditional music?",
-    answer: "Umtsimba",
-    explanation: "Umtsimba is a traditional dance that is deeply intertwined with indigenous music."
-  },
-  {
-    question: "Which instrument is essential for the traditional sound of Eswatini folk music?",
-    answer: "Kalimba",
-    explanation: "The kalimba provides a melodic, soothing quality to folk music in Eswatini."
-  },
-  {
-    question: "Name an Eswatini music producer who has collaborated internationally.",
-    answer: "Khanyisa",
-    explanation: "Khanyisa has brought Eswatini sounds to an international audience through innovative collaborations."
-  },
-  {
-    question: "Which event celebrates Eswatini's musical diversity and talent?",
-    answer: "Diverse Beats Festival",
-    explanation: "Diverse Beats Festival highlights the range of musical styles present in Eswatini."
-  },
-  {
-    question: "What is a popular subject of Eswatini music lyrics?",
-    answer: "Love",
-    explanation: "Love is a universal theme that resonates deeply in many Eswatini songs."
-  },
-  {
-    question: "Which Eswatini musician is known for innovative fusions of traditional and modern music?",
-    answer: "Siyaya",
-    explanation: "Siyaya's innovative approach has made him a standout figure in the local music scene."
-  },
-  {
-    question: "Name the traditional dance that is a highlight of Eswatini cultural events.",
-    answer: "Umhlanga",
-    explanation: "The Umhlanga dance is celebrated for its elegance and cultural significance."
-  },
-  {
-    question: "Which instrument is frequently played in Eswatini highlife music?",
-    answer: "Saxophone",
-    explanation: "The saxophone adds a jazzy, smooth element to highlife tracks."
-  },
-  {
-    question: "What style of music is Eswatini's contemporary hit 'Vibes of Swaziland' associated with?",
-    answer: "Afro-pop",
-    explanation: "'Vibes of Swaziland' is a prime example of the country's thriving Afro-pop scene."
-  },
-  {
-    question: "Name a well-known venue in Mbabane for live music performances.",
-    answer: "The Music Lounge",
-    explanation: "The Music Lounge is a popular spot for experiencing live performances in Mbabane."
-  },
-  {
-    question: "Which musical instrument is central to the Eswatini gospel choir sound?",
-    answer: "Organ",
-    explanation: "The organ provides a rich, full sound that is key to gospel music in Eswatini."
-  },
-  {
-    question: "What type of music is popular at Eswatini nightclubs?",
-    answer: "Dance",
-    explanation: "Dance music, with its energetic beats, is a favorite in Eswatini nightclubs."
-  },
-  {
-    question: "Which instrument is commonly used in Eswatini jazz fusion tracks?",
-    answer: "Trumpet",
-    explanation: "The trumpet’s bold sound adds a distinctive flair to jazz fusion in Eswatini."
-  },
-  {
-    question: "Name a rising star in the Eswatini music scene known for experimental sounds.",
-    answer: "Lindiwe",
-    explanation: "Lindiwe is quickly gaining attention for her boundary-pushing musical style."
-  },
-  {
-    question: "Which traditional percussion instrument is used in Eswatini cultural celebrations?",
-    answer: "Ingoma",
-    explanation: "The ingoma drum is an essential element of Eswatini’s rhythmic traditions."
-  },
-  {
-    question: "What is the name of Eswatini’s traditional music ensemble?",
-    answer: "Swazi Harmony",
-    explanation: "Swazi Harmony represents the collective spirit of traditional music in Eswatini."
-  },
-  {
-    question: "Name an Eswatini pop culture event that attracts international artists.",
-    answer: "Global Swazi Fest",
-    explanation: "Global Swazi Fest brings together local talent and international acts for a vibrant celebration."
-  },
-  {
-    question: "Which instrument is known for its unique sound in Eswatini traditional music?",
-    answer: "Uhadi",
-    explanation: "The uhadi, a traditional musical bow, offers a distinct, soulful tone."
-  },
-  {
-    question: "What genre of music is Eswatini's modern hit 'Vibes of Swaziland' categorized as?",
-    answer: "Afro-pop",
-    explanation: "The song blends catchy pop melodies with African rhythms typical of Afro-pop."
-  },
-  {
-    question: "Name a popular Eswatini music TV show that features live performances.",
-    answer: "Swazi Beats",
-    explanation: "Swazi Beats is a TV show dedicated to showcasing live music from local artists."
-  },
-  {
-    question: "Which Eswatini festival is dedicated to celebrating emerging local musicians?",
-    answer: "New Sound Festival",
-    explanation: "New Sound Festival focuses on discovering and promoting new musical talent in Eswatini."
-  },
-  {
-    question: "What instrument, often used in jazz, has found its way into Eswatini fusion music?",
-    answer: "Saxophone",
-    explanation: "The saxophone’s smooth tones have made it a favorite in fusion tracks."
-  },
-  {
-    question: "Name the traditional Eswatini string instrument used in folk music.",
-    answer: "Silimba",
-    explanation: "The silimba is celebrated for its unique contribution to folk melodies."
-  },
-  {
-    question: "Which genre has seen a rise in popularity among Eswatini youth in recent years?",
-    answer: "Hip-hop",
-    explanation: "Hip-hop has become increasingly popular, reflecting the dynamic nature of Eswatini youth culture."
-  },
-  {
-    question: "What is a common theme in Eswatini music about national pride?",
-    answer: "Unity",
-    explanation: "Many songs emphasize unity as a core value of the nation."
-  },
-  {
-    question: "Name an annual event that showcases the evolution of Eswatini music.",
-    answer: "Sound Evolution Expo",
-    explanation: "Sound Evolution Expo highlights how music in Eswatini has grown and diversified over the years."
-  },
-  {
-    question: "Which traditional dance music is integral to Eswatini wedding ceremonies?",
-    answer: "Umhlanga tunes",
-    explanation: "Umhlanga tunes set the festive mood during wedding celebrations."
-  },
-  {
-    question: "What modern instrument is being embraced by Eswatini artists for its versatility?",
-    answer: "Drum machine",
-    explanation: "Drum machines allow for creative beat production in modern music."
-  },
-  {
-    question: "Name a renowned Eswatini music festival that celebrates both tradition and innovation.",
-    answer: "Heritage Beats Fest",
-    explanation: "Heritage Beats Fest bridges the gap between traditional sounds and modern music innovation."
-  },
-  {
-    question: "Which Eswatini artist is celebrated for their contributions to gospel music?",
-    answer: "Blessing",
-    explanation: "Blessing has become a prominent voice in the gospel music scene of Eswatini."
-  },
-  {
-    question: "What instrument is a staple in Eswatini street performances?",
-    answer: "Acoustic guitar",
-    explanation: "The acoustic guitar is frequently used in impromptu street performances across Eswatini."
-  },
-  {
-    question: "Name a popular music collaboration between Eswatini and international artists.",
-    answer: "Crossroads Jam",
-    explanation: "Crossroads Jam has successfully brought together diverse musical influences from Eswatini and abroad."
-  },
-  {
-    question: "Which event in Eswatini highlights traditional music competitions?",
-    answer: "Swazi Rhythm Challenge",
-    explanation: "Swazi Rhythm Challenge is a competitive event that celebrates traditional percussion skills."
-  },
-  {
-    question: "What is the traditional name for a music ensemble in Eswatini?",
-    answer: "Indlela",
-    explanation: "Indlela refers to a group of musicians performing together in a traditional setting."
-  },
-  {
-    question: "Name a well-known Eswatini music curator who promotes local talent.",
-    answer: "Nhlanhla",
-    explanation: "Nhlanhla is respected for his role in nurturing and promoting Eswatini’s music scene."
-  },
-  {
-    question: "Which genre is often fused with traditional sounds to create Eswatini pop hits?",
-    answer: "R&B",
-    explanation: "R&B elements add smooth, soulful vibes to many Eswatini pop tracks."
-  },
-  {
-    question: "What instrument, symbolic of Eswatini heritage, is often played at cultural events?",
-    answer: "Uhadi",
-    explanation: "The uhadi is not only a musical instrument but also a symbol of Eswatini’s cultural identity."
-  },
-  {
-    question: "Name a popular track by an emerging Eswatini artist that celebrates culture.",
-    answer: "'Echoes of Swaziland'",
-    explanation: "The track 'Echoes of Swaziland' has resonated with audiences for its tribute to local heritage."
-  },
-  {
-    question: "Which Eswatini event is known for its energetic street performances?",
-    answer: "Urban Beats Festival",
-    explanation: "Urban Beats Festival showcases lively performances that capture the urban music scene."
-  },
-  {
-    question: "What genre in Eswatini is known for its emotive lyrics and smooth melodies?",
-    answer: "Soul",
-    explanation: "Soul music in Eswatini is characterized by its heartfelt lyrics and mellow tunes."
-  },
-  {
-    question: "Name a traditional festival where music and dance play a central role.",
-    answer: "Incwala",
-    explanation: "Incwala is a cornerstone of Eswatini culture, where music and dance are essential components."
-  },
-  {
-    question: "Which instrument is central to the sound of Eswatini's traditional folk music?",
-    answer: "Mbira",
-    explanation: "The mbira remains a defining sound in traditional folk music across Eswatini."
-  },
-  {
-    question: "What modern music style in Eswatini blends electronic and acoustic elements?",
-    answer: "Electro-pop",
-    explanation: "Electro-pop in Eswatini is emerging as a fresh sound that merges digital beats with organic instruments."
-  },
-  {
-    question: "Name an influential Eswatini music critic known for highlighting new talent.",
-    answer: "Sipho",
-    explanation: "Sipho’s reviews and insights have made him a trusted voice in the local music industry."
-  },
-  {
-    question: "Which event in Eswatini is dedicated to showcasing music innovation and technology?",
-    answer: "Tech Beats Expo",
-    explanation: "Tech Beats Expo focuses on the intersection of music and modern technology in Eswatini."
-  },
-  {
-    question: "What traditional performance art in Eswatini incorporates music, dance, and storytelling?",
-    answer: "Umtsimba",
-    explanation: "Umtsimba is a holistic performance art that brings together multiple elements of Eswatini culture."
-  },
-  {
-    question: "Name a popular social media platform where Eswatini music is trending.",
-    answer: "SwaziGram",
-    explanation: "SwaziGram has become a go-to platform for discovering and sharing local music content."
-  },
-  {
-    question: "Which instrument is often used in Eswatini hip-hop tracks to add traditional flavor?",
-    answer: "Djembe",
-    explanation: "The djembe’s distinctive sound adds an authentic touch to hip-hop productions in Eswatini."
-  },
-  {
-    question: "What subject matter is frequently explored in Eswatini music about societal issues?",
-    answer: "Empowerment",
-    explanation: "Many artists in Eswatini use their music to address social challenges and promote empowerment."
-  },
-  {
-    question: "Name a breakthrough Eswatini music artist who gained fame through digital platforms.",
-    answer: "Zanele",
-    explanation: "Zanele leveraged social media to launch her career and quickly became a household name."
-  },
-  {
-    question: "Which genre in Eswatini music is recognized for its rhythmic beats and danceable tunes?",
-    answer: "Dancehall",
-    explanation: "Dancehall's infectious rhythms make it a favorite for clubs and parties alike."
-  },
-  {
-    question: "What traditional event in Eswatini is closely associated with music and communal celebration?",
-    answer: "Reed Dance",
-    explanation: "The Reed Dance is not only a cultural ceremony but also a festive musical celebration."
-  },
-  {
-    question: "Name a popular Eswatini music podcast that discusses industry trends.",
-    answer: "Swazi Sounds",
-    explanation: "Swazi Sounds offers in-depth discussions on local music trends and artist interviews."
-  },
-  {
-    question: "Which Eswatini music initiative aims to preserve traditional sounds while embracing modern influences?",
-    answer: "Heritage Harmony",
-    explanation: "Heritage Harmony is dedicated to preserving the roots of Eswatini music while promoting innovation."
-  }
-];
-
       {
-        question: "Name one famous Eswatini artist or band.",
+        question: "Name the traditional event that celebrates Eswatini heritage through music.",
+        answer: "Incwala",
+        explanation: "Incwala is a sacred ceremony featuring traditional music and dance."
+      },
+      {
+        question: "Which Eswatini artist is known for fusing traditional and modern sounds?",
         answer: "Siyaya",
-        explanation: "Siyaya is an example; other notable names might also be acceptable based on current trends."
+        explanation: "Siyaya is celebrated for bridging indigenous musical styles with contemporary influences."
+      },
+      {
+        question: "What traditional instrument is iconic in Eswatini music?",
+        answer: "Mbira",
+        explanation: "The mbira, or thumb piano, is central to many traditional Eswatini music performances."
+      },
+      {
+        question: "Which genre is most associated with modern Eswatini pop music?",
+        answer: "Afro-pop",
+        explanation: "Afro-pop blends traditional African rhythms with contemporary pop influences."
+      },
+      {
+        question: "What is a common clause in music contracts to protect an artist's creative work?",
+        answer: "Copyright clause",
+        explanation: "A copyright clause ensures that the artist retains rights over their original music."
+      },
+      {
+        question: "Which term refers to the percentage of revenue an artist earns from record sales?",
+        answer: "Royalty",
+        explanation: "Royalties are the payments artists receive based on sales or usage of their music."
+      },
+      {
+        question: "What is a key focus during music contract negotiations in Eswatini?",
+        answer: "Royalty rates",
+        explanation: "Negotiating favorable royalty rates is essential for ensuring fair compensation for artists."
+      },
+      {
+        question: "Which document outlines the terms of an artist’s relationship with a record label?",
+        answer: "Record agreement",
+        explanation: "A record agreement details the rights, obligations, and compensation between an artist and a label."
+      },
+      {
+        question: "What is often negotiated to provide artists with upfront payment?",
+        answer: "Advance payment",
+        explanation: "An advance is paid to artists before royalties are earned, providing immediate funds."
+      },
+      {
+        question: "Which city is a hub for music industry professionals in Eswatini?",
+        answer: "Mbabane",
+        explanation: "Mbabane is a central location for industry activities, including negotiations and live performances."
+      },
+      {
+        question: "Name a contract clause that ensures timely royalty payments.",
+        answer: "Audit clause",
+        explanation: "An audit clause allows artists to verify that royalties are calculated and paid accurately."
+      },
+      {
+        question: "Which aspect of a music contract deals with distribution rights?",
+        answer: "Licensing",
+        explanation: "Licensing terms determine how and where an artist’s music can be distributed."
+      },
+      {
+        question: "What fee is paid when music is used in TV, films, or commercials?",
+        answer: "Sync fee",
+        explanation: "A sync fee is paid to the artist for synchronizing music with visual media."
+      },
+      {
+        question: "Which type of contract is typically used for individual music projects?",
+        answer: "Single deal",
+        explanation: "Single deals focus on individual tracks rather than full albums."
+      },
+      {
+        question: "What is a benefit of a well-negotiated music contract for an artist?",
+        answer: "Creative control",
+        explanation: "Securing creative control allows artists to maintain their artistic vision."
+      },
+      {
+        question: "Which event in Eswatini brings industry experts together for discussions on music business?",
+        answer: "Music Business Summit",
+        explanation: "The Music Business Summit offers insights into contract negotiations and industry trends."
+      },
+      {
+        question: "What is the purpose of a non-compete clause in music contracts?",
+        answer: "Prevent conflict of interest",
+        explanation: "A non-compete clause restricts artists from signing with competing labels for a period of time."
+      },
+      {
+        question: "Which revenue stream supplements record sales for many Eswatini artists?",
+        answer: "Merchandising",
+        explanation: "Merchandising involves selling branded products to fans, providing additional income."
+      },
+      {
+        question: "What method is often used to resolve disputes in music contracts?",
+        answer: "Arbitration",
+        explanation: "Arbitration is an alternative dispute resolution method outside the courtroom."
+      },
+      {
+        question: "Name a digital platform that has transformed music distribution in Eswatini.",
+        answer: "SwaziTunes",
+        explanation: "SwaziTunes supports digital distribution and streaming for local artists."
+      },
+      {
+        question: "Which contract clause outlines the promotional efforts the label must provide?",
+        answer: "Marketing clause",
+        explanation: "A marketing clause details how the label will promote the artist’s work."
+      },
+      {
+        question: "What does a '360 deal' typically involve?",
+        answer: "Revenue sharing across multiple streams",
+        explanation: "A 360 deal means the label shares revenue from various sources, not just record sales."
+      },
+      {
+        question: "Which term specifies the duration of a music contract?",
+        answer: "Term length",
+        explanation: "The term length defines how long the artist is committed to the contract."
+      },
+      {
+        question: "Name a key consideration for international music distribution rights.",
+        answer: "Territorial rights",
+        explanation: "Territorial rights determine the regions where the music can be legally distributed."
+      },
+      {
+        question: "Which Eswatini city is emerging as a center for music industry innovation?",
+        answer: "Manzini",
+        explanation: "Manzini is gaining recognition for its innovative contributions to the music business."
+      },
+      {
+        question: "What is a major benefit of signing with a reputable record label in Eswatini?",
+        answer: "Industry connections",
+        explanation: "Reputable labels provide valuable networking opportunities and resources."
+      },
+      {
+        question: "Which contract term outlines an artist's touring obligations?",
+        answer: "Touring clause",
+        explanation: "A touring clause specifies the requirements and commitments related to live performances."
+      },
+      {
+        question: "What is the primary purpose of a management contract in the music industry?",
+        answer: "Career guidance",
+        explanation: "Management contracts offer strategic advice and help shape an artist’s career path."
+      },
+      {
+        question: "Which financial term ensures an artist receives payment even if sales are low?",
+        answer: "Guarantee",
+        explanation: "A guarantee secures a minimum payment regardless of commercial performance."
+      },
+      {
+        question: "Name a provision in contracts that allows artists to regain rights over their work.",
+        answer: "Rights reversion clause",
+        explanation: "This clause lets artists reclaim rights to their music after a specified period."
+      },
+      {
+        question: "Which type of contract is commonly used for collaborations between artists?",
+        answer: "Joint venture",
+        explanation: "Joint ventures outline shared responsibilities and revenue for collaborative projects."
+      },
+      {
+        question: "What does 'sync licensing' enable an artist to do?",
+        answer: "License music for media use",
+        explanation: "Sync licensing permits the use of music in films, TV, and commercials."
+      },
+      {
+        question: "Which term refers to the upfront payment provided to an artist?",
+        answer: "Advance",
+        explanation: "An advance is an upfront payment against future earnings from music sales."
+      },
+      {
+        question: "What is a common challenge during contract negotiations in Eswatini?",
+        answer: "Fair royalty distribution",
+        explanation: "Ensuring a fair split of royalties is a frequent challenge for artists."
+      },
+      {
+        question: "What role does an attorney play in the music contract process?",
+        answer: "Legal advisor",
+        explanation: "Attorneys provide legal guidance and help protect the artist's interests."
+      },
+      {
+        question: "Which clause specifies the commercial use of an artist's image?",
+        answer: "Image rights clause",
+        explanation: "This clause governs how and where an artist's likeness can be used."
+      },
+      {
+        question: "What is a key benefit of digital distribution for Eswatini artists?",
+        answer: "Global reach",
+        explanation: "Digital platforms allow artists to connect with audiences worldwide."
+      },
+      {
+        question: "Name the revenue stream earned from live performances.",
+        answer: "Booking fees",
+        explanation: "Booking fees are payments received for live concerts and events."
+      },
+      {
+        question: "Which contract clause gives an artist control over promotional materials?",
+        answer: "Approval clause",
+        explanation: "An approval clause ensures that promotional content is vetted by the artist."
+      },
+      {
+        question: "What is a common challenge in music contract negotiations?",
+        answer: "Lack of transparency",
+        explanation: "Transparency is essential to ensure that contract terms are fair and clear."
+      },
+      {
+        question: "Which term describes transferring certain rights from the artist to the label?",
+        answer: "Assignment",
+        explanation: "Assignment transfers specific rights, such as distribution, to the label."
+      },
+      {
+        question: "What is a critical factor in negotiating a fair music contract?",
+        answer: "Mutual trust",
+        explanation: "A foundation of trust between the artist and label helps secure equitable terms."
+      },
+      {
+        question: "Name a clause that allows an artist to exit a contract under set conditions.",
+        answer: "Escape clause",
+        explanation: "An escape clause outlines the conditions under which the contract can be terminated."
+      },
+      {
+        question: "Which aspect of contract negotiations can greatly impact an artist's earnings?",
+        answer: "Royalty rate",
+        explanation: "A favorable royalty rate is key to long-term financial success for an artist."
+      },
+      {
+        question: "What term defines how revenue is split among collaborators?",
+        answer: "Profit sharing",
+        explanation: "Profit sharing specifies the division of earnings among those involved in a project."
+      },
+      {
+        question: "Name a provision that covers the use of an artist's music in advertising.",
+        answer: "Endorsement clause",
+        explanation: "An endorsement clause details the terms under which an artist’s music can be used in ads."
+      },
+      {
+        question: "Which factor is important when deciding the term length of a contract?",
+        answer: "Career stage",
+        explanation: "An artist’s career stage can influence the optimal duration of a contract."
+      },
+      {
+        question: "What is a benefit of renegotiating contract terms after a successful release?",
+        answer: "Increased leverage",
+        explanation: "Successful releases provide artists with more bargaining power for better terms."
+      },
+      {
+        question: "Name a common mistake artists should avoid during contract negotiations.",
+        answer: "Overlooking fine print",
+        explanation: "Failing to review the details of a contract can lead to unfavorable conditions."
       }
     ];
 
+    // Configuration for each round
+    const QUESTIONS_PER_ROUND = 5;
+    let selectedQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
+
+    // Function to get a random selection of questions from the pool
+    function getRandomQuestions(arr, num) {
+      const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, num);
+    }
 
     // Function to add a message to the chat window
     function addMessage(text, sender = 'bot') {
@@ -624,16 +378,24 @@
       chatBot.scrollTop = chatBot.scrollHeight;
     }
 
-    // Start the quiz with a welcome message
+    // Start the quiz round
     function startQuiz() {
-      addMessage("Hello! Welcome to the Skill Assessment Quiz. Let's get started!");
-      setTimeout(askQuestion, 1500);
+      // Reset state
+      chatBot.innerHTML = "";
+      userInput.value = "";
+      currentQuestionIndex = 0;
+      score = 0;
+      retryBtn.style.display = "none";
+      // Select 5 random questions from the 50-question pool
+      selectedQuestions = getRandomQuestions(quizData, QUESTIONS_PER_ROUND);
+      addMessage("Hello! Welcome to the Eswatini Music & Industry Quiz. Let's begin with 5 questions.");
+      setTimeout(askQuestion, 1000);
     }
 
     // Ask the current quiz question
     function askQuestion() {
-      if (currentQuestionIndex < quizData.length) {
-        addMessage(quizData[currentQuestionIndex].question);
+      if (currentQuestionIndex < selectedQuestions.length) {
+        addMessage(selectedQuestions[currentQuestionIndex].question);
       } else {
         finishQuiz();
       }
@@ -645,9 +407,8 @@
       if (answer === "") return;
       addMessage(answer, 'user');
       userInput.value = "";
-
-      // Compare user answer with the correct answer (case-insensitive)
-      const currentQuestion = quizData[currentQuestionIndex];
+      
+      const currentQuestion = selectedQuestions[currentQuestionIndex];
       if (answer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
         score++;
         addMessage("Correct! " + currentQuestion.explanation);
@@ -658,33 +419,23 @@
       setTimeout(askQuestion, 1500);
     }
 
-    // Finish the quiz and provide recommendations
+    // Finish the quiz round and show score with a retry button
     function finishQuiz() {
-      addMessage("Quiz complete! Your score is: " + score + " out of " + quizData.length);
-      let recommendation = "";
-      if (score === quizData.length) {
-        recommendation = "Excellent work! You seem very knowledgeable. Check out our advanced resources.";
-      } else if (score >= quizData.length / 2) {
-        recommendation = "Good job! You might benefit from reviewing some of our intermediate materials.";
-      } else {
-        recommendation = "It looks like you might need some more practice. Consider starting with our beginner guides.";
-      }
-      addMessage("Recommendation: " + recommendation);
+      addMessage("Round complete! Your score: " + score + " out of " + QUESTIONS_PER_ROUND);
+      retryBtn.style.display = "inline-block";
     }
 
-    // Event listeners for sending answers
+    // Event listeners for sending answers and retrying
     submitBtn.addEventListener('click', handleAnswer);
     userInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         handleAnswer();
       }
     });
+    retryBtn.addEventListener('click', startQuiz);
 
-    // Begin the quiz when the page loads
+    // Begin the first round when the page loads
     startQuiz();
   </script>
-</body>
-</html>
-
 </body>
 </html>
