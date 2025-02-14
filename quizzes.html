@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Assessment Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Basic Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    #chatbot {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      background-color: #e8f5e9;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 5px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    .message.bot {
+      background-color: #1abc9c;
+      color: #fff;
+      text-align: left;
+    }
+    .message.user {
+      background-color: #f1f1f1;
+      color: #333;
+      text-align: right;
+      margin-left: auto;
+    }
+    #input-area {
+      display: flex;
+    }
+    #user-input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+      font-size: 16px;
+    }
+    #submit-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1abc9c;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #submit-btn:hover {
+      background-color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Skill Assessment Quiz</h1>
+    <div id="chatbot">
+      <!-- Chat messages will appear here -->
+    </div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Type your answer here..." autofocus />
+      <button id="submit-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // DOM elements
+    const chatBot = document.getElementById('chatbot');
+    const userInput = document.getElementById('user-input');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Quiz data (this can later be dynamically generated via AI)
+    const quizData = [
+      {
+        question: "What is the administrative capital of Eswatini?",
+        answer: "Mbabane",
+        explanation: "Mbabane is the administrative capital, while Lobamba is the royal and legislative capital."
+      },
+      {
+        question: "Which musical genre is deeply rooted in Eswatini culture?",
+        answer: "Traditional",
+        explanation: "Traditional music and dance are a key part of Eswatini’s cultural heritage."
+      },
+      {
+        question: "Name one famous Eswatini artist or band.",
+        answer: "Siyaya",
+        explanation: "Siyaya is an example; other notable names might also be acceptable based on current trends."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    // Function to add a message to the chat window
+    function addMessage(text, sender = 'bot') {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', sender);
+      messageDiv.innerText = text;
+      chatBot.appendChild(messageDiv);
+      chatBot.scrollTop = chatBot.scrollHeight;
+    }
+
+    // Start the quiz with a welcome message
+    function startQuiz() {
+      addMessage("Hello! Welcome to the Skill Assessment Quiz. Let's get started!");
+      setTimeout(askQuestion, 1000);
+    }
+
+    // Ask the current quiz question
+    function askQuestion() {
+      if (currentQuestionIndex < quizData.length) {
+        addMessage(quizData[currentQuestionIndex].question);
+      } else {
+        finishQuiz();
+      }
+    }
+
+    // Handle answer submission
+    function handleAnswer() {
+      const answer = userInput.value.trim();
+      if (answer === "") return;
+      addMessage(answer, 'user');
+      userInput.value = "";
+
+      // Compare user answer with the correct answer (case-insensitive)
+      const currentQuestion = quizData[currentQuestionIndex];
+      if (answer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
+        score++;
+        addMessage("Correct! " + currentQuestion.explanation);
+      } else {
+        addMessage("That's not correct. " + currentQuestion.explanation);
+      }
+      currentQuestionIndex++;
+      setTimeout(askQuestion, 1500);
+    }
+
+    // Finish the quiz and provide recommendations
+    function finishQuiz() {
+      addMessage("Quiz complete! Your score is: " + score + " out of " + quizData.length);
+      let recommendation = "";
+      if (score === quizData.length) {
+        recommendation = "Excellent work! You seem very knowledgeable. Check out our advanced resources.";
+      } else if (score >= quizData.length / 2) {
+        recommendation = "Good job! You might benefit from reviewing some of our intermediate materials.";
+      } else {
+        recommendation = "It looks like you might need some more practice. Consider starting with our beginner guides.";
+      }
+      addMessage("Recommendation: " + recommendation);
+    }
+
+    // Event listeners for sending answers
+    submitBtn.addEventListener('click', handleAnswer);
+    userInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        handleAnswer();
+      }
+    });
+
+    // Begin the quiz when the page loads
+    startQuiz();
+  </script>
+</body>
+</html>
