@@ -161,11 +161,14 @@
     const userInput = document.getElementById('user-input');
     const submitBtn = document.getElementById('submit-btn');
     const retryBtn = document.createElement("button");
+    const scoreDisplay = document.getElementById('score-display');
+    
     retryBtn.innerText = "Retry Quiz";
     retryBtn.style.display = "none";
     retryBtn.style.marginTop = "10px";
     retryBtn.onclick = startQuiz;
     chatBot.parentNode.appendChild(retryBtn);
+    
 
     let score = 0;
     let questionIndex = 0;
