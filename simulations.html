@@ -100,198 +100,39 @@
     const retryBtn = document.getElementById("retry-btn");
     const scoreDiv = document.getElementById("score");
 
-    const simulationScenarios =
-     
-  node2: {
-    text: "The contract limits your ability to perform independently. How do you proceed?",
-    options: [
-      { text: "Insist on performance flexibility", next: "node3", points: 1 },
-      { text: "Accept the restriction for label backing", next: "node3", points: -1 }
-    ]
-  },
-  node3: {
-    text: "The label wants control over your social media. What’s your response?",
-    options: [
-      { text: "Negotiate to retain control", next: "node4", points: 1 },
-      { text: "Agree to focus only on music", next: "node4", points: -1 }
-    ]
-  },
-  node4: {
-    text: "Your music rights are unclear in the contract. What do you do?",
-    options: [
-      { text: "Clarify and secure ownership of your masters", next: "node5", points: 1 },
-      { text: "Ignore it to finalize the deal quickly", next: "node5", points: -1 }
-    ]
-  },
-  node5: {
-    text: "The label wants a 360 deal. How do you respond?",
-    options: [
-      { text: "Negotiate for a standard recording contract", next: "node6", points: 1 },
-      { text: "Agree to the 360 deal for better support", next: "node6", points: -1 }
-    ]
-  },
-  node6: {
-    text: "The label suggests changing your artistic style. What do you do?",
-    options: [
-      { text: "Stay true to your original style", next: "node7", points: 1 },
-      { text: "Adapt to the label's suggested style", next: "node7", points: -1 }
-    ]
-  },
-  node7: {
-    text: "The label delays your album release. How do you handle it?",
-    options: [
-      { text: "Push for a new release date", next: "node8", points: 1 },
-      { text: "Wait patiently for the label's decision", next: "node8", points: -1 }
-    ]
-  },
-  node8: {
-    text: "The label wants to own your publishing rights. What’s your move?",
-    options: [
-      { text: "Retain your publishing rights", next: "node9", points: 1 },
-      { text: "Agree to give up publishing rights", next: "node9", points: -1 }
-    ]
-  },
-  node9: {
-    text: "The label offers a small royalty percentage. What do you do?",
-    options: [
-      { text: "Negotiate for a higher royalty rate", next: "node10", points: 1 },
-      { text: "Accept the offer to get started", next: "node10", points: -1 }
-    ]
-  },
-  node10: {
-    text: "The label wants you to sign a long-term contract. How do you respond?",
-    options: [
-      { text: "Request a shorter contract term", next: "node11", points: 1 },
-      { text: "Agree to the long-term contract", next: "node11", points: -1 }
-    ]
-  },
-  node11: {
-    text: "The label suggests hiring their preferred producer. What do you do?",
-    options: [
-      { text: "Insist on choosing your own producer", next: "node12", points: 1 },
-      { text: "Agree to work with their producer", next: "node12", points: -1 }
-    ]
-  },
-  node12: {
-    text: "The label wants to control your merchandise sales. How do you proceed?",
-    options: [
-      { text: "Negotiate to retain control of merchandise", next: "node13", points: 1 },
-      { text: "Agree to let the label handle merchandise", next: "node13", points: -1 }
-    ]
-  },
-  node13: {
-    text: "The label asks for exclusivity on your next album. What’s your response?",
-    options: [
-      { text: "Negotiate for non-exclusive terms", next: "node14", points: 1 },
-      { text: "Agree to exclusivity for better support", next: "node14", points: -1 }
-    ]
-  },
-  node14: {
-    text: "The label wants to take a percentage of your touring revenue. What do you do?",
-    options: [
-      { text: "Negotiate to keep touring revenue separate", next: "node15", points: 1 },
-      { text: "Agree to share touring revenue", next: "node15", points: -1 }
-    ]
-  },
-  node15: {
-    text: "The label suggests a joint venture for your music. How do you respond?",
-    options: [
-      { text: "Negotiate for a standard recording deal", next: "node16", points: 1 },
-      { text: "Agree to the joint venture", next: "node16", points: -1 }
-    ]
-  },
-  node16: {
-    text: "The label wants to own your master recordings. What’s your move?",
-    options: [
-      { text: "Retain ownership of your masters", next: "node17", points: 1 },
-      { text: "Agree to let the label own your masters", next: "node17", points: -1 }
-    ]
-  },
-  node17: {
-    text: "The label asks for a non-refundable advance. What do you do?",
-    options: [
-      { text: "Negotiate for a refundable advance", next: "node18", points: 1 },
-      { text: "Agree to the non-refundable advance", next: "node18", points: -1 }
-    ]
-  },
-  node18: {
-    text: "The label wants to control your creative direction. How do you proceed?",
-    options: [
-      { text: "Insist on maintaining creative control", next: "node19", points: 1 },
-      { text: "Agree to let the label guide your direction", next: "node19", points: -1 }
-    ]
-  },
-  node19: {
-    text: "The label suggests a co-writing agreement. What’s your response?",
-    options: [
-      { text: "Negotiate to retain full writing credits", next: "node20", points: 1 },
-      { text: "Agree to co-writing for better exposure", next: "node20", points: -1 }
-    ]
-  },
-  node20: {
-    text: "The label wants to extend your contract. How do you respond?",
-    options: [
-      { text: "Negotiate for a fair extension", next: "node21", points: 1 },
-      { text: "Agree to the extension without negotiation", next: "node21", points: -1 }
-    ]
-  },
-  node21: {
-    text: "The label suggests a marketing campaign you don’t agree with. What do you do?",
-    options: [
-      { text: "Propose an alternative campaign", next: "node22", points: 1 },
-      { text: "Agree to the label's campaign", next: "node22", points: -1 }
-    ]
-  },
-  node22: {
-    text: "The label wants to take a percentage of your sync licensing revenue. What’s your move?",
-    options: [
-      { text: "Negotiate to keep sync licensing revenue separate", next: "node23", points: 1 },
-      { text: "Agree to share sync licensing revenue", next: "node23", points: -1 }
-    ]
-  },
-  node23: {
-    text: "The label asks for a non-compete clause. How do you proceed?",
-    options: [
-      { text: "Negotiate to remove the non-compete clause", next: "node24", points: 1 },
-      { text: "Agree to the non-compete clause", next: "node24", points: -1 }
-    ]
-  },
-  node24: {
-    text: "The label wants to control your public image. What’s your response?",
-    options: [
-      { text: "Insist on controlling your own image", next: "node25", points: 1 },
-      { text: "Agree to let the label manage your image", next: "node25", points: -1 }
-    ]
-  },
-  node25: {
-    text: "The label suggests a renegotiation of your contract. How do you respond?",
-    options: [
-      { text: "Negotiate for better terms", next: "node26", points: 1 },
-      { text: "Agree to the renegotiation without changes", next: "node26", points: -1 }
-    ]
-  },
-  node26: {
-    text: "A local promoter offers an unpaid gig promising exposure. Your choice?",
-    options: [
-      { text: "Accept for visibility", points: 0 },
-      { text: "Demand payment or decline", points: 1 }
-    ]
-  },
-  node27: {
-    text: "A sponsor wants to fund your album but takes 50% of profits. What’s your move?",
-    options: [
-      { text: "Negotiate a better deal", points: 1 },
-      { text: "Take the deal without changes", points: 0 }
-    ]
-  },
-  node28: {
-    text: "You’re invited to collaborate on a song, but the artist has bad industry rep. Do you proceed?",
-    options: [
-      { text: "Decline to protect your brand", points: 1 },
-      { text: "Accept for potential reach", points: 0 }
-    ]
-  }
-}
+    const simulationScenarios = [
+      { text: "A gallery offers you an exhibition but wants a 70% commission.", options: [
+          { text: "Negotiate for 50%", feedback: "They agree to 50%. Well done!", points: 1 },
+          { text: "Accept 70%", feedback: "You lose too much profit.", points: 0 }
+        ]},
+      { text: "A client wants a custom painting but refuses to pay upfront.", options: [
+          { text: "Request a 50% deposit", feedback: "The client agrees. Good move!", points: 1 },
+          { text: "Accept and start work", feedback: "The client disappears without paying.", points: 0 }
+        ]},
+      { text: "A music label offers you a contract with no royalties.", options: [
+          { text: "Negotiate for at least 10% royalties", feedback: "The label agrees. Smart choice!", points: 1 },
+          { text: "Sign the contract", feedback: "You miss out on long-term income.", points: 0 }
+        ]},
+      { text: "A brand wants to use your artwork for an ad but offers exposure instead of payment.", options: [
+          { text: "Decline unless they pay", feedback: "They offer a fair payment. Good job!", points: 1 },
+          { text: "Accept for exposure", feedback: "Exposure doesn’t pay bills.", points: 0 }
+        ]},
+      { text: "A client refuses to sign a contract for a commissioned piece.", options: [
+          { text: "Insist on a contract", feedback: "They sign, securing your payment!", points: 1 },
+          { text: "Proceed without it", feedback: "They refuse to pay after delivery.", points: 0 }
+        ]}
+    ];
+    
+    function startSimulation() {
+      score = 0;
+      currentScenarioIndex = 0;
+      usedIndices.clear();
+      simulationDiv.innerHTML = "";
+      optionsDiv.innerHTML = "";
+      retryBtn.style.display = "none";
+      scoreDiv.innerText = "Score: 0";
+      displayScenario();
+    }
 
     function getRandomScenario() {
       if (usedIndices.size >= maxQuestions) return null;
@@ -334,28 +175,6 @@
       score += option.points;
       scoreDiv.innerText = `Score: ${score}`;
       currentScenarioIndex++;
-      setTimeout(displayScenario, 1000);
-    }
-
-    function finishSimulation() {
-      addMessage("Simulation complete. Final Score: " + score, "bot");
-      if (score === 10) {
-        addMessage("🎉 Excellent! You passed! You're a negotiation pro!", "bot");
-      } else {
-        addMessage("⚠️ You did not pass. Try again to improve your score.", "bot");
-      }
-      retryBtn.style.display = "inline-block";
-    }
-
-    function startSimulation() {
-      simulationDiv.innerHTML = "";
-      optionsDiv.innerHTML = "";
-      retryBtn.style.display = "none";
-      score = 0;
-      currentScenarioIndex = 0;
-      usedIndices.clear();
-      scoreDiv.innerText = "Score: 0";
-      addMessage("Welcome to the Artist Career Negotiation Simulator!");
       setTimeout(displayScenario, 1000);
     }
 
