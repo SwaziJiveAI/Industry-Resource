@@ -215,6 +215,199 @@
 },
 {
   text: "The label suggests hiring their preferred producer.",
+  options: [<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <header>
+    <h1>Eswatini Music Resource Center</h1>
+  </header>
+  <title>Artist Career Negotiation Simulation</title>
+  <p style="text-align: center; margin-top: 20px;"><a href="https://swazijiveai.github.io/Industry-Resource/quizzes.html" style="font-size: 22px; color: #bcb71a; text-decoration: overline; font-weight: bold;">Try The Quiz!</a></p>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    header {
+            background: linear-gradient(135deg, #2c3e50, #1abc9c);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    #simulation {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: #e8f5e9;
+      min-height: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 5px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    .message.bot {
+      background-color: #1abc9c;
+      color: #fff;
+      text-align: left;
+    }
+    .message.user {
+      background-color: #f1f1f1;
+      color: #333;
+      text-align: right;
+      margin-left: auto;
+    }
+    #options {
+      text-align: center;
+    }
+    .option-btn, .retry-btn {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1abc9c;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .option-btn:hover, .retry-btn:hover {
+      background-color: #2c3e50;
+    }
+    .retry-btn {
+      display: none;
+    }
+    #score {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Artist Career Negotiation Simulation</h1>
+    <div id="simulation"></div>
+    <div id="options"></div>
+    <button class="retry-btn" id="retry-btn">Retry</button>
+    <div id="score">Score: 0</div>
+  </div>
+
+  <script>
+    let score = 0;
+    let currentScenarioIndex = 0;
+    const maxQuestions = 100;
+    const usedIndices = new Set();
+    const simulationDiv = document.getElementById("simulation");
+    const optionsDiv = document.getElementById("options");
+    const retryBtn = document.getElementById("retry-btn");
+    const scoreDiv = document.getElementById("score");
+
+    const simulationScenarios = [
+      {
+  text: "A music label offers you a contract with no royalties.",
+  options: [
+    { text: "Negotiate for at least 10% royalties", feedback: "The label agrees. Smart choice!", points: 1 },
+    { text: "Sign the contract", feedback: "You miss out on long-term income.", points: 0 }
+  ]
+},
+{
+  text: "The label offers a low advance but promises exposure.",
+  options: [
+    { text: "Negotiate for a higher advance", feedback: "The label increases the offer. Great move!", points: 1 },
+    { text: "Accept it and trust the label's plan", feedback: "Exposure alone may not pay the bills.", points: 0 }
+  ]
+},
+{
+  text: "The contract limits your ability to perform independently.",
+  options: [
+    { text: "Insist on performance flexibility", feedback: "The label agrees to loosen restrictions.", points: 1 },
+    { text: "Accept the restriction for label backing", feedback: "This could limit your career growth.", points: 0 }
+  ]
+},
+{
+  text: "The label wants control over your social media.",
+  options: [
+    { text: "Negotiate to retain control", feedback: "You maintain your online presence.", points: 1 },
+    { text: "Agree to focus only on music", feedback: "Losing control of your image can be risky.", points: 0 }
+  ]
+},
+{
+  text: "Your music rights are unclear in the contract.",
+  options: [
+    { text: "Clarify and secure ownership of your masters", feedback: "You protect your intellectual property.", points: 1 },
+    { text: "Ignore it to finalize the deal quickly", feedback: "This could lead to future disputes.", points: 0 }
+  ]
+},
+{
+  text: "The label wants a 360 deal.",
+  options: [
+    { text: "Negotiate for a standard recording contract", feedback: "The label agrees to a fairer deal.", points: 1 },
+    { text: "Agree to the 360 deal for better support", feedback: "A 360 deal takes a bigger cut of your earnings.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests changing your artistic style.",
+  options: [
+    { text: "Stay true to your original style", feedback: "Authenticity resonates with fans.", points: 1 },
+    { text: "Adapt to the label's suggested style", feedback: "Changing styles might alienate your audience.", points: 0 }
+  ]
+},
+{
+  text: "The label delays your album release.",
+  options: [
+    { text: "Push for a new release date", feedback: "The label sets a more reasonable timeline.", points: 1 },
+    { text: "Wait patiently for the label's decision", feedback: "Delaying releases can hurt momentum.", points: 0 }
+  ]
+},
+{
+  text: "The label wants to own your publishing rights.",
+  options: [
+    { text: "Retain your publishing rights", feedback: "You keep earning from songwriting.", points: 1 },
+    { text: "Agree to give up publishing rights", feedback: "Giving up publishing rights reduces future income.", points: 0 }
+  ]
+},
+{
+  text: "The label offers a small royalty percentage.",
+  options: [
+    { text: "Negotiate for a higher royalty rate", feedback: "The label raises the royalty percentage.", points: 1 },
+    { text: "Accept the offer to get started", feedback: "Low royalties mean less profit per sale.", points: 0 }
+  ]
+},
+{
+  text: "The label wants you to sign a long-term contract.",
+  options: [
+    { text: "Request a shorter contract term", feedback: "Shorter terms provide more flexibility.", points: 1 },
+    { text: "Agree to the long-term contract", feedback: "Long-term contracts lock you into one label.", points: 0 }
+  ]
+},
+{
+  text: "The label suggests hiring their preferred producer.",
   options: [
     { text: "Insist on choosing your own producer", feedback: "Collaborating with trusted producers enhances creativity.", points: 1 },
     { text: "Agree to work with their producer", feedback: "Using the label's producer might compromise your vision.", points: 0 }
@@ -1022,46 +1215,64 @@
 },
     ];
     
-    function displayScenario() {
-      if (currentScenarioIndex >= simulationScenarios.length || score >= maxQuestions) {
-        simulationDiv.innerHTML = `<div class="message bot">🎉 Simulation completed! You scored ${score} points. Well done!</div>`;
-        optionsDiv.innerHTML = "";
-        retryBtn.style.display = "block";
-        return;
-      }
-
-      const scenario = simulationScenarios[currentScenarioIndex];
-      simulationDiv.innerHTML = `<div class="message bot">${scenario.question}</div>`;
-      optionsDiv.innerHTML = scenario.options
-        .map(
-          (option) =>
-            `<button class="option-btn" onclick="handleAnswer('${option}')">${option}</button>`
-        )
-        .join("");
-    }
-
-    function handleAnswer(selectedOption) {
-      const scenario = simulationScenarios[currentScenarioIndex];
-      if (selectedOption === scenario.correctAnswer) {
-        score++;
-        scoreDiv.textContent = `Score: ${score}`;
-        simulationDiv.innerHTML += `<div class="message bot">✅ Correct! ${scenario.explanation}</div>`;
-      } else {
-        simulationDiv.innerHTML += `<div class="message bot">❌ Incorrect. ${scenario.explanation}</div>`;
-      }
-      currentScenarioIndex++;
-      setTimeout(displayScenario, 1500);
-    }
-
-    retryBtn.addEventListener("click", () => {
+    function startSimulation() {
       score = 0;
       currentScenarioIndex = 0;
-      scoreDiv.textContent = `Score: ${score}`;
+      usedIndices.clear();
+      simulationDiv.innerHTML = "";
+      optionsDiv.innerHTML = "";
       retryBtn.style.display = "none";
+      scoreDiv.innerText = "Score: 0";
       displayScenario();
-    });
+    }
 
-    window.onload = displayScenario;
+    function getRandomScenario() {
+      if (usedIndices.size >= maxQuestions) return null;
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * simulationScenarios.length);
+      } while (usedIndices.has(randomIndex));
+      usedIndices.add(randomIndex);
+      return simulationScenarios[randomIndex];
+    }
+
+    function addMessage(text, sender = "bot") {
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message", sender);
+      msgDiv.innerText = text;
+      simulationDiv.appendChild(msgDiv);
+      simulationDiv.scrollTop = simulationDiv.scrollHeight;
+    }
+
+    function displayScenario() {
+      const scenario = getRandomScenario();
+      if (!scenario) {
+        finishSimulation();
+        return;
+      }
+      addMessage(scenario.text, "bot");
+      optionsDiv.innerHTML = "";
+      scenario.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option.text;
+        btn.classList.add("option-btn");
+        btn.addEventListener("click", () => handleOption(option));
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function handleOption(option) {
+      addMessage(option.text, "user");
+      addMessage(option.feedback, "bot");
+      score += option.points;
+      scoreDiv.innerText = `Score: ${score}`;
+      currentScenarioIndex++;
+      setTimeout(displayScenario, 1000);
+    }
+
+    retryBtn.addEventListener("click", startSimulation);
+    startSimulation();
   </script>
 </body>
 </html>
+
