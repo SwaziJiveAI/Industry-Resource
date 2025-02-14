@@ -122,14 +122,17 @@
     <div id="simulation"></div>
     <div id="options"></div>
     <button class="retry-btn" id="retry-btn">Retry</button>
-    <div id="score">Score: 0</div>
+    <div id="score">Round: 1 | Score: 0 | Wrong Answers: 0</div>
   </div>
 
   <script>
     let score = 0;
+    let wrongAnswers = 0;
+    let currentRound = 1;
     let currentScenarioIndex = 0;
-    const maxQuestions = 100;
-    const usedIndices = new Set();
+    const maxQuestionsPerRound = 20;
+    const maxWrongAnswers = 3;
+    const correctAnswersToWin = 10;
     const simulationDiv = document.getElementById("simulation");
     const optionsDiv = document.getElementById("options");
     const retryBtn = document.getElementById("retry-btn");
@@ -329,9 +332,24 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       }
     ];
 
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
     function displayScenario() {
-      if (currentScenarioIndex >= simulationScenarios.length || score >= maxQuestions) {
-        simulationDiv.innerHTML = `<div class="message bot">🎉 Simulation completed! You scored ${score} points. Well done!</div>`;
+      if (currentScenarioIndex >= simulationScenarios.length || score >= correctAnswersToWin || wrongAnswers >= maxWrongAnswers) {
+        let message;
+        if (wrongAnswers >= maxWrongAnswers) {
+          message = `❌ Game Over! You got 3 wrong answers. Final Score: ${score}`;
+        } else if (score >= correctAnswersToWin) {
+          message = `🎉 You won Round ${currentRound}! Final Score: ${score}`;
+        } else {
+          message = `🏁 Round ${currentRound} over! You scored ${score} points.`;
+        }
+        simulationDiv.innerHTML = `<div class="message bot">${message}</div>`;
         optionsDiv.innerHTML = "";
         retryBtn.style.display = "block";
         return;
@@ -351,24 +369,32 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       const scenario = simulationScenarios[currentScenarioIndex];
       if (selectedOption === scenario.correctAnswer) {
         score++;
-        scoreDiv.textContent = `Score: ${score}`;
         simulationDiv.innerHTML += `<div class="message bot">✅ Correct! ${scenario.explanation}</div>`;
       } else {
+        wrongAnswers++;
         simulationDiv.innerHTML += `<div class="message bot">❌ Incorrect. ${scenario.explanation}</div>`;
       }
+      scoreDiv.textContent = `Round: ${currentRound} | Score: ${score} | Wrong Answers: ${wrongAnswers}`;
       currentScenarioIndex++;
       setTimeout(displayScenario, 1500);
     }
 
-    retryBtn.addEventListener("click", () => {
+    function startQuiz() {
+      shuffleArray(simulationScenarios);
       score = 0;
+      wrongAnswers = 0;
       currentScenarioIndex = 0;
-      scoreDiv.textContent = `Score: ${score}`;
+      scoreDiv.textContent = `Round: ${currentRound} | Score: ${score} | Wrong Answers: ${wrongAnswers}`;
       retryBtn.style.display = "none";
       displayScenario();
+    }
+
+    retryBtn.addEventListener("click", () => {
+      currentRound++;
+      startQuiz();
     });
 
-    window.onload = displayScenario;
+    window.onload = startQuiz;
   </script>
 </body>
 </html>
