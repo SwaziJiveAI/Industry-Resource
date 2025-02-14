@@ -384,7 +384,7 @@
     // Fetch Top Tracks from Spotify
     async function fetchTopTracks() {
       const data = await fetch('https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF', {
-        headers: { 'Authorization': 'Bearer YOUR_SPOTIFY_API_TOKEN' }
+        headers: { 'Authorization': 'Bearer d040c271482344a580de2fb8700e0959' }
       }).then(res => res.json());
       return data.tracks.items.slice(0, 5).map(track => ({
         name: track.track.name,
