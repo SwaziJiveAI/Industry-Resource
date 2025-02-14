@@ -91,6 +91,15 @@
   </div>
 
   <script>
+    let score = 0;
+    let currentScenarioIndex = 0;
+    const maxQuestions = 10;
+    const usedIndices = new Set();
+    const simulationDiv = document.getElementById("simulation");
+    const optionsDiv = document.getElementById("options");
+    const retryBtn = document.getElementById("retry-btn");
+    const scoreDiv = document.getElementById("score");
+
     const simulationScenarios = [
       { text: "The label offers a low advance but promises exposure. What do you do?",
     options: [
@@ -265,45 +274,38 @@
       { text: "Negotiate for better terms", next: "node26", points: 1 },
       { text: "Agree to the renegotiation without changes", next: "node26", points: -1 }
     ]
+  },
+  node26: {
+    text: "A local promoter offers an unpaid gig promising exposure. Your choice?",
+    options: [
+      { text: "Accept for visibility", points: 0 },
+      { text: "Demand payment or decline", points: 1 }
+    ]
+  },
+  node27: {
+    text: "A sponsor wants to fund your album but takes 50% of profits. What’s your move?",
+    options: [
+      { text: "Negotiate a better deal", points: 1 },
+      { text: "Take the deal without changes", points: 0 }
+    ]
+  },
+  node28: {
+    text: "You’re invited to collaborate on a song, but the artist has bad industry rep. Do you proceed?",
+    options: [
+      { text: "Decline to protect your brand", points: 1 },
+      { text: "Accept for potential reach", points: 0 }
+    ]
   }
-};
-      { text: "A local promoter offers an unpaid gig promising exposure. Your choice?", options: [
-          { text: "Accept for visibility", points: 0 },
-          { text: "Demand payment or decline", points: 1 }
-        ]
-      },
-      { text: "A sponsor wants to fund your album but takes 50% of profits. What’s your move?", options: [
-          { text: "Negotiate a better deal", points: 1 },
-          { text: "Take the deal without changes", points: 0 }
-        ]
-      },
-      { text: "You’re invited to collaborate on a song, but the artist has bad industry rep. Do you proceed?", options: [
-          { text: "Decline to protect your brand", points: 1 },
-          { text: "Accept for potential reach", points: 0 }
-        ]
-      }
-    ];
-
-    let score = 0;
-    let badDecisions = 0;
-    const maxBadDecisions = 3;
-    let questionsAsked = [];
-
-    const simulationDiv = document.getElementById("simulation");
-    const optionsDiv = document.getElementById("options");
-    const retryBtn = document.getElementById("retry-btn");
-    const scoreDiv = document.getElementById("score");
+}
 
     function getRandomScenario() {
-      let availableScenarios = simulationScenarios.filter((_, index) => !questionsAsked.includes(index));
-      if (availableScenarios.length === 0) {
-        finishSimulation();
-        return null;
-      }
-      let randomIndex = Math.floor(Math.random() * availableScenarios.length);
-      let scenarioIndex = simulationScenarios.indexOf(availableScenarios[randomIndex]);
-      questionsAsked.push(scenarioIndex);
-      return simulationScenarios[scenarioIndex];
+      if (usedIndices.size >= maxQuestions) return null;
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * simulationScenarios.length);
+      } while (usedIndices.has(randomIndex));
+      usedIndices.add(randomIndex);
+      return simulationScenarios[randomIndex];
     }
 
     function addMessage(text, sender = "bot") {
@@ -315,8 +317,11 @@
     }
 
     function displayScenario() {
-      let scenario = getRandomScenario();
-      if (!scenario) return;
+      const scenario = getRandomScenario();
+      if (!scenario) {
+        finishSimulation();
+        return;
+      }
       addMessage(scenario.text, "bot");
       optionsDiv.innerHTML = "";
       scenario.options.forEach(option => {
@@ -330,19 +335,20 @@
 
     function handleOption(option) {
       addMessage(option.text, "user");
+      addMessage(option.feedback, "bot");
       score += option.points;
-      if (option.points === 0) badDecisions++;
       scoreDiv.innerText = `Score: ${score}`;
-      if (badDecisions >= maxBadDecisions) {
-        finishSimulation();
-      } else {
-        displayScenario();
-      }
+      currentScenarioIndex++;
+      setTimeout(displayScenario, 1000);
     }
 
     function finishSimulation() {
-      addMessage("Simulation complete.", "bot");
-      addMessage(`Final score: ${score}`, "bot");
+      addMessage("Simulation complete. Final Score: " + score, "bot");
+      if (score === 10) {
+        addMessage("🎉 Excellent! You passed! You're a negotiation pro!", "bot");
+      } else {
+        addMessage("⚠️ You did not pass. Try again to improve your score.", "bot");
+      }
       retryBtn.style.display = "inline-block";
     }
 
@@ -351,10 +357,10 @@
       optionsDiv.innerHTML = "";
       retryBtn.style.display = "none";
       score = 0;
-      badDecisions = 0;
-      questionsAsked = [];
+      currentScenarioIndex = 0;
+      usedIndices.clear();
       scoreDiv.innerText = "Score: 0";
-      addMessage("Welcome to the Artist Career Negotiation Simulation.");
+      addMessage("Welcome to the Artist Career Negotiation Simulator!");
       setTimeout(displayScenario, 1000);
     }
 
@@ -363,5 +369,3 @@
   </script>
 </body>
 </html>
-
-
