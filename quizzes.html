@@ -22,157 +22,116 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        nav {
-            background: #34495e;
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav ul li a:hover {
-            color: #1abc9c;
-        }
-
-        main {
+        .container {
+            max-width: 90%;
+            width: 100%;
+            margin: 20px auto;
             padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
 
-        section {
-            margin-bottom: 40px;
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
         }
 
-        h2 {
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1abc9c, #2c3e50);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Quiz Styling */
+        #quiz-container {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            min-height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: bold;
             color: #2c3e50;
         }
 
-        footer {
-            background: linear-gradient(135deg, #2c3e50, #1abc9c);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+        .options {
+            display: grid;
+            gap: 10px;
         }
 
-        /* Chatbot Styling */
-        #chatbot {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .message {
-            margin: 5px 0;
-            padding: 8px;
-            border-radius: 5px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .bot {
-            background-color: #f0f0f0;
-            align-self: flex-start;
-        }
-
-        .user {
-            background-color: #d1e7dd;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-
-        #user-input {
-            width: calc(100% - 90px);
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #submit-btn {
-            width: 80px;
-            padding: 8px;
+        .option-btn {
+            padding: 10px 15px;
             background-color: #1abc9c;
-            color: white;
             border: none;
             border-radius: 5px;
+            color: white;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        #submit-btn:hover {
+        .option-btn:hover {
             background-color: #2c3e50;
+            transform: translateY(-2px);
         }
 
-        /* Score Display */
         #score-display {
+            text-align: center;
             font-size: 1.2rem;
-            font-weight: bold;
-            margin: 10px 0;
+            margin: 15px 0;
             color: #2c3e50;
+        }
+
+        .retry-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 30px;
+            background-color: #1abc9c;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            background-color: #2c3e50;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Eswatini Music Resource Center</h1>
-
     </header>
 
-    <main>
-        <section>
-            <p>This platform supports budding artists, artist managers, labels, and other stakeholders in the local Eswatini music industry.</p>
-            <a href="https://swazijiveai.github.io/Industry-Resource/simulations.html">Back to simulator→</a>
-        </section>
-
-        <!-- Chatbot Section -->
-        <section>
-            <h2>Skill Assessment Quiz</h2> <div id="score-display">Score: 0</div>
-            <div id="chatbot"></div>
-            <input type="text" id="user-input" placeholder="Type your answer here...">
-            <button id="submit-btn">Send</button>
-        </section>
-    </main>
+    <div class="container">
+        <div id="quiz-container">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+            <div id="score-display">Score: 0/20 (0%)</div>
+            <div id="question-container"></div>
+        </div>
+        <button class="retry-btn" id="retry-btn" style="display: none;">Retry Quiz</button>
+    </div>
 
     <script>
-        const chatBot = document.getElementById('chatbot');
-        const userInput = document.getElementById('user-input');
-        const submitBtn = document.getElementById('submit-btn');
-        const retryBtn = document.createElement("button");
-        const scoreDisplay = document.getElementById('score-display');
-
-        retryBtn.innerText = "Retry Quiz";
-        retryBtn.style.display = "none";
-        retryBtn.style.marginTop = "10px";
-        retryBtn.onclick = startQuiz;
-        chatBot.parentNode.appendChild(retryBtn);
-
+        let currentQuestionIndex = 0;
         let score = 0;
-        let questionIndex = 0;
-        const maxCorrectAnswers = 20;
+        let wrongAttempts = 0;
+        const passThreshold = 20;
+        const maxWrongAttempts = 3;
 
         const quizData = [
             {
@@ -812,6 +771,11 @@
             }
         ];
 
+        const quizContainer = document.getElementById('question-container');
+        const retryBtn = document.getElementById('retry-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreDisplay = document.getElementById('score-display');
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -819,71 +783,71 @@
             }
         }
 
-        function appendMessage(text, sender) {
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add("message", sender);
-            messageDiv.textContent = text;
-            chatBot.appendChild(messageDiv);
-            chatBot.scrollTop = chatBot.scrollHeight;
+        function updateProgress() {
+            const progress = (score / passThreshold) * 100;
+            progressBar.style.width = `${progress}%`;
+            scoreDisplay.textContent = `Score: ${score}/${passThreshold} (${Math.round(progress)}%)`;
         }
 
-        function updateScore() {
-            scoreDisplay.innerText = `Score: ${score}`;
-        }
-
-        function askQuestion() {
-            if (score >= maxCorrectAnswers) {
-                appendMessage(`🎉 Quiz completed! You got ${score} correct answers. Well done!`, "bot");
-                submitBtn.disabled = true;
-                userInput.disabled = true;
-                retryBtn.style.display = "block";
+        function showQuestion() {
+            if (score >= passThreshold) {
+                quizContainer.innerHTML = `<div class="question">🎉 Congratulations! You've passed with ${score} correct answers!</div>`;
+                retryBtn.style.display = 'block';
                 return;
             }
 
-            if (questionIndex < quizData.length) {
-                appendMessage(quizData[questionIndex].question, "bot");
-            } else {
-                appendMessage("Quiz finished! Restart to try again.", "bot");
-                submitBtn.disabled = true;
-                userInput.disabled = true;
-                retryBtn.style.display = "block";
+            if (wrongAttempts >= maxWrongAttempts) {
+                quizContainer.innerHTML = `<div class="question">❌ Game Over! Too many incorrect attempts. Final score: ${score}</div>`;
+                retryBtn.style.display = 'block';
+                return;
             }
+
+            const question = quizData[currentQuestionIndex];
+            quizContainer.innerHTML = `
+                <div class="question">${question.question}</div>
+                <div class="options">
+                    ${question.options.map(opt => 
+                        `<button class="option-btn" onclick="handleAnswer('${opt}')">${opt}</button>`
+                    ).join('')}
+                </div>
+            `;
         }
 
-        submitBtn.addEventListener("click", () => {
-            const userAnswer = userInput.value.trim();
-            if (userAnswer === "") return;
-
-            appendMessage(userAnswer, "user");
-            const correctAnswer = quizData[questionIndex].answer;
-            const explanation = quizData[questionIndex].explanation;
-
-            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        function handleAnswer(selectedAnswer) {
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            if (selectedAnswer === correctAnswer) {
                 score++;
-                updateScore(); // Update the score display
-                appendMessage(`✅ Correct! ${explanation}`, "bot");
+                quizContainer.innerHTML += `<div style="color: #1abc9c; margin-top: 10px;">✅ Correct! ${quizData[currentQuestionIndex].explanation}</div>`;
             } else {
-                appendMessage(`❌ Incorrect. ${explanation}`, "bot");
+                wrongAttempts++;
+                quizContainer.innerHTML += `<div style="color: #e74c3c; margin-top: 10px;">❌ Incorrect. ${quizData[currentQuestionIndex].explanation}</div>`;
             }
 
-            userInput.value = "";
-            questionIndex++;
-            setTimeout(askQuestion, 1500);
-        });
+            currentQuestionIndex++;
+            updateProgress();
+            
+            setTimeout(() => {
+                if (currentQuestionIndex < quizData.length) {
+                    showQuestion();
+                } else {
+                    quizContainer.innerHTML = `<div class="question">🏁 Quiz Complete! Final score: ${score}/${passThreshold}</div>`;
+                    retryBtn.style.display = 'block';
+                }
+            }, 1500);
+        }
 
         function startQuiz() {
             shuffleArray(quizData);
+            currentQuestionIndex = 0;
             score = 0;
-            questionIndex = 0;
-            chatBot.innerHTML = "";
-            submitBtn.disabled = false;
-            userInput.disabled = false;
-            retryBtn.style.display = "none";
-            updateScore(); // Reset score display
-            appendMessage("🎵 Welcome to the Music Industry Quiz! Answer 20 questions correctly to win.", "bot");
-            setTimeout(askQuestion, 1000);
+            wrongAttempts = 0;
+            retryBtn.style.display = 'none';
+            progressBar.style.width = '0%';
+            scoreDisplay.textContent = `Score: 0/${passThreshold} (0%)`;
+            showQuestion();
         }
 
+        retryBtn.addEventListener('click', startQuiz);
         window.onload = startQuiz;
     </script>
 </body>
