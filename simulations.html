@@ -7,7 +7,11 @@
     <h1>Eswatini Music Resource Center</h1>
   </header>
   <title>Artist Career Negotiation Simulation</title>
-  <p style="text-align: center; margin-top: 20px;"><a href="https://swazijiveai.github.io/Industry-Resource/quizzes.html" style="font-size: 20px; color: #bcb71a; text-decoration: overline; font-weight: bold;">Try The Quiz - Click Me!</a></p>
+  <p style="text-align: center; margin-top: 20px;">
+    <a href="https://swazijiveai.github.io/Industry-Resource/quizzes.html" style="font-size: 20px; color: #bcb71a; text-decoration: overline; font-weight: bold;">
+      Try The Quiz - Click Me!
+    </a>
+  </p>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     header {
@@ -25,40 +29,47 @@
       color: #333;
     }
     .container {
-      max-width: 90%; /* Adjust to 90% of the screen width */
-      width: 100%; /* Ensure it takes full width on smaller screens */
-      margin: 20px auto; /* Reduce margin for smaller screens */
+      max-width: 90%;
+      width: 100%;
+      margin: 20px auto;
       padding: 20px;
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      box-sizing: border-box; /* Ensure padding is included in the width */
+      box-sizing: border-box;
     }
     @media (max-width: 768px) {
       .container {
-        max-width: 95%; /* Increase width for smaller screens */
-        margin: 10px auto; /* Reduce margin further */
-        padding: 15px; /* Reduce padding for smaller screens */
+        max-width: 95%;
+        margin: 10px auto;
+        padding: 15px;
       }
     }
     @media (max-width: 480px) {
       .container {
-        max-width: 100%; /* Full width on very small screens */
-        margin: 5px auto; /* Minimal margin */
-        padding: 10px; /* Minimal padding */
-        border-radius: 0; /* Remove border-radius for full-width look */
+        max-width: 100%;
+        margin: 5px auto;
+        padding: 10px;
+        border-radius: 0;
       }
     }
     @media (orientation: landscape) and (max-height: 500px) {
       .container {
-        max-width: 90%; /* Adjust width for landscape mode */
-        margin: 10px auto; /* Adjust margin for landscape mode */
-        padding: 10px; /* Adjust padding for landscape mode */
+        max-width: 90%;
+        margin: 10px auto;
+        padding: 10px;
       }
     }
     h1 {
       text-align: center;
       color: #2c3e50;
+    }
+    /* Timer styling */
+    #timer {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #e74c3c;
     }
     #simulation {
       border: 1px solid #ccc;
@@ -119,6 +130,8 @@
 <body>
   <div class="container">
     <h1>Artist Career Negotiation Simulation</h1>
+    <!-- Timer display -->
+    <div id="timer">Time left: 5s</div>
     <div id="simulation"></div>
     <div id="options"></div>
     <button class="retry-btn" id="retry-btn">Retry</button>
@@ -130,13 +143,16 @@
     let wrongAnswers = 0;
     let currentRound = 1;
     let currentScenarioIndex = 0;
-    const maxQuestionsPerRound = 20;
     const maxWrongAnswers = 3;
     const correctAnswersToWin = 10;
     const simulationDiv = document.getElementById("simulation");
     const optionsDiv = document.getElementById("options");
     const retryBtn = document.getElementById("retry-btn");
     const scoreDiv = document.getElementById("score");
+    const timerDiv = document.getElementById("timer");
+    const timerDuration = 5; // seconds per question
+    let timeLeft = timerDuration;
+    let timerInterval = null;
 
     const simulationScenarios = [
       {
@@ -612,6 +628,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       },
     ];
 
+    // Shuffle the simulation scenarios using Fisher-Yates algorithm
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -619,11 +636,17 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       }
     }
 
+    // Display the current question and start the timer
     function displayScenario() {
-      if (currentScenarioIndex >= simulationScenarios.length || score >= correctAnswersToWin || wrongAnswers >= maxWrongAnswers) {
+      // End quiz if out of questions or if win/loss condition is met
+      if (
+        currentScenarioIndex >= simulationScenarios.length ||
+        score >= correctAnswersToWin ||
+        wrongAnswers >= maxWrongAnswers
+      ) {
         let message;
         if (wrongAnswers >= maxWrongAnswers) {
-          message = `❌ Game Over! You got 3 wrong answers. Final Score: ${score}`;
+          message = `❌ Game Over! You got ${maxWrongAnswers} wrong answers. Final Score: ${score}`;
         } else if (score >= correctAnswersToWin) {
           message = `🎉 You won Round ${currentRound}! Final Score: ${score}`;
         } else {
@@ -632,9 +655,12 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
         simulationDiv.innerHTML = `<div class="message bot">${message}</div>`;
         optionsDiv.innerHTML = "";
         retryBtn.style.display = "block";
+        clearInterval(timerInterval);
+        timerDiv.textContent = "";
         return;
       }
-
+      
+      // Display the current scenario
       const scenario = simulationScenarios[currentScenarioIndex];
       simulationDiv.innerHTML = `<div class="message bot">${scenario.question}</div>`;
       optionsDiv.innerHTML = scenario.options
@@ -643,9 +669,39 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
             `<button class="option-btn" onclick="handleAnswer('${option}')">${option}</button>`
         )
         .join("");
+      
+      // Start the countdown timer for this question
+      clearInterval(timerInterval);
+      startTimer();
     }
 
+    // Start the 5-second timer
+    function startTimer() {
+      timeLeft = timerDuration;
+      timerDiv.textContent = "Time left: " + timeLeft + "s";
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = "Time left: " + timeLeft + "s";
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          handleTimeout();
+        }
+      }, 1000);
+    }
+
+    // If the timer runs out before an answer is selected
+    function handleTimeout() {
+      const scenario = simulationScenarios[currentScenarioIndex];
+      wrongAnswers++;
+      simulationDiv.innerHTML += `<div class="message bot">⏰ Time's up! The correct answer was: ${scenario.correctAnswer}. ${scenario.explanation}</div>`;
+      scoreDiv.textContent = `Round: ${currentRound} | Score: ${score} | Wrong Answers: ${wrongAnswers}`;
+      currentScenarioIndex++;
+      setTimeout(displayScenario, 2850);
+    }
+
+    // Process the user's answer
     function handleAnswer(selectedOption) {
+      clearInterval(timerInterval);
       const scenario = simulationScenarios[currentScenarioIndex];
       if (selectedOption === scenario.correctAnswer) {
         score++;
@@ -659,6 +715,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       setTimeout(displayScenario, 2850);
     }
 
+    // Initialize the quiz
     function startQuiz() {
       shuffleArray(simulationScenarios);
       score = 0;
