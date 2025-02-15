@@ -939,7 +939,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
           clearInterval(timerInterval);
           handleTimeout();
         }
-      }, 1000);
+      }, 1500);
     }
 
     // If the timer runs out before an answer is selected
@@ -949,7 +949,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       simulationDiv.innerHTML += `<div class="message bot">⏰ Time's up! The correct answer was: ${scenario.correctAnswer}. ${scenario.explanation}</div>`;
       scoreDiv.textContent = `Round: ${currentRound} | Score: ${score} | Wrong Answers: ${wrongAnswers}`;
       currentScenarioIndex++;
-      setTimeout(displayScenario, 2850);
+      setTimeout(displayScenario, 3000);
     }
 
     // Process the user's answer
@@ -965,7 +965,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       }
       scoreDiv.textContent = `Round: ${currentRound} | Score: ${score} | Wrong Answers: ${wrongAnswers}`;
       currentScenarioIndex++;
-      setTimeout(displayScenario, 2850);
+      setTimeout(displayScenario, 3000);
     }
 
     // Initialize the quiz
