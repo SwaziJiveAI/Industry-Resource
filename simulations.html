@@ -150,7 +150,7 @@
     const retryBtn = document.getElementById("retry-btn");
     const scoreDiv = document.getElementById("score");
     const timerDiv = document.getElementById("timer");
-    const timerDuration = 5; // seconds per question
+    const timerDuration = 9; // seconds per question
     let timeLeft = timerDuration;
     let timerInterval = null;
 
@@ -675,7 +675,7 @@ explanation: "Cross-border royalties are collected by both SAMRO and COSOMA."
       startTimer();
     }
 
-    // Start the 5-second timer
+    // Start the 9-second timer
     function startTimer() {
       timeLeft = timerDuration;
       timerDiv.textContent = "Time left: " + timeLeft + "s";
