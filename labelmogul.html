@@ -8,36 +8,42 @@
         .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .side-panel { display: flex; flex-direction: column; gap: 20px; }
         .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .decision-btn { 
-            margin: 5px; padding: 10px 15px; 
-            background: #4CAF50; color: white; 
-            border: none; border-radius: 4px; 
-            cursor: pointer; 
+        .decision-btn {
+            margin: 5px; padding: 10px 15px;
+            background: #4CAF50; color: white;
+            border: none; border-radius: 4px;
+            cursor: pointer;
         }
-        #message-container { 
-            height: 200px; overflow-y: auto; 
-            padding: 10px; background: #1a1a1a; 
-            color: #00ff00; margin-bottom: 20px; 
+        #message-container {
+            height: 200px; overflow-y: auto;
+            padding: 10px; background: #1a1a1a;
+            color: #00ff00; margin-bottom: 20px;
             border: 2px solid #333;
         }
-        .status-bar { 
-            display: flex; justify-content: space-between; 
-            margin-bottom: 20px; padding: 10px; 
-            background: #333; color: white; 
+        .status-bar {
+            display: flex; justify-content: space-between;
+            margin-bottom: 20px; padding: 10px;
+            background: #333; color: white;
             border-radius: 4px;
         }
         .scroll-box { height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; }
-        #continue-btn { 
-            width: 100%; padding: 15px; 
-            background: #2196F3; color: white; 
-            border: none; border-radius: 4px; 
+        #continue-btn {
+            width: 100%; padding: 15px;
+            background: #2196F3; color: white;
+            border: none; border-radius: 4px;
             cursor: pointer; margin-top: 20px;
+        }
+        .artist-card, .staff-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="status-bar">
-        <div>💰 Cash: <span id="cash">E500,000</span></div>
+        <div>💰 Cash: <span id="cash">E150,000</span></div>
         <div>📅 Day: <span id="day">1/50</span></div>
         <div>⭐ Studio Quality: <span id="quality">1</span></div>
     </div>
@@ -45,10 +51,10 @@
     <div class="game-container">
         <div class="main-panel">
             <div id="message-container"></div>
-            
+
             <h3>📋 Available Actions</h3>
             <div id="decisions" class="scroll-box"></div>
-            
+
             <button id="continue-btn" onclick="advanceDay()">Continue to Next Day →</button>
         </div>
 
@@ -70,168 +76,218 @@
         </div>
     </div>
 
-<script>
-// INITIAL GAME STATE
-const gameState = {
-    cash: 500000,
-    day: 1,
-    pendingDecisions: [],
-    artists: [
-        { name: "Lihlombe 12", genre: "sibhaca", skill: 65, popularity: 25, happiness: 80, contractDays: 30 },
-        { name: "Mbabane Beats", genre: "hiphop", skill: 45, popularity: 40, happiness: 70, contractDays: 45 }
-    ],
-    equipment: [
-        { name: "Basic Mic", quality: 1, cost: 20000 }
-    ],
-    staff: [
-        { role: "Producer", skill: 68, salary: 4500 }
-    ],
-    activeTours: [],
-    trends: { pop: 1.1, hiphop: 0.9, gospel: 1.4, sibhaca: 1.3 },
-    competitors: ["Bombaso Records", "Shiselweni Sounds"]
-};
+    <script>
+        // INITIAL GAME STATE
+        const gameState = {
+            cash: 150000,
+            day: 1,
+            pendingDecisions: [],
+            artists: [
+                { name: "Lihlombe 12", genre: "sibhaca", skill: 65, popularity: 25, happiness: 80, contractDays: 30 },
+                { name: "Mbabane Beats", genre: "hiphop", skill: 45, popularity: 40, happiness: 70, contractDays: 45 }
+            ],
+            equipment: [
+                { name: "Basic Mic", quality: 1, cost: 20000 }
+            ],
+            staff: [
+                { role: "Producer", skill: 68, salary: 4500 }
+            ],
+            activeTours: [],
+            trends: { pop: 1.1, hiphop: 0.9, gospel: 1.4, sibhaca: 1.3 },
+            competitors: ["Bombaso Records", "Shiselweni Sounds"]
+        };
 
-// CORE GAME FUNCTIONS
-function advanceDay() {
-    // Process pending decisions
-    gameState.pendingDecisions.forEach(decision => {
-        gameState.cash -= decision.cost;
-        const result = decision.effect();
-        addMessage(result.message);
-        if(result.cashEffect) gameState.cash += result.cashEffect;
-    });
+        // CORE GAME FUNCTIONS
+        function advanceDay() {
+            // Process pending decisions
+            gameState.pendingDecisions.forEach(decision => {
+                const result = decision.effect();
+                addMessage(result.message);
+                if (result.cashEffect) gameState.cash += result.cashEffect;
+            });
 
-    // Daily updates
-    paySalaries();
-    updateContracts();
-    updateTrends();
-    processCompetitors();
-    updateTours();
-    checkArtistMorale();
-    
-    // Advance day
-    gameState.day++;
-    gameState.pendingDecisions = [];
-    updateGameDisplay();
+            // Daily updates
+            paySalaries();
+            updateContracts();
+            updateTrends();
+            processCompetitors();
+            updateTours();
+            checkArtistMorale();
 
-    // Check win/lose conditions
-    if(gameState.cash <= 0) gameOver();
-    if(gameState.day > 50) victory();
-}
+            // Advance day
+            gameState.day++;
+            gameState.pendingDecisions = [];
+            updateGameDisplay();
 
-function processDecision(decision) {
-    if(gameState.pendingDecisions.length >= 3) return;
-    gameState.pendingDecisions.push(decision);
-    updateGameDisplay();
-}
-
-// SAMPLE DECISION TYPES
-const decisions = {
-    signArtist: {
-        title: "🎤 Sign New Artist (E15,000)",
-        cost: 15000,
-        effect: () => {
-            const artist = createArtist();
-            gameState.artists.push(artist);
-            return {
-                message: `Signed ${artist.name} (${artist.genre})`,
-                cashEffect: -15000
-            };
+            // Check win/lose conditions
+            if (gameState.cash <= 0) gameOver();
+            if (gameState.day > 50) victory();
         }
-    },
-    upgradeStudio: {
-        title: "💿 Upgrade Studio (E50,000)",
-        cost: 50000,
-        effect: () => {
-            gameState.equipment.push({ name: "Pro Studio", quality: 2 });
-            return {
-                message: "Studio quality improved!",
-                cashEffect: -50000
-            };
+
+        function processDecision(decision) {
+            if (gameState.pendingDecisions.length >= 3) {
+                addMessage("You can only make 3 decisions per day!");
+                return;
+            }
+            if (gameState.cash < decision.cost) {
+                addMessage("Not enough cash for this decision!");
+                return;
+            }
+
+            gameState.pendingDecisions.push(decision);
+            updateGameDisplay();
+            addMessage(`Added to queue: ${decision.title}`);
         }
-    },
-    launchSingle: {
-        title: "📀 Release Single (E20,000)",
-        cost: 20000,
-        effect: () => {
-            const artist = gameState.artists[0];
-            const revenue = artist.popularity * 500;
-            gameState.cash += revenue;
-            artist.popularity += 10;
-            return {
-                message: `${artist.name} single earned E${revenue}!`,
-                cashEffect: revenue
-            };
+
+        // DECISION TYPES
+        const decisions = {
+            signArtist: {
+                title: "🎤 Sign New Artist (E15,000)",
+                cost: 15000,
+                effect: () => {
+                    const artist = createArtist();
+                    gameState.artists.push(artist);
+                    return {
+                        message: `Signed ${artist.name} (${artist.genre})`,
+                        cashEffect: -15000
+                    };
+                }
+            },
+            upgradeStudio: {
+                title: "💿 Upgrade Studio (E50,000)",
+                cost: 50000,
+                effect: () => {
+                    gameState.equipment.push({ name: "Pro Studio", quality: 2 });
+                    return {
+                        message: "Studio quality improved!",
+                        cashEffect: -50000
+                    };
+                }
+            },
+            launchSingle: {
+                title: "📀 Release Single (E20,000)",
+                cost: 20000,
+                effect: () => {
+                    const artist = gameState.artists[0];
+                    const revenue = artist.popularity * 500;
+                    gameState.cash += revenue;
+                    artist.popularity += 10;
+                    return {
+                        message: `${artist.name} single earned E${revenue}!`,
+                        cashEffect: revenue
+                    };
+                }
+            },
+            hireStaff: {
+                title: "👔 Hire Marketer (E10,000)",
+                cost: 10000,
+                effect: () => {
+                    gameState.staff.push({
+                        role: "Marketer",
+                        skill: Math.floor(Math.random() * 50 + 50),
+                        salary: 4000
+                    });
+                    return {
+                        message: "Hired new marketing specialist!",
+                        cashEffect: -10000
+                    };
+                }
+            }
+        };
+
+        // DYNAMIC DECISION GENERATION
+        function generateDecisions() {
+            const availableDecisions = [];
+
+            // Sign Artist
+            if (gameState.cash >= decisions.signArtist.cost) {
+                availableDecisions.push(decisions.signArtist);
+            }
+
+            // Upgrade Studio
+            if (gameState.cash >= decisions.upgradeStudio.cost) {
+                availableDecisions.push(decisions.upgradeStudio);
+            }
+
+            // Launch Single
+            if (gameState.cash >= decisions.launchSingle.cost && gameState.artists.length > 0) {
+                availableDecisions.push(decisions.launchSingle);
+            }
+
+            // Hire Staff
+            if (gameState.cash >= decisions.hireStaff.cost && gameState.staff.length < 5) {
+                availableDecisions.push(decisions.hireStaff);
+            }
+
+            return availableDecisions;
         }
-    }
-};
 
-// UI FUNCTIONS
-function updateGameDisplay() {
-    // Update numbers
-    document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
-    document.getElementById('day').textContent = `${gameState.day}/50`;
-    document.getElementById('quality').textContent = 
-        gameState.equipment.reduce((sum, eq) => sum + eq.quality, 0);
+        // UI FUNCTIONS
+        function updateGameDisplay() {
+            // Update numbers
+            document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
+            document.getElementById('day').textContent = `${gameState.day}/50`;
+            document.getElementById('quality').textContent = 
+                gameState.equipment.reduce((sum, eq) => sum + eq.quality, 0);
 
-    // Artists display
-    document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
-        <div class="artist-card">
-            <strong>${artist.name}</strong><br>
-            Genre: ${artist.genre}<br>
-            Popularity: ${artist.popularity}<br>
-            Contract: ${artist.contractDays} days
-        </div>
-    `).join('');
+            // Artists display
+            document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
+                <div class="artist-card">
+                    <strong>${artist.name}</strong><br>
+                    Genre: ${artist.genre}<br>
+                    Popularity: ${artist.popularity}<br>
+                    Contract: ${artist.contractDays} days
+                </div>
+            `).join('');
 
-    // Staff display
-    document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
-        <div class="staff-card">
-            ${staff.role}<br>
-            Salary: E${staff.salary}/day
-        </div>
-    `).join('');
+            // Staff display
+            document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
+                <div class="staff-card">
+                    ${staff.role}<br>
+                    Salary: E${staff.salary}/day
+                </div>
+            `).join('');
 
-    // Update decisions
-    renderDecisions();
-}
+            // Update decisions
+            renderDecisions();
+        }
 
-function renderDecisions() {
-    const decisionsHTML = Object.values(decisions).map(decision => `
-        <button class="decision-btn" 
-                onclick="processDecision(${JSON.stringify(decision)})"
-                ${gameState.cash < decision.cost ? 'disabled' : ''}
-                ${gameState.pendingDecisions.includes(decision) ? 'disabled' : ''}>
-            ${decision.title}
-        </button>
-    `).join('');
-    
-    document.getElementById('decisions').innerHTML = `
-        <p>Pending actions: ${gameState.pendingDecisions.length}/3</p>
-        ${decisionsHTML}
-    `;
-}
+        function renderDecisions() {
+            const available = generateDecisions();
+            const decisionsHTML = available.map(decision => `
+                <button class="decision-btn"
+                    onclick="processDecision(${JSON.stringify(decision)})"
+                    ${gameState.cash < decision.cost ? 'disabled' : ''}>
+                    ${decision.title}
+                </button>
+            `).join('');
 
-function addMessage(msg) {
-    const container = document.getElementById('message-container');
-    container.innerHTML += `<div>▶️ ${msg}</div>`;
-    container.scrollTop = container.scrollHeight;
-}
+            document.getElementById('decisions').innerHTML = `
+                <p>Pending actions: ${gameState.pendingDecisions.length}/3</p>
+                ${decisionsHTML}
+            `;
+        }
 
-function gameOver() {
-    addMessage("💸 BANKRUPTCY! Game Over");
-    document.getElementById('continue-btn').disabled = true;
-}
+        function addMessage(msg) {
+            const container = document.getElementById('message-container');
+            container.innerHTML += `<div>▶️ ${msg}</div>`;
+            container.scrollTop = container.scrollHeight;
+        }
 
-function victory() {
-    addMessage("🏆 CONGRATULATIONS! You've built a music empire!");
-    document.getElementById('continue-btn').disabled = true;
-}
+        function gameOver() {
+            addMessage("💸 BANKRUPTCY! Game Over");
+            document.getElementById('continue-btn').disabled = true;
+        }
 
-// INITIALIZE GAME
-addMessage("Welcome to eSwatini Music Mogul!");
-addMessage("Day 1: Start building your music empire!");
-updateGameDisplay();
-</script>
+        function victory() {
+            addMessage("🏆 CONGRATULATIONS! You've built a music empire!");
+            document.getElementById('continue-btn').disabled = true;
+        }
+
+        // INITIALIZE
+        addMessage("Welcome to eSwatini Music Mogul!");
+        addMessage("Day 1: Start building your music empire!");
+        updateGameDisplay();
+    </script>
 </body>
 </html>
