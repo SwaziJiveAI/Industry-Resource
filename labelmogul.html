@@ -1,140 +1,239 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>eSwatini Record Label Simulator</title>
+    <title>eSwatini Music Mogul</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .game-container { border: 2px solid #333; padding: 20px; margin-top: 20px; }
-        .status-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .decision-btn { margin: 5px; padding: 10px; cursor: pointer; }
-        #message-container { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .game-container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; }
+        .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+        .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .decision-btn { 
+            margin: 5px; padding: 10px 15px; 
+            background: #4CAF50; color: white; 
+            border: none; border-radius: 4px; 
+            cursor: pointer; 
+        }
+        #message-container { 
+            height: 200px; overflow-y: auto; 
+            padding: 10px; background: #1a1a1a; 
+            color: #00ff00; margin-bottom: 20px; 
+            border: 2px solid #333;
+        }
+        .status-bar { 
+            display: flex; justify-content: space-between; 
+            margin-bottom: 20px; padding: 10px; 
+            background: #333; color: white; 
+            border-radius: 4px;
+        }
+        .scroll-box { height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; }
+        #continue-btn { 
+            width: 100%; padding: 15px; 
+            background: #2196F3; color: white; 
+            border: none; border-radius: 4px; 
+            cursor: pointer; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="status-bar">
+        <div>💰 Cash: <span id="cash">E500,000</span></div>
+        <div>📅 Day: <span id="day">1/50</span></div>
+        <div>⭐ Studio Quality: <span id="quality">1</span></div>
+    </div>
+
     <div class="game-container">
-        <h1>eSwatini Music Mogul</h1>
-        <div class="status-bar">
-            <div>💰 Cash: <span id="cash">$100,000</span></div>
-            <div>📅 Day: <span id="day">1/50</span></div>
+        <div class="main-panel">
+            <div id="message-container"></div>
+            
+            <h3>📋 Available Actions</h3>
+            <div id="decisions" class="scroll-box"></div>
+            
+            <button id="continue-btn" onclick="advanceDay()">Continue to Next Day →</button>
         </div>
-        <div id="message-container"></div>
-        <div id="decisions"></div>
+
+        <div class="side-panel">
+            <div class="info-box">
+                <h3>🎤 Artists</h3>
+                <div id="artist-roster" class="scroll-box"></div>
+            </div>
+
+            <div class="info-box">
+                <h3>👥 Staff</h3>
+                <div id="staff-list" class="scroll-box"></div>
+            </div>
+
+            <div class="info-box">
+                <h3>🚌 Active Tours</h3>
+                <div id="tours-display" class="scroll-box"></div>
+            </div>
+        </div>
     </div>
 
 <script>
+// INITIAL GAME STATE
 const gameState = {
-    cash: 100000,
+    cash: 500000,
     day: 1,
-    decisionsMade: 0,
-    artists: [],
-    equipment: [],
-    partnerships: []
+    pendingDecisions: [],
+    artists: [
+        { name: "Lihlombe 12", genre: "R&B", skill: 65, popularity: 25, happiness: 80, contractDays: 30 },
+        { name: "Mbabane Beats", genre: "hiphop", skill: 45, popularity: 40, happiness: 70, contractDays: 45 }
+        { name: "Lihlombe 12", genre: "Amapiano", skill: 65, popularity: 25, happiness: 80, contractDays: 30 },
+        { name: "Mbabane Beats", genre: "House", skill: 45, popularity: 40, happiness: 70, contractDays: 45 }
+    ],
+    equipment: [
+        { name: "Basic Mic", quality: 1, cost: 20000 }
+    ],
+    staff: [
+        { role: "Producer", skill: 68, salary: 4500 }
+    ],
+    activeTours: [],
+    trends: { pop: 1.1, hiphop: 0.9, gospel: 1.4, sibhaca: 1.3 },
+    competitors: ["Bombaso Records", "Shiselweni Sounds"]
 };
 
-const decisions = [
-    {
-        title: "🎤 Sign Local Artist",
-        cost: 20000,
-        message: "Signed up-and-coming artist from Manzini",
-        effect: { artists: +1 }
-    },
-    {
-        title: "💿 Buy Studio Equipment",
-        cost: 50000,
-        message: "Purchased professional recording gear",
-        effect: { equipment: +1 }
-    },
-    {
-        title: "🤝 Partner with Radio Station",
-        cost: 30000,
-        message: "Secured airplay deal with Eswatini FM",
-        effect: { partnerships: +1 }
-    },
-    {
-        title: "🎵 Produce Single",
+// CORE GAME FUNCTIONS
+function advanceDay() {
+    // Process pending decisions
+    gameState.pendingDecisions.forEach(decision => {
+        gameState.cash -= decision.cost;
+        const result = decision.effect();
+        addMessage(result.message);
+        if(result.cashEffect) gameState.cash += result.cashEffect;
+    });
+
+    // Daily updates
+    paySalaries();
+    updateContracts();
+    updateTrends();
+    processCompetitors();
+    updateTours();
+    checkArtistMorale();
+    
+    // Advance day
+    gameState.day++;
+    gameState.pendingDecisions = [];
+    updateGameDisplay();
+
+    // Check win/lose conditions
+    if(gameState.cash <= 0) gameOver();
+    if(gameState.day > 50) victory();
+}
+
+function processDecision(decision) {
+    if(gameState.pendingDecisions.length >= 3) return;
+    gameState.pendingDecisions.push(decision);
+    updateGameDisplay();
+}
+
+// SAMPLE DECISION TYPES
+const decisions = {
+    signArtist: {
+        title: "🎤 Sign New Artist (E15,000)",
         cost: 15000,
-        message: "Recorded new track with your artist",
-        revenue: 40000
+        effect: () => {
+            const artist = createArtist();
+            gameState.artists.push(artist);
+            return {
+                message: `Signed ${artist.name} (${artist.genre})`,
+                cashEffect: -15000
+            };
+        }
     },
-    {
-        title: "📻 Run Radio Campaign",
-        cost: 25000,
-        message: "Launched promotional radio blitz",
-        revenue: 60000
-    }
-];
-
-function updateDisplay() {
-    document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
-    document.getElementById('day').textContent = `${gameState.day}/50`;
-}
-
-function addMessage(message) {
-    const msgContainer = document.getElementById('message-container');
-    msgContainer.innerHTML += `<div>${message}</div>`;
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-}
-
-function handleDecision(decision) {
-    if (gameState.cash <= 0 || gameState.day > 50) return;
-
-    // Calculate financial impact
-    if (decision.cost) gameState.cash -= decision.cost;
-    if (decision.revenue) gameState.cash += decision.revenue;
-    
-    addMessage(decision.message + (decision.cost ? ` [-E${decision.cost.toLocaleString()}]` : '') + 
-              (decision.revenue ? ` [+E${decision.revenue.toLocaleString()}]` : ''));
-    
-    gameState.decisionsMade++;
-    
-    if (gameState.decisionsMade >= 3) {
-        gameState.day++;
-        gameState.decisionsMade = 0;
-        addMessage(`--- Day ${gameState.day} begins ---`);
-        
-        // Add random events
-        if (Math.random() < 0.3) {
-            const events = [
-                { msg: "🔥 Equipment malfunction! Emergency repairs needed", cost: 10000 },
-                { msg: "🎉 Hit single goes viral! Sales surge", revenue: 30000 },
-                { msg: "🎤 Artist demands better contract terms", cost: 15000 }
-            ];
-            const event = events[Math.floor(Math.random() * events.length)];
-            gameState.cash += (event.revenue || 0) - (event.cost || 0);
-            addMessage(`EVENT: ${event.msg} ${event.cost ? `[-E${event.cost}]` : ''} ${event.revenue ? `[+E${event.revenue}]` : ''}`);
+    upgradeStudio: {
+        title: "💿 Upgrade Studio (E50,000)",
+        cost: 50000,
+        effect: () => {
+            gameState.equipment.push({ name: "Pro Studio", quality: 2 });
+            return {
+                message: "Studio quality improved!",
+                cashEffect: -50000
+            };
+        }
+    },
+    launchSingle: {
+        title: "📀 Release Single (E20,000)",
+        cost: 20000,
+        effect: () => {
+            const artist = gameState.artists[0];
+            const revenue = artist.popularity * 500;
+            gameState.cash += revenue;
+            artist.popularity += 10;
+            return {
+                message: `${artist.name} single earned E${revenue}!`,
+                cashEffect: revenue
+            };
         }
     }
+};
 
-    updateDisplay();
-    checkGameOver();
+// UI FUNCTIONS
+function updateGameDisplay() {
+    // Update numbers
+    document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
+    document.getElementById('day').textContent = `${gameState.day}/50`;
+    document.getElementById('quality').textContent = 
+        gameState.equipment.reduce((sum, eq) => sum + eq.quality, 0);
+
+    // Artists display
+    document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
+        <div class="artist-card">
+            <strong>${artist.name}</strong><br>
+            Genre: ${artist.genre}<br>
+            Popularity: ${artist.popularity}<br>
+            Contract: ${artist.contractDays} days
+        </div>
+    `).join('');
+
+    // Staff display
+    document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
+        <div class="staff-card">
+            ${staff.role}<br>
+            Salary: E${staff.salary}/day
+        </div>
+    `).join('');
+
+    // Update decisions
     renderDecisions();
 }
 
-function checkGameOver() {
-    if (gameState.cash <= 0) {
-        addMessage("💸 BANKRUPT! Game Over");
-        document.getElementById('decisions').innerHTML = "";
-    } else if (gameState.day > 50) {
-        addMessage("🏆 CONGRATULATIONS! You survived 50 days as a music mogul!");
-        document.getElementById('decisions').innerHTML = "";
-    }
-}
-
 function renderDecisions() {
-    const container = document.getElementById('decisions');
-    container.innerHTML = decisions.map(decision => `
+    const decisionsHTML = Object.values(decisions).map(decision => `
         <button class="decision-btn" 
-                onclick="handleDecision(${JSON.stringify(decision)})" 
-                ${gameState.cash < (decision.cost || 0) ? 'disabled' : ''}>
-            ${decision.title}${decision.cost ? ` (E${decision.cost.toLocaleString()})` : ''}
+                onclick="processDecision(${JSON.stringify(decision)})"
+                ${gameState.cash < decision.cost ? 'disabled' : ''}
+                ${gameState.pendingDecisions.includes(decision) ? 'disabled' : ''}>
+            ${decision.title}
         </button>
     `).join('');
+    
+    document.getElementById('decisions').innerHTML = `
+        <p>Pending actions: ${gameState.pendingDecisions.length}/3</p>
+        ${decisionsHTML}
+    `;
 }
 
-// Start game
-addMessage("Welcome to eSwatini Music Mogul! Build your record label empire.");
-renderDecisions();
-updateDisplay();
+function addMessage(msg) {
+    const container = document.getElementById('message-container');
+    container.innerHTML += `<div>▶️ ${msg}</div>`;
+    container.scrollTop = container.scrollHeight;
+}
+
+function gameOver() {
+    addMessage("💸 BANKRUPTCY! Game Over");
+    document.getElementById('continue-btn').disabled = true;
+}
+
+function victory() {
+    addMessage("🏆 CONGRATULATIONS! You've built a music empire!");
+    document.getElementById('continue-btn').disabled = true;
+}
+
+// INITIALIZE GAME
+addMessage("Welcome to eSwatini Music Mogul!");
+addMessage("Day 1: Start building your music empire!");
+updateGameDisplay();
 </script>
 </body>
 </html>
