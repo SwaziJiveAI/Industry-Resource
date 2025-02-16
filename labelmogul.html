@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>eSwatini Record Label Simulator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .game-container { border: 2px solid #333; padding: 20px; margin-top: 20px; }
+        .status-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .decision-btn { margin: 5px; padding: 10px; cursor: pointer; }
+        #message-container { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>eSwatini Music Mogul</h1>
+        <div class="status-bar">
+            <div>💰 Cash: <span id="cash">$100,000</span></div>
+            <div>📅 Day: <span id="day">1/50</span></div>
+        </div>
+        <div id="message-container"></div>
+        <div id="decisions"></div>
+    </div>
+
+<script>
+const gameState = {
+    cash: 100000,
+    day: 1,
+    decisionsMade: 0,
+    artists: [],
+    equipment: [],
+    partnerships: []
+};
+
+const decisions = [
+    {
+        title: "🎤 Sign Local Artist",
+        cost: 20000,
+        message: "Signed up-and-coming artist from Manzini",
+        effect: { artists: +1 }
+    },
+    {
+        title: "💿 Buy Studio Equipment",
+        cost: 50000,
+        message: "Purchased professional recording gear",
+        effect: { equipment: +1 }
+    },
+    {
+        title: "🤝 Partner with Radio Station",
+        cost: 30000,
+        message: "Secured airplay deal with Eswatini FM",
+        effect: { partnerships: +1 }
+    },
+    {
+        title: "🎵 Produce Single",
+        cost: 15000,
+        message: "Recorded new track with your artist",
+        revenue: 40000
+    },
+    {
+        title: "📻 Run Radio Campaign",
+        cost: 25000,
+        message: "Launched promotional radio blitz",
+        revenue: 60000
+    }
+];
+
+function updateDisplay() {
+    document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
+    document.getElementById('day').textContent = `${gameState.day}/50`;
+}
+
+function addMessage(message) {
+    const msgContainer = document.getElementById('message-container');
+    msgContainer.innerHTML += `<div>${message}</div>`;
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function handleDecision(decision) {
+    if (gameState.cash <= 0 || gameState.day > 50) return;
+
+    // Calculate financial impact
+    if (decision.cost) gameState.cash -= decision.cost;
+    if (decision.revenue) gameState.cash += decision.revenue;
+    
+    addMessage(decision.message + (decision.cost ? ` [-E${decision.cost.toLocaleString()}]` : '') + 
+              (decision.revenue ? ` [+E${decision.revenue.toLocaleString()}]` : ''));
+    
+    gameState.decisionsMade++;
+    
+    if (gameState.decisionsMade >= 3) {
+        gameState.day++;
+        gameState.decisionsMade = 0;
+        addMessage(`--- Day ${gameState.day} begins ---`);
+        
+        // Add random events
+        if (Math.random() < 0.3) {
+            const events = [
+                { msg: "🔥 Equipment malfunction! Emergency repairs needed", cost: 10000 },
+                { msg: "🎉 Hit single goes viral! Sales surge", revenue: 30000 },
+                { msg: "🎤 Artist demands better contract terms", cost: 15000 }
+            ];
+            const event = events[Math.floor(Math.random() * events.length)];
+            gameState.cash += (event.revenue || 0) - (event.cost || 0);
+            addMessage(`EVENT: ${event.msg} ${event.cost ? `[-E${event.cost}]` : ''} ${event.revenue ? `[+E${event.revenue}]` : ''}`);
+        }
+    }
+
+    updateDisplay();
+    checkGameOver();
+    renderDecisions();
+}
+
+function checkGameOver() {
+    if (gameState.cash <= 0) {
+        addMessage("💸 BANKRUPT! Game Over");
+        document.getElementById('decisions').innerHTML = "";
+    } else if (gameState.day > 50) {
+        addMessage("🏆 CONGRATULATIONS! You survived 50 days as a music mogul!");
+        document.getElementById('decisions').innerHTML = "";
+    }
+}
+
+function renderDecisions() {
+    const container = document.getElementById('decisions');
+    container.innerHTML = decisions.map(decision => `
+        <button class="decision-btn" 
+                onclick="handleDecision(${JSON.stringify(decision)})" 
+                ${gameState.cash < (decision.cost || 0) ? 'disabled' : ''}>
+            ${decision.title}${decision.cost ? ` (E${decision.cost.toLocaleString()})` : ''}
+        </button>
+    `).join('');
+}
+
+// Start game
+addMessage("Welcome to eSwatini Music Mogul! Build your record label empire.");
+renderDecisions();
+updateDisplay();
+</script>
+</body>
+</html>
