@@ -40,13 +40,52 @@
             border-radius: 5px;
         }
         .scenario-box { margin-bottom: 15px; }
+        .marketplace-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+        .marketplace-section {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .market-scroll {
+            height: 150px;
+            overflow-y: auto;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .market-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f8f8f8;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .market-item:hover {
+            background: #e8e8e8;
+        }
+        .reputation-level-basic { background: #FFE5E5 !important; }
+        .reputation-level-rising { background: #FFEDCC !important; }
+        .reputation-level-notable { background: #E5FFE5 !important; }
+        .reputation-level-celebrated { background: #E5F0FF !important; }
+        .reputation-level-legendary { background: #F2E5FF !important; }
     </style>
 </head>
 <body>
     <div class="status-bar">
         <div>💰 Cash: <span id="cash">E150,000</span></div>
         <div>📅 Day: <span id="day">1</span>/50</div>
-        <div>🎯 Target: E1,000,000</div>
+        <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
     </div>
 
     <div class="game-container">
@@ -57,8 +96,34 @@
                     ▶️ Day 1: Start building your music empire!
                 </div>
             </div>
-            <div id="decisions" class="scroll-box"></div>
-            <button id="newGameBtn" class="new-game-btn" onclick="startNewGame()">New Game</button>
+            <div class="marketplace-container">
+                <div class="marketplace-section">
+                    <h3>🎭 Shows</h3>
+                    <div id="shows-market" class="market-scroll"></div>
+                </div>
+                <div class="marketplace-section">
+                    <h3>📝 Deals</h3>
+                    <div id="deals-market" class="market-scroll"></div>
+                </div>
+                <div class="marketplace-section">
+                    <h3>🎤 Artists Market</h3>
+                    <div id="artists-market" class="market-scroll"></div>
+                </div>
+                <div class="marketplace-section">
+                    <h3>🎛️ Equipment</h3>
+                    <div id="equipment-market" class="market-scroll"></div>
+                </div>
+                <div class="marketplace-section">
+                    <h3>📚 Training</h3>
+                    <div id="training-market" class="market-scroll"></div>
+                </div>
+                <div class="marketplace-section">
+                    <h3>📣 Marketing</h3>
+                    <div id="marketing-market" class="market-scroll"></div>
+                </div>
+            </div>
+            <!-- Remove the New Game button -->
+            <!-- <button id="newGameBtn" class="new-game-btn" onclick="startNewGame()">New Game</button> -->
         </div>
 
         <div class="side-panel">
@@ -76,920 +141,507 @@
     <script>
         let gameState;
 
+        const REPUTATION_LEVELS = {
+            1: { name: "Basic", min: 0 },
+            2: { name: "Rising", min: 500000 },
+            3: { name: "Notable", min: 1000000 },
+            4: { name: "Celebrated", min: 1500000 },
+            5: { name: "Legendary", min: 2000000 }
+        };
+
+        const scenarios = [
+            {
+                question: "A social media influencer promotes your artist:",
+                options: [
+                    {
+                        text: "Pay for the promotion (Cost E25k)",
+                        effect: () => {
+                            adjustArtistHappiness(5);
+                            adjustStaffMorale(0);
+                            adjustArtistPopularity(30);
+                            adjustReputation(10);
+                            return -25000;
+                        }
+                    },
+                    {
+                        text: "Stay independent (Safe E20k)",
+                        effect: () => {
+                            adjustArtistHappiness(5);
+                            adjustStaffMorale(5);
+                            adjustArtistPopularity(3);
+                            adjustReputation(5);
+                            return 20000;
+                        }
+                    },
+                    {
+                        text: "Do Nothing (Risk E10k)",
+                        effect: () => {
+                            adjustArtistHappiness(-10);
+                            adjustStaffMorale(-5);
+                            adjustArtistPopularity(-3);
+                            adjustReputation(-5);
+                            return -10000;
+                        }
+                    }
+                ]
+            },
+            {
+                question: "A rival label tries to poach your top artist:",
+                options: [
+                    {
+                        text: "Counteroffer (Cost E80k)",
+                        effect: () => {
+                            adjustArtistHappiness(10);
+                            adjustStaffMorale(0);
+                            adjustArtistPopularity(10);
+                            adjustReputation(15);
+                            return -80000;
+                        }
+                    },
+                    {
+                        text: "Let them go (Gain E40k)",
+                        effect: () => {
+                            adjustArtistHappiness(-10);
+                            adjustStaffMorale(5);
+                            adjustArtistPopularity(-5);
+                            adjustReputation(-10);
+                            return 40000;
+                        }
+                    },
+                    {
+                        text: "Do Nothing (Risk Artist Leaving)",
+                        effect: () => {
+                            adjustArtistHappiness(-15);
+                            adjustStaffMorale(-10);
+                            adjustArtistPopularity(-20);
+                            adjustReputation(-20);
+                            return 0;
+                        }
+                    }
+                ]
+            }
+        ];
+
         function initializeGameState() {
             gameState = {
-                cash: 150000,
+                cash: 50000, // Set starting cash to 50,000
                 day: 1,
+                reputation: 0,
                 scenarios: [],
                 artists: [
                     { name: "Lihlombe 12", genre: "sibhaca", popularity: 25, happiness: 80, contractDays: 15 },
                     { name: "Mbabane Beats", genre: "hiphop", popularity: 40, happiness: 70, contractDays: 18 }
                 ],
                 staff: [{ role: "Manager", morale: 100 }, { role: "Publicist", morale: 85 }],
+                activeDeals: [],
                 equipment: []
             };
+            updateReputationDisplay();
         }
 
-        const scenarios = [
-    {
-        question: "A streaming platform offers an exclusive deal:",
-        options: [
-            { 
-                text: "Accept exclusive (Risk E50k)", 
-                effect: () => {
-                    const result = Math.random() > 0.4 ? 150000 : -50000;
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(5);  
-                    return result;
-                }
-            },
-            { 
-                text: "Stay independent (Safe E20k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(3);
-                    return 20000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk E10k)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-3);  
-                    return -10000;
-                }
-            }
-        ]
-    },
-    {
-        question: "A rival label tries to poach your top artist:",
-        options: [
-            { 
-                text: "Counteroffer (Cost E80k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(10);  
-                    return -80000;
-                }
-            },
-            { 
-                text: "Let them go (Gain E40k)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(-5);  
-                    return 40000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk Artist Leaving)", 
-                effect: () => {
-                    adjustArtistHappiness(-15);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Music video production dilemma:",
-        options: [
-            { 
-                text: "Big budget video (Cost E120k)", 
-                effect: () => {
-                    adjustArtistHappiness(15);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(20);  
-                    return -120000;
-                }
-            },
-            { 
-                text: "DIY approach (Save E60k)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 60000;
-                }
-            },
-            { 
-                text: "Do Nothing (Popularity Declines)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist is caught up in a social media scandal:",
-        options: [
-            { 
-                text: "Issue a public apology (Cost E30k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(5);  
-                    return -30000;
-                }
-            },
-            { 
-                text: "Ignore the scandal (Risk popularity decline)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let scandal blow over)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Music label merger offer comes through:",
-        options: [
-            { 
-                text: "Accept the merger (Gain E100k)", 
-                effect: () => {
-                    adjustArtistHappiness(20);
-                    adjustStaffMorale(15);
-                    adjustArtistPopularity(25);  
-                    return 100000;
-                }
-            },
-            { 
-                text: "Refuse the merger (Maintain control)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let it go to another label)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-5);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A new competitor releases a hit album:",
-        options: [
-            { 
-                text: "Speed up album release (Cost E70k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(15);  
-                    return -70000;
-                }
-            },
-            { 
-                text: "Wait for the hype to die down (Save E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 50000;
-                }
-            },
-            { 
-                text: "Do Nothing (Miss the chance)", 
-                effect: () => {
-                    adjustArtistHappiness(-15);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-25);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist needs a break to prevent burnout:",
-        options: [
-            { 
-                text: "Give them a break (Cost E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(30);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(10);  
-                    return -50000;
-                }
-            },
-            { 
-                text: "Push through the schedule (Risk burnout)", 
-                effect: () => {
-                    adjustArtistHappiness(-20);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Burnout inevitable)", 
-                effect: () => {
-                    adjustArtistHappiness(-30);
-                    adjustStaffMorale(-20);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist is offered a big endorsement deal:",
-        options: [
-            { 
-                text: "Accept the deal (Gain E150k)", 
-                effect: () => {
-                    adjustArtistHappiness(25);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(20);  
-                    return 150000;
-                }
-            },
-            { 
-                text: "Turn down the deal (Maintain artistic integrity)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Miss out on the deal)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-5);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A highly anticipated album drops on the same day as yours:",
-        options: [
-            { 
-                text: "Release your album anyway (Cost E40k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(10);  
-                    return -40000;
-                }
-            },
-            { 
-                text: "Delay your release (Save E10k)", 
-                effect: () => {
-                    adjustArtistHappiness(0);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 10000;
-                }
-            },
-            { 
-                text: "Do Nothing (Miss out on the hype)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A celebrity wants to collaborate with your artist:",
-        options: [
-            { 
-                text: "Accept the collaboration (Gain E200k)", 
-                effect: () => {
-                    adjustArtistHappiness(20);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(30);  
-                    return 200000;
-                }
-            },
-            { 
-                text: "Decline the collaboration (Maintain control)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(10);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let it slip away)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A tour is being planned for your artist:",
-        options: [
-            { 
-                text: "Go on the tour (Cost E150k)", 
-                effect: () => {
-                    adjustArtistHappiness(30);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(25);  
-                    return -150000;
-                }
-            },
-            { 
-                text: "Postpone the tour (Save E100k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(5);  
-                    return 100000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk fan disappointment)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist's album isn't performing as expected:",
-        options: [
-            { 
-                text: "Release a single (Cost E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(20);  
-                    return -50000;
-                }
-            },
-            { 
-                text: "Do some marketing (Cost E20k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(15);  
-                    return -20000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk the album's failure)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-25);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A major sponsor backs out of a deal:",
-        options: [
-            { 
-                text: "Find a new sponsor (Risk E60k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(10);  
-                    return -60000;
-                }
-            },
-            { 
-                text: "Keep going without a sponsor (Risk finances)", 
-                effect: () => {
-                    adjustArtistHappiness(0);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Miss the sponsorship)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A social media influencer promotes your artist:",
-        options: [
-            { 
-                text: "Pay for the promotion (Cost E25k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(30);  
-                    return -25000;
-                }
-            },
-            { 
-                text: "Ignore the promotion (Save E25k)", 
-                effect: () => {
-                    adjustArtistHappiness(0);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(-5);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let the promotion fade)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist needs a manager:",
-        options: [
-            { 
-                text: "Hire a top manager (Cost E100k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(15);  
-                    return -100000;
-                }
-            },
-            { 
-                text: "Hire a junior manager (Save E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 50000;
-               }
-            },
-
-{
-        question: "A rival label spreads false media rumors about your artist:",
-        options: [
-            { 
-                text: "Sue for defamation (Cost E100k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(10);  
-                    return -100000;
-                }
-            },
-            { 
-                text: "Ignore the rumors (Risk reputation)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Allow rumors to fade)", 
-                effect: () => {
-                    adjustArtistHappiness(-15);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-25);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A rival label offers your artist a bigger deal:",
-        options: [
-            { 
-                text: "Counter with a better offer (Cost E150k)", 
-                effect: () => {
-                    adjustArtistHappiness(20);
-                    adjustStaffMorale(10);
-                    adjustArtistPopularity(15);  
-                    return -150000;
-                }
-            },
-            { 
-                text: "Let them go (Gain E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(-20);  
-                    return 50000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk losing artist to competition)", 
-                effect: () => {
-                    adjustArtistHappiness(-20);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-30);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist has a public feud with a rival musician:",
-        options: [
-            { 
-                text: "Resolve the feud publicly (Cost E30k)", 
-                effect: () => {
-                    adjustArtistHappiness(15);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(10);  
-                    return -30000;
-                }
-            },
-            { 
-                text: "Ignore the feud (Risk negative press)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let it escalate)", 
-                effect: () => {
-                    adjustArtistHappiness(-15);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A rival label is spreading false rumors about your album's quality:",
-        options: [
-            { 
-                text: "Defend the album publicly (Cost E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(20);  
-                    return -50000;
-                }
-            },
-            { 
-                text: "Let the album speak for itself (Save E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(5);  
-                    return 50000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk album sales dropping)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A rival artist publicly criticizes your artist's work:",
-        options: [
-            { 
-                text: "Respond with a diss track (Cost E40k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(10);  
-                    return -40000;
-                }
-            },
-            { 
-                text: "Ignore the criticism (Risk ongoing tension)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let the fans decide)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-5);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A rival label attempts to sabotage your upcoming tour with false claims of mismanagement:",
-        options: [
-            { 
-                text: "Fight back legally (Cost E80k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(15);  
-                    return -80000;
-                }
-            },
-            { 
-                text: "Ignore the sabotage (Risk public opinion)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Let the sabotage go unchecked)", 
-                effect: () => {
-                    adjustArtistHappiness(-20);
-                    adjustStaffMorale(-15);
-                    adjustArtistPopularity(-30);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "A major media outlet runs a misleading story about your artist's behavior:",
-        options: [
-            { 
-                text: "Issue a public correction (Cost E40k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(15);  
-                    return -40000;
-                }
-            },
-            { 
-                text: "Let it slide (Save E40k)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 40000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk losing fans)", 
-                effect: () => {
-                    adjustArtistHappiness(-15);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist is being accused of copying another artist's work:",
-        options: [
-            { 
-                text: "Defend the originality (Cost E60k)", 
-                effect: () => {
-                    adjustArtistHappiness(15);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(20);  
-                    return -60000;
-                }
-            },
-            { 
-                text: "Ignore the accusation (Risk backlash)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-10);
-                    adjustArtistPopularity(-15);  
-                    return 0;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk artist's reputation)", 
-                effect: () => {
-                    adjustArtistHappiness(-20);
-                    adjustStaffMorale(-15);
-                    adjustArtistPopularity(-25);  
-                    return 0;
-                }
-            }
-        ]
-    },
-    {
-        question: "Your artist's latest album leaks online before the official release:",
-        options: [
-            { 
-                text: "Release the album early (Gain E50k)", 
-                effect: () => {
-                    adjustArtistHappiness(10);
-                    adjustStaffMorale(5);
-                    adjustArtistPopularity(25);  
-                    return 50000;
-                }
-            },
-            { 
-                text: "Fight the leak (Cost E70k)", 
-                effect: () => {
-                    adjustArtistHappiness(5);
-                    adjustStaffMorale(0);
-                    adjustArtistPopularity(10);  
-                    return -70000;
-                }
-            },
-            { 
-                text: "Do Nothing (Risk decreased sales)", 
-                effect: () => {
-                    adjustArtistHappiness(-10);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-20);  
-                    return 0;
-                }
-            }
-        ]
-    },
-            { 
-                text: "Do Nothing (Risk disorganization)", 
-                effect: () => {
-                    adjustArtistHappiness(-5);
-                    adjustStaffMorale(-5);
-                    adjustArtistPopularity(-10);  
-                    return 0;
-                }
-            }
-        ]
-    }
-];
-
-
-        function startNewGame() {
-            initializeGameState();
-            startNewDay();
-            document.getElementById('newGameBtn').style.display = 'none';
+        function adjustReputation(amount) {
+            gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
+            updateReputationDisplay();
         }
 
-        function startNewDay() {
-            gameState.scenarios = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 3);
-            showNextScenario();
-            updateGameDisplay();
+        function getCurrentReputationLevel() {
+            let level = 1;
+            for (const [key, value] of Object.entries(REPUTATION_LEVELS)) {
+                if (gameState.cash >= value.min) level = parseInt(key);
+            }
+            return level;
         }
 
-        function showNextScenario() {
-            const scenario = gameState.scenarios.shift();
-            if (!scenario) return endDay();
-
-            const html = `
-                <div class="scenario-box">
-                    ${scenario.question}
-                    ${scenario.options.map((opt, index) => `
-                        <button class="decision-btn" id="option-${index}">
-                            ${opt.text}
-                        </button>
-                    `).join('')}
-                </div>
-            `;
-            document.getElementById('message-container').innerHTML = html;
+        function updateReputationDisplay() {
+            const level = getCurrentReputationLevel();
+            const levelElement = document.getElementById('reputation-level');
+            levelElement.textContent = REPUTATION_LEVELS[level].name;
+            document.getElementById('reputation-points').textContent = 
+                Math.floor(gameState.cash / 500000 * 100);
             
-            scenario.options.forEach((option, index) => {
-                document.getElementById(`option-${index}`).addEventListener('click', function() {
-                    handleDecision(option);
-                });
-            });
+            levelElement.classList.remove(
+                'reputation-level-basic',
+                'reputation-level-rising',
+                'reputation-level-notable',
+                'reputation-level-celebrated',
+                'reputation-level-legendary'
+            );
+            
+            levelElement.classList.add(`reputation-level-${REPUTATION_LEVELS[level].name.toLowerCase()}`);
         }
 
-        function handleDecision(option) {
-            const result = option.effect();
-            gameState.cash += result;
-
-            addMessage(result > 0 ? `Earned E${result}` : `Lost E${-result}`);
-            showNextScenario();
-            updateGameDisplay();
-            checkWinCondition();
-        }
-
-        function endDay() {
-            gameState.day++;
-            processDailyCosts();
-            addMessage(`Day ${gameState.day} starting...`);
-            startNewDay();
-        }
-
-        function processDailyCosts() {
-            let staffCosts = gameState.staff.length * 15000;
-            gameState.artists.forEach(artist => {
-                staffCosts += artist.contractDays * 5000;
-            });
-            gameState.cash -= staffCosts;
-
-            if(staffCosts > 0) addMessage(`Paid staff costs: E${staffCosts}`);
-        }
-
-        function checkWinCondition() {
-            if(gameState.cash >= 1000000) {
-                document.getElementById('message-container').innerHTML = 
-                    "<div class='scenario-box'>🏆 YOU WON! Reached E1,000,000!</div>";
-                document.getElementById('newGameBtn').style.display = 'inline-block';
-            }
-            if(gameState.cash <= 0) {
-                document.getElementById('message-container').innerHTML = 
-                    "<div class='scenario-box'>💸 BANKRUPT! Game Over</div>";
-                document.getElementById('newGameBtn').style.display = 'inline-block';
-            }
-        }
-
-        function adjustArtistHappiness(amount) {
-            gameState.artists.forEach(artist => {
-                artist.happiness += amount;
-                if (artist.happiness < 0) artist.happiness = 0;
-                if (artist.happiness > 100) artist.happiness = 100;
-            });
-        }
-
-        function adjustStaffMorale(amount) {
-            gameState.staff.forEach(staff => {
-                staff.morale += amount;
-                if (staff.morale < 0) staff.morale = 0;
-                if (staff.morale > 100) staff.morale = 100;
-            });
-        }
-
-        function adjustArtistPopularity(amount) {
-            gameState.artists.forEach(artist => {
-                artist.popularity += amount;
-                if (artist.popularity < 0) artist.popularity = 0;
-                if (artist.popularity > 100) artist.popularity = 100;
-            });
-        }
-
-        function addMessage(msg) {
+        function addMessage(message) {
             const container = document.getElementById('message-container');
-            container.innerHTML += `<div class='scenario-box'>▶️ ${msg}</div>`;
+            container.innerHTML += `<div>${message}</div>`;
             container.scrollTop = container.scrollHeight;
         }
 
         function updateGameDisplay() {
             document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
             document.getElementById('day').textContent = gameState.day;
-
+            
             document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
                 <div class="artist-card">
-                    <strong>${artist.name}</strong><br>
-                    Genre: ${artist.genre}<br>
-                    Popularity: ${artist.popularity}<br>
-                    Happiness: ${artist.happiness}<br>
-                    Contract: ${artist.contractDays} days
+                    <strong>${artist.name}</strong> (${artist.genre})<br>
+                    📈 Popularity: ${artist.popularity}<br>
+                    😊 Happiness: ${artist.happiness}%<br>
+                    📅 Contract: ${artist.contractDays} days
                 </div>
             `).join('');
-
+            
             document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
-                <div class="staff-card">${staff.role} - Morale: ${staff.morale}</div>
+                <div class="staff-card">
+                    <strong>${staff.role}</strong><br>
+                    😊 Morale: ${staff.morale}%
+                </div>
             `).join('');
         }
 
-        // Start the game when the page loads
-        window.onload = startNewGame;
+        function adjustArtistHappiness(amount) {
+            gameState.artists.forEach(artist => {
+                artist.happiness = Math.max(0, Math.min(100, artist.happiness + amount));
+            });
+        }
+
+        function adjustStaffMorale(amount) {
+            gameState.staff.forEach(staff => {
+                staff.morale = Math.max(0, Math.min(100, staff.morale + amount));
+            });
+        }
+
+        function adjustArtistPopularity(amount) {
+            gameState.artists.forEach(artist => {
+                artist.popularity = Math.max(0, artist.popularity + amount);
+            });
+        }
+
+        // Add to your marketData object
+        const marketData = {
+            shows: [
+                { name: "Local Club Show", cost: 5000, popularity: 5, duration: 1 },
+                { name: "Radio Station Performance", cost: 15000, popularity: 15, duration: 2 },
+                { name: "Music Festival Slot", cost: 50000, popularity: 30, duration: 3 },
+                { name: "National TV Show", cost: 75000, popularity: 40, duration: 4 },
+                { name: "International Tour", cost: 100000, popularity: 50, duration: 5 },
+                { name: "Charity Concert", cost: 20000, popularity: 20, duration: 2 },
+                { name: "Private Event", cost: 30000, popularity: 25, duration: 3 }
+            ],
+            deals: [
+                { name: "Merchandise Deal", cost: 20000, revenue: 5000, duration: 5 },
+                { name: "Brand Sponsorship", cost: 50000, revenue: 15000, duration: 7 },
+                { name: "Distribution Deal", cost: 100000, revenue: 25000, duration: 10 },
+                { name: "Streaming Partnership", cost: 80000, revenue: 20000, duration: 8 },
+                { name: "Endorsement Contract", cost: 60000, revenue: 18000, duration: 6 }
+            ],
+            artists: [
+                { name: "Rising Star", genre: "Afropop", cost: 30000, popularity: 35, contractCost: 5000 },
+                { name: "Underground Talent", genre: "Hip-hop", cost: 25000, popularity: 30, contractCost: 4000 },
+                { name: "Traditional Artist", genre: "Sibhaca", cost: 40000, popularity: 45, contractCost: 6000 },
+                { name: "Pop Sensation", genre: "Pop", cost: 50000, popularity: 50, contractCost: 7000 },
+                { name: "Jazz Virtuoso", genre: "Jazz", cost: 35000, popularity: 40, contractCost: 5500 }
+            ],
+            equipment: [
+                { name: "Studio Microphone", cost: 8000, quality: 10, maintenance: 500 },
+                { name: "Mixing Console", cost: 25000, quality: 20, maintenance: 1000 },
+                { name: "Recording Suite", cost: 60000, quality: 35, maintenance: 2000 },
+                { name: "Live Sound System", cost: 40000, quality: 25, maintenance: 1500 },
+                { name: "Lighting Rig", cost: 15000, quality: 15, maintenance: 700 }
+            ],
+            training: [
+                { name: "Vocal Workshop", cost: 12000, skillBoost: 15, duration: 3 },
+                { name: "Dance Training", cost: 18000, skillBoost: 20, duration: 5 },
+                { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
+                { name: "Songwriting Masterclass", cost: 25000, skillBoost: 22, duration: 6 },
+                { name: "Stage Presence Seminar", cost: 20000, skillBoost: 18, duration: 4 }
+            ],
+            marketing: [
+                { name: "Social Media Campaign", cost: 15000, exposure: 20, duration: 5 },
+                { name: "Radio Advertisement", cost: 25000, exposure: 30, duration: 7 },
+                { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
+                { name: "Billboard Promotion", cost: 35000, exposure: 40, duration: 8 },
+                { name: "Influencer Collaboration", cost: 20000, exposure: 25, duration: 6 }
+            ]
+        };
+
+        function updateMarketplaces() {
+            updateShowsMarket();
+            updateDealsMarket();
+            updateArtistsMarket();
+            updateEquipmentMarket();
+            updateTrainingMarket();
+            updateMarketingMarket();
+        }
+
+        // Add these market update functions
+        function updateEquipmentMarket() {
+            document.getElementById('equipment-market').innerHTML = marketData.equipment.map(item => `
+                <div class="market-item" onclick="buyEquipment('${item.name}', ${item.cost}, ${item.quality}, ${item.maintenance})">
+                    <strong>${item.name}</strong><br>
+                    💰 Cost: E${item.cost.toLocaleString()}<br>
+                    ⭐ Quality: +${item.quality}<br>
+                    🔧 Maintenance: E${item.maintenance}/day
+                </div>
+            `).join('');
+        }
+
+        function updateTrainingMarket() {
+            document.getElementById('training-market').innerHTML = marketData.training.map(course => `
+                <div class="market-item" onclick="bookTraining('${course.name}', ${course.cost}, ${course.skillBoost}, ${course.duration})">
+                    <strong>${course.name}</strong><br>
+                    💰 Cost: E${course.cost.toLocaleString()}<br>
+                    📈 Skill Boost: +${course.skillBoost}<br>
+                    ⏱️ Duration: ${course.duration} days
+                </div>
+            `).join('');
+        }
+
+        function updateMarketingMarket() {
+            document.getElementById('marketing-market').innerHTML = marketData.marketing.map(campaign => `
+                <div class="market-item" onclick="launchCampaign('${campaign.name}', ${campaign.cost}, ${campaign.exposure}, ${campaign.duration})">
+                    <strong>${campaign.name}</strong><br>
+                    💰 Cost: E${campaign.cost.toLocaleString()}<br>
+                    🎯 Exposure: +${campaign.exposure}<br>
+                    ⏱️ Duration: ${campaign.duration} days
+                </div>
+            `).join('');
+        }
+
+        // Add these handler functions
+        // Update handler functions to affect relevant factors
+        function checkBankruptcy() {
+            if (gameState.cash < 0) {
+                addMessage("💥 Game Over: You've gone bankrupt!");
+                document.querySelectorAll('.market-item').forEach(item => item.onclick = null); // Disable all market interactions
+                document.querySelectorAll('.decision-btn').forEach(btn => btn.onclick = null); // Disable scenario decisions
+                showRetryButton(); // Show retry button
+                return true;
+            }
+            return false;
+        }
+
+        function showRetryButton() {
+            const container = document.getElementById('message-container');
+            const retryButton = document.createElement('button');
+            retryButton.textContent = "Retry";
+            retryButton.className = "new-game-btn";
+            retryButton.onclick = startNewGame;
+            container.innerHTML += `<div>💥 Game Over: You've gone bankrupt!</div>`; // Add Game Over message
+            container.appendChild(retryButton); // Append Retry button next to the message
+            container.scrollTop = container.scrollHeight; // Scroll to the bottom to show the message and button
+        }
+
+        function startNewGame() {
+            initializeGameState();
+            startNewDay();
+            updateMarketplaces(); // Ensure marketplaces are updated
+            document.querySelector('.new-game-btn').remove(); // Remove retry button after starting a new game
+        }
+
+        // Update handler functions to include bankruptcy check
+        function buyEquipment(name, cost, quality, maintenance) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash to buy ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+            gameState.equipment.push({ name, quality, maintenance });
+            adjustArtistHappiness(quality / 2);
+            adjustReputation(quality / 3);
+            addMessage(`🎛️ Purchased ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        function bookTraining(name, cost, skillBoost, duration) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash for ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+            adjustArtistPopularity(skillBoost);
+            adjustStaffMorale(skillBoost / 2);
+            addMessage(`📚 Booked ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        function launchCampaign(name, cost, exposure, duration) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash for ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+            adjustArtistPopularity(exposure);
+            adjustReputation(exposure / 2);
+            addMessage(`📣 Launched ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        function bookShow(name, cost, popularity, duration) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash to book ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+            adjustArtistPopularity(popularity);
+            adjustReputation(popularity / 2);
+            addMessage(`🎭 Booked ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        function acceptDeal(name, cost, revenue, duration) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash for ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+            gameState.activeDeals.push({ name, revenue, daysLeft: duration });
+            adjustReputation(10);
+            addMessage(`📝 Accepted ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        function signArtist(name, genre, cost, popularity, contractCost) {
+            if (gameState.cash < cost) {
+                addMessage(`❌ Not enough cash to sign ${name}`);
+                return;
+            }
+            gameState.cash -= cost;
+            gameState.artists.push({
+                name,
+                genre,
+                popularity,
+                happiness: 100,
+                contractDays: 30
+            });
+            adjustReputation(15); // Signing artists affects reputation
+            addMessage(`🎤 Signed ${name} for E${cost.toLocaleString()}`);
+            updateGameDisplay();
+        }
+
+        // Enhance game dynamics
+        function startNewDay() {
+            gameState.scenarios = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 1);
+            showNextScenario();
+            updateGameDisplay();
+            updateMarketplaces(); // Ensure marketplaces are updated daily
+        }
+
+        function updateShowsMarket() {
+            document.getElementById('shows-market').innerHTML = marketData.shows.map(show => `
+                <div class="market-item" onclick="bookShow('${show.name}', ${show.cost}, ${show.popularity}, ${show.duration})">
+                    <strong>${show.name}</strong><br>
+                    💰 Cost: E${show.cost.toLocaleString()}<br>
+                    📈 Popularity Boost: +${show.popularity}<br>
+                    ⏱️ Duration: ${show.duration} day${show.duration > 1 ? 's' : ''}
+                </div>
+            `).join('');
+        }
+        // Add these functions before the DOMContentLoaded event
+        function startNewDay() {
+            gameState.scenarios = [...scenarios].sort(() => Math.random() - 0.5).slice(0, 1);
+            showNextScenario();
+            updateGameDisplay();
+        }
+
+        function showNextScenario() {
+            const scenario = gameState.scenarios[0];
+            if (!scenario) return;
+        
+            const html = `
+                <div class="scenario-box">
+                    <h3>${scenario.question}</h3>
+                    ${scenario.options.map((opt, index) => `
+                        <button class="decision-btn" onclick="handleDecision(${index})">
+                            ${opt.text}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('message-container').innerHTML = html;
+        }
+
+        function handleDecision(optionIndex) {
+            const scenario = gameState.scenarios[0];
+            if (!scenario) return;
+        
+            const option = scenario.options[optionIndex];
+            const cashEffect = option.effect();
+            gameState.cash += cashEffect;
+            if (checkBankruptcy()) return; // Check for bankruptcy
+        
+            addMessage(`Decision made: ${option.text}`);
+            if (cashEffect > 0) {
+                addMessage(`💰 Gained E${Math.abs(cashEffect).toLocaleString()}`);
+            } else if (cashEffect < 0) {
+                addMessage(`💸 Spent E${Math.abs(cashEffect).toLocaleString()}`);
+            }
+            
+            gameState.day++;
+            if (gameState.day > 50) {
+                endGame(); // End the game after 50 days
+            } else {
+                startNewDay();
+            }
+            updateGameDisplay();
+        }
+
+        function endGame() {
+            addMessage("🏁 Game Over: You've reached the end of 50 days!");
+            addMessage(`Final Cash: E${gameState.cash.toLocaleString()}`);
+            addMessage(`Final Reputation: ${gameState.reputation}`);
+            document.querySelectorAll('.market-item').forEach(item => item.onclick = null); // Disable all market interactions
+            document.querySelectorAll('.decision-btn').forEach(btn => btn.onclick = null); // Disable scenario decisions
+            showRetryButton(); // Show retry button
+        }
+
+        function updateDealsMarket() {
+            document.getElementById('deals-market').innerHTML = marketData.deals.map(deal => `
+                <div class="market-item" onclick="acceptDeal('${deal.name}', ${deal.cost}, ${deal.revenue}, ${deal.duration})">
+                    <strong>${deal.name}</strong><br>
+                    💰 Initial Cost: E${deal.cost.toLocaleString()}<br>
+                    💵 Daily Revenue: E${deal.revenue.toLocaleString()}<br>
+                    ⏱️ Duration: ${deal.duration} days
+                </div>
+            `).join('');
+        }
+
+        function updateArtistsMarket() {
+            document.getElementById('artists-market').innerHTML = marketData.artists.map(artist => `
+                <div class="market-item" onclick="signArtist('${artist.name}', '${artist.genre}', ${artist.cost}, ${artist.popularity}, ${artist.contractCost})">
+                    <strong>${artist.name}</strong><br>
+                    🎵 Genre: ${artist.genre}<br>
+                    💰 Signing Cost: E${artist.cost.toLocaleString()}<br>
+                    📈 Starting Popularity: ${artist.popularity}<br>
+                    💵 Daily Cost: E${artist.contractCost.toLocaleString()}
+                </div>
+            `).join('');
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Define all your functions here
+            function startNewGame() {
+                initializeGameState();
+                startNewDay();
+                updateMarketplaces(); // Ensure marketplaces are updated
+                document.getElementById('newGameBtn').style.display = 'none';
+            }
+
+            // Initialize the game state when the page loads
+            initializeGameState();
+            startNewDay(); // Start the game immediately
+            updateMarketplaces(); // Ensure marketplaces are updated
+        });
+
+        // Remove the startNewGame function
+        // function startNewGame() {
+        //     initializeGameState();
+        //     startNewDay();
+        //     updateMarketplaces(); // Ensure marketplaces are updated
+        //     document.getElementById('newGameBtn').style.display = 'none';
+        // }
     </script>
 </body>
 </html>
