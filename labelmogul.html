@@ -989,13 +989,77 @@
         ]
       },
       {
-        question: "A backstage incident creates a stir before a major performance.",
-        options: [
-          { text: "Address it publicly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Downplay the incident", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Offer compensation to affected fans", effect: () => { adjustReputation(10); return -15000; } }
-        ]
-      }
+    question: "A positive review from a major publication boosts your profile.",
+    options: [
+      { text: "Amplify the publicity", effect: () => { adjustReputation(15); return -10000; } },
+      { text: "Reinvest in promotion", effect: () => { adjustReputation(10); return -15000; } },
+      { text: "Take a measured approach", effect: () => { return 0; } }
+    ]
+  },
+  {
+    question: "A backstage incident creates a stir before a major performance.",
+    options: [
+      { text: "Address it publicly", effect: () => { adjustReputation(5); return -10000; } },
+      { text: "Downplay the incident", effect: () => { adjustReputation(-5); return 0; } },
+      { text: "Offer compensation to affected fans", effect: () => { adjustReputation(10); return -15000; } }
+    ]
+  },
+  {
+    question: "A viral trend emerges that perfectly fits your brand.",
+    options: [
+      { text: "Capitalize on the trend", effect: () => { adjustReputation(10); return -12000; } },
+      { text: "Observe and adapt later", effect: () => { adjustReputation(5); return 0; } },
+      { text: "Ignore the trend", effect: () => { adjustReputation(-5); return 0; } }
+    ]
+  },
+  {
+    question: "A competitor releases a diss track aimed at you.",
+    options: [
+      { text: "Fire back with a response", effect: () => { adjustReputation(8); return -8000; } },
+      { text: "Take the high road", effect: () => { adjustReputation(5); return 0; } },
+      { text: "Ignore and focus on your music", effect: () => { adjustReputation(3); return 0; } }
+    ]
+  },
+  {
+    question: "A major sponsor offers a deal that clashes with your image.",
+    options: [
+      { text: "Accept for financial gain", effect: () => { adjustReputation(-10); return 50000; } },
+      { text: "Negotiate for better alignment", effect: () => { adjustReputation(5); return 20000; } },
+      { text: "Reject to protect your brand", effect: () => { adjustReputation(10); return 0; } }
+    ]
+  },
+  {
+    question: "Your latest album leaks before its official release.",
+    options: [
+      { text: "Drop the album early", effect: () => { adjustReputation(5); return -5000; } },
+      { text: "Take legal action", effect: () => { adjustReputation(-5); return -15000; } },
+      { text: "Use the hype to your advantage", effect: () => { adjustReputation(10); return -10000; } }
+    ]
+  },
+  {
+    question: "A charity organization asks you to perform for free.",
+    options: [
+      { text: "Perform and promote it", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Donate instead", effect: () => { adjustReputation(10); return -10000; } },
+      { text: "Politely decline", effect: () => { adjustReputation(-5); return 0; } }
+    ]
+  },
+  {
+    question: "A high-profile artist offers to collaborate on a track.",
+    options: [
+      { text: "Accept eagerly", effect: () => { adjustReputation(20); return -25000; } },
+      { text: "Negotiate terms", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Decline to maintain artistic control", effect: () => { adjustReputation(-5); return 0; } }
+    ]
+  },
+  {
+    question: "Your social media manager posts something controversial.",
+    options: [
+      { text: "Apologize and take responsibility", effect: () => { adjustReputation(5); return -10000; } },
+      { text: "Blame the manager and fire them", effect: () => { adjustReputation(-10); return 0; } },
+      { text: "Ignore and move on", effect: () => { adjustReputation(-5); return 0; } }
+    ]
+  }
       
 
     ];
@@ -1004,15 +1068,12 @@
     function initializeGameState() {
       gameState = {
         cash: 50000,
-        day: 1,
+        day: 0,
         reputation: 0,
         availableScenarios: [...allScenarios],
         currentScenario: null,
-        artists: [
-          { name: "Lihlombe 12", genre: "sibhaca", popularity: 25, happiness: 80, contractDays: 15 },
-          { name: "Mbabane Beats", genre: "hiphop", popularity: 40, happiness: 70, contractDays: 18 }
-        ],
-        staff: [{ role: "Manager", morale: 100 }, { role: "Publicist", morale: 85 }],
+        artists: [],
+        staff: [{ role: "Manager", morale: 50 }, { role: "Publicist", morale: 50 }],
         activeDeals: [],
         equipment: []
       };
@@ -1131,37 +1192,79 @@
         { name: "Endorsement Contract", cost: 60000, revenue: 18000, duration: 6 }
       ],
       artists: [
-        { name: "Rising Star", genre: "Afropop", cost: 30000, popularity: 35, contractCost: 5000 },
-        { name: "Underground Talent", genre: "Hip-hop", cost: 25000, popularity: 30, contractCost: 4000 },
-        { name: "Traditional Artist", genre: "Sibhaca", cost: 40000, popularity: 45, contractCost: 6000 },
-        { name: "Pop Sensation", genre: "Pop", cost: 50000, popularity: 50, contractCost: 7000 },
-        { name: "Jazz Virtuoso", genre: "Jazz", cost: 35000, popularity: 40, contractCost: 5500 }
-      ],
-      equipment: [
-        { name: "Studio Microphone", cost: 8000, quality: 10, maintenance: 500 },
-        { name: "Mixing Console", cost: 25000, quality: 20, maintenance: 1000 },
-        { name: "Recording Suite", cost: 60000, quality: 35, maintenance: 2000 },
-        { name: "Live Sound System", cost: 40000, quality: 25, maintenance: 1500 },
-        { name: "Lighting Rig", cost: 15000, quality: 15, maintenance: 700 }
-      ],
-      training: [
-        { name: "Vocal Workshop", cost: 12000, skillBoost: 15, duration: 3 },
-        { name: "Dance Training", cost: 18000, skillBoost: 20, duration: 5 },
-        { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
-        { name: "Songwriting Masterclass", cost: 25000, skillBoost: 22, duration: 6 },
-        { name: "Stage Presence Seminar", cost: 20000, skillBoost: 18, duration: 4 },
-     { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
-        { name: "Advanced Production Course", cost: 50000, skillBoost: 30, duration: 10 }
-    ],
-      marketing: [
-        { name: "Social Media Campaign", cost: 15000, exposure: 20, duration: 5 },
-        { name: "Radio Advertisement", cost: 25000, exposure: 30, duration: 7 },
-        { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
-        { name: "Billboard Promotion", cost: 35000, exposure: 40, duration: 8 },
-        { name: "Influencer Collaboration", cost: 20000, exposure: 25, duration: 6 },
-        { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
-        { name: "International Billboard Campaign", cost: 120000, exposure: 80, duration: 15 }
-      ]
+  { name: "Rising Star", genre: "Afropop", cost: 30000, popularity: 35, contractCost: 5000 },
+  { name: "Underground Talent", genre: "Hip-hop", cost: 25000, popularity: 30, contractCost: 4000 },
+  { name: "Traditional Artist", genre: "Sibhaca", cost: 40000, popularity: 45, contractCost: 6000 },
+  { name: "Pop Sensation", genre: "Pop", cost: 85000, popularity: 90, contractCost: 7000 },
+  { name: "Jazz Virtuoso", genre: "Jazz", cost: 35000, popularity: 40, contractCost: 5500 },
+  { name: "Lihlombe 12", genre: "sibhaca", cost: 35000, popularity: 25, contractCost: 6000 },
+  { name: "Mbabane Beats", genre: "hiphop", cost: 35000, popularity: 40, contractCost: 6000 },
+  { name: "Electric Echo", genre: "Electronic", cost: 60000, popularity: 55, contractCost: 6500 },
+  { name: "Soul Serenade", genre: "Soul", cost: 32000, popularity: 38, contractCost: 5200 },
+  { name: "Rock Legend", genre: "Rock", cost: 70000, popularity: 80, contractCost: 7500 },
+  { name: "Country Roads", genre: "Country", cost: 28000, popularity: 32, contractCost: 4500 },
+  { name: "Rhythm Rebellion", genre: "Reggae", cost: 40000, popularity: 50, contractCost: 5800 },
+  { name: "Indie Icon", genre: "Indie", cost: 45000, popularity: 60, contractCost: 6200 },
+  { name: "R&B Royalty", genre: "R&B", cost: 50000, popularity: 70, contractCost: 6800 },
+  { name: "Latin Flame", genre: "Latin", cost: 42000, popularity: 48, contractCost: 5600 },
+  { name: "Alternative Visionary", genre: "Alternative", cost: 37000, popularity: 42, contractCost: 5300 },
+  { name: "Folk Maestro", genre: "Folk", cost: 30000, popularity: 35, contractCost: 4900 }
+],
+equipment: [
+  { name: "Studio Microphone", cost: 8000, quality: 10, maintenance: 500 },
+  { name: "Mixing Console", cost: 25000, quality: 20, maintenance: 1000 },
+  { name: "Recording Suite", cost: 60000, quality: 35, maintenance: 2000 },
+  { name: "Live Sound System", cost: 40000, quality: 25, maintenance: 1500 },
+  { name: "Lighting Rig", cost: 15000, quality: 15, maintenance: 700 },
+  { name: "Guitar Amp", cost: 12000, quality: 18, maintenance: 600 },
+  { name: "Drum Kit", cost: 18000, quality: 22, maintenance: 800 },
+  { name: "Keyboard Synthesizer", cost: 22000, quality: 28, maintenance: 900 },
+  { name: "Bass Amplifier", cost: 10000, quality: 16, maintenance: 550 },
+  { name: "Acoustic Panels", cost: 5000, quality: 12, maintenance: 300 },
+  { name: "DJ Turntable", cost: 15000, quality: 20, maintenance: 700 },
+  { name: "Sound Mixer", cost: 20000, quality: 23, maintenance: 850 },
+  { name: "Wireless Microphone", cost: 9000, quality: 14, maintenance: 450 },
+  { name: "Projector Screen", cost: 7000, quality: 10, maintenance: 400 },
+  { name: "Digital Audio Workstation", cost: 45000, quality: 30, maintenance: 1200 }
+],
+training: [
+  { name: "Vocal Workshop", cost: 12000, skillBoost: 15, duration: 3 },
+  { name: "Dance Training", cost: 18000, skillBoost: 20, duration: 5 },
+  { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
+  { name: "Songwriting Masterclass", cost: 25000, skillBoost: 22, duration: 6 },
+  { name: "Stage Presence Seminar", cost: 20000, skillBoost: 18, duration: 4 },
+  { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
+  { name: "Advanced Production Course", cost: 50000, skillBoost: 30, duration: 10 },
+  { name: "Instrument Mastery Program", cost: 22000, skillBoost: 19, duration: 4 },
+  { name: "Advanced Vocal Techniques", cost: 14000, skillBoost: 17, duration: 3 },
+  { name: "Music Theory Intensive", cost: 16000, skillBoost: 20, duration: 5 },
+  { name: "Beat Making Bootcamp", cost: 28000, skillBoost: 23, duration: 6 },
+  { name: "Improvisation Lab", cost: 13000, skillBoost: 16, duration: 3 },
+  { name: "Sound Engineering Seminar", cost: 32000, skillBoost: 27, duration: 8 },
+  { name: "Digital Music Production", cost: 40000, skillBoost: 30, duration: 9 },
+  { name: "Live Performance Coaching", cost: 26000, skillBoost: 21, duration: 5 },
+  { name: "Song Arrangement Workshop", cost: 21000, skillBoost: 19, duration: 4 },
+  { name: "Creative Collaboration Retreat", cost: 35000, skillBoost: 28, duration: 7 }
+],
+marketing: [
+  { name: "Social Media Campaign", cost: 15000, exposure: 20, duration: 5 },
+  { name: "Radio Advertisement", cost: 25000, exposure: 30, duration: 7 },
+  { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
+  { name: "Billboard Promotion", cost: 35000, exposure: 40, duration: 8 },
+  { name: "Influencer Collaboration", cost: 20000, exposure: 25, duration: 6 },
+  { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
+  { name: "International Billboard Campaign", cost: 120000, exposure: 80, duration: 15 },
+  { name: "Press Release Distribution", cost: 18000, exposure: 22, duration: 5 },
+  { name: "Music Video Promotion", cost: 30000, exposure: 35, duration: 7 },
+  { name: "Concert Sponsorship", cost: 70000, exposure: 60, duration: 12 },
+  { name: "Streaming Platform Ads", cost: 28000, exposure: 33, duration: 6 },
+  { name: "Merchandising Campaign", cost: 40000, exposure: 45, duration: 9 },
+  { name: "Event Partnerships", cost: 55000, exposure: 55, duration: 11 },
+  { name: "Street Team Marketing", cost: 12000, exposure: 18, duration: 4 },
+  { name: "Music Festival Sponsorship", cost: 90000, exposure: 75, duration: 14 },
+  { name: "Podcast Advertising", cost: 22000, exposure: 28, duration: 6 },
+  { name: "Magazine Feature", cost: 26000, exposure: 30, duration: 7 }
+]
     };
 
     function updateMarketplaces() {
