@@ -1089,10 +1089,10 @@
       let level = 1;
       for (const [key, value] of Object.entries({
         1: { min: 0 },
-        2: { min: 500000 },
-        3: { min: 1000000 },
-        4: { min: 1500000 },
-        5: { min: 2000000 }
+        2: { min: 1000000 },
+        3: { min: 5000000 },
+        4: { min: 15000000 },
+        5: { min: 30000000 }
       })) {
         if (gameState.cash >= value.min) level = parseInt(key);
       }
