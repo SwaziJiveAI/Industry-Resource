@@ -1486,7 +1486,7 @@ marketing: [
 
     // Start a new day: process revenue, update contracts, and pick a new scenario
     function startNewDay() {
-      if (gameState.day > 50) {
+      if (gameState.day >= 50) {
         endGame();
         return;
       }
