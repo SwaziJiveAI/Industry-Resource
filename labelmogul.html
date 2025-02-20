@@ -155,798 +155,768 @@
 
     // List of 52 unique scenarios
     const allScenarios = [
-      {
-        question: "A social media influencer promotes your artist:",
-        options: [
-          { text: "Pay for the promotion (Cost E25k)", effect: () => { adjustArtistHappiness(5); adjustStaffMorale(0); adjustArtistPopularity(30); adjustReputation(10); return -25000; } },
-          { text: "Stay independent (Safe E20k)", effect: () => { adjustArtistHappiness(5); adjustStaffMorale(5); adjustArtistPopularity(3); adjustReputation(5); return 20000; } },
-          { text: "Do Nothing (Risk E10k)", effect: () => { adjustArtistHappiness(-10); adjustStaffMorale(-5); adjustArtistPopularity(-3); adjustReputation(-5); return -10000; } }
-        ]
-      },
-      {
-        question: "A rival label tries to poach your top artist:",
-        options: [
-          { text: "Counteroffer (Cost E80k)", effect: () => { adjustArtistHappiness(10); adjustStaffMorale(0); adjustArtistPopularity(10); adjustReputation(15); return -80000; } },
-          { text: "Let them go (Gain E40k)", effect: () => { adjustArtistHappiness(-10); adjustStaffMorale(5); adjustArtistPopularity(-5); adjustReputation(-10); return 40000; } },
-          { text: "Do Nothing (Risk Artist Leaving)", effect: () => { adjustArtistHappiness(-15); adjustStaffMorale(-10); adjustArtistPopularity(-20); adjustReputation(-20); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist receives an unexpected invitation to perform at an exclusive event.",
-        options: [
-          { text: "Accept the invitation (Cost E30k)", effect: () => { adjustArtistPopularity(20); adjustReputation(10); return -30000; } },
-          { text: "Decline politely", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Negotiate a higher fee", effect: () => { adjustArtistPopularity(10); adjustReputation(5); return -15000; } }
-        ]
-      },
-      {
-        question: "A renowned producer offers to collaborate with your artist.",
-        options: [
-          { text: "Accept the collaboration (Cost E50k)", effect: () => { adjustArtistPopularity(25); adjustReputation(15); return -50000; } },
-          { text: "Negotiate better terms", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return -30000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A scandal involving one of your artists surfaces in the media.",
-        options: [
-          { text: "Issue a public apology", effect: () => { adjustArtistHappiness(-10); adjustReputation(-5); return -10000; } },
-          { text: "Ignore it", effect: () => { adjustReputation(-15); return 0; } },
-          { text: "Spin it positively", effect: () => { adjustArtistHappiness(5); adjustReputation(10); return -5000; } }
-        ]
-      },
-      {
-        question: "Your artist's latest single goes viral overnight.",
-        options: [
-          { text: "Invest in promotion", effect: () => { adjustArtistPopularity(30); adjustReputation(20); return -40000; } },
-          { text: "Remain cautious", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return 10000; } },
-          { text: "Release a follow-up track immediately", effect: () => { adjustArtistPopularity(10); adjustReputation(5); return -20000; } }
-        ]
-      },
-      {
-        question: "A famous celebrity expresses interest in endorsing your artist.",
-        options: [
-          { text: "Accept the endorsement", effect: () => { adjustReputation(20); adjustArtistPopularity(25); return -35000; } },
-          { text: "Negotiate for a better deal", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Refuse the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A major sponsor offers to fund a world tour for your artist.",
-        options: [
-          { text: "Accept the sponsorship", effect: () => { adjustReputation(25); adjustArtistPopularity(30); return -60000; } },
-          { text: "Negotiate for better terms", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A rival label is rumored to be making a tempting offer to one of your artists.",
-        options: [
-          { text: "Increase their contract offer", effect: () => { adjustArtistHappiness(10); adjustReputation(10); return -40000; } },
-          { text: "Offer additional benefits", effect: () => { adjustArtistHappiness(15); adjustReputation(5); return -35000; } },
-          { text: "Let them go", effect: () => { adjustReputation(-10); return 20000; } }
-        ]
-      },
-      {
-        question: "Your studio equipment gets upgraded unexpectedly by a benefactor.",
-        options: [
-          { text: "Upgrade your marketing strategy", effect: () => { adjustReputation(10); adjustArtistHappiness(5); return 0; } },
-          { text: "Invest extra in training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Keep your current plans", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "An influential music blogger writes a rave review about your artist.",
-        options: [
-          { text: "Capitalize on the publicity", effect: () => { adjustReputation(15); adjustArtistPopularity(20); return 10000; } },
-          { text: "Downplay it", effect: () => { adjustReputation(5); return 0; } },
-          { text: "Ignore the review", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A financial analyst predicts a downturn in the music industry.",
-        options: [
-          { text: "Cut costs immediately", effect: () => { adjustReputation(-5); return 20000; } },
-          { text: "Invest cautiously", effect: () => { adjustReputation(5); return -5000; } },
-          { text: "Double down on promotion", effect: () => { adjustReputation(10); adjustArtistPopularity(15); return -30000; } }
-        ]
-      },
-      {
-        question: "Your artist gets a chance to perform on national TV.",
-        options: [
-          { text: "Invest in the appearance", effect: () => { adjustArtistPopularity(25); adjustReputation(20); return -40000; } },
-          { text: "Skip the opportunity", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Prepare extensively then perform", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return -25000; } }
-        ]
-      },
-      {
-        question: "A new streaming service offers a lucrative deal for your artist's music.",
-        options: [
-          { text: "Sign the deal", effect: () => { adjustReputation(15); return 20000; } },
-          { text: "Negotiate terms", effect: () => { adjustReputation(10); return 10000; } },
-          { text: "Wait for better offers", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A local charity event requests your artist to perform for free.",
-        options: [
-          { text: "Donate the performance", effect: () => { adjustReputation(10); return 0; } },
-          { text: "Charge a reduced fee", effect: () => { adjustReputation(5); return 10000; } },
-          { text: "Decline the request", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's social media following is growing rapidly.",
-        options: [
-          { text: "Launch a targeted campaign", effect: () => { adjustArtistPopularity(20); return -15000; } },
-          { text: "Invest in merchandise", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Do nothing", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A major music festival is seeking new acts.",
-        options: [
-          { text: "Enter the festival", effect: () => { adjustArtistPopularity(25); adjustReputation(15); return -35000; } },
-          { text: "Skip it", effect: () => { return 0; } },
-          { text: "Prepare a special performance", effect: () => { adjustArtistPopularity(15); return -20000; } }
-        ]
-      },
-      {
-        question: "Your artist is invited to an international music conference.",
-        options: [
-          { text: "Attend and network", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Send a representative", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the invitation", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A new trend in music production emerges.",
-        options: [
-          { text: "Invest in new technology", effect: () => { adjustReputation(15); return -40000; } },
-          { text: "Ignore the trend", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Try a small pilot project", effect: () => { adjustArtistPopularity(10); return -20000; } }
-        ]
-      },
-      {
-        question: "Your artist faces harsh criticism from a respected critic.",
-        options: [
-          { text: "Address the criticism publicly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Ignore the criticism", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Offer a counter-review", effect: () => { adjustReputation(10); return -5000; } }
-        ]
-      },
-      {
-        question: "A successful remix of your artist's song is released by an independent DJ.",
-        options: [
-          { text: "Promote the remix", effect: () => { adjustArtistPopularity(15); return 10000; } },
-          { text: "Create an official remix", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Downplay it", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "Your artist wins a local music award.",
-        options: [
-          { text: "Celebrate with a promotion event", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Reinvest in training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Ignore the award", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A viral challenge featuring your artist's music takes off online.",
-        options: [
-          { text: "Launch a related marketing campaign", effect: () => { adjustReputation(15); return -25000; } },
-          { text: "Partner with influencers", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Stay neutral", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A sudden drop in streaming numbers concerns your team.",
-        options: [
-          { text: "Investigate and adjust strategy", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Blame external factors", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Ignore the drop", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist is approached for a brand partnership.",
-        options: [
-          { text: "Secure the partnership", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Negotiate terms", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A technical glitch disrupts your live performance.",
-        options: [
-          { text: "Apologize and reschedule", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Offer refunds", effect: () => { adjustReputation(-5); return -5000; } },
-          { text: "Blame technical issues", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A competitor releases a hit single that overshadows your artist.",
-        options: [
-          { text: "Release a new track immediately", effect: () => { adjustArtistPopularity(20); return -30000; } },
-          { text: "Rebrand your artist", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Collaborate with another talent", effect: () => { adjustReputation(15); return -25000; } }
-        ]
-      },
-      {
-        question: "Your artist's merchandise sales skyrocket unexpectedly.",
-        options: [
-          { text: "Expand the merchandise line", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Reinvest profits", effect: () => { adjustReputation(5); return 5000; } },
-          { text: "Keep the status quo", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A new music award show invites your artist to perform.",
-        options: [
-          { text: "Accept the invitation", effect: () => { adjustReputation(15); return -20000; } },
-          { text: "Negotiate a performance fee", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the invitation", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A famous DJ requests a remix of your artist's song.",
-        options: [
-          { text: "Approve the remix", effect: () => { adjustArtistPopularity(15); return 10000; } },
-          { text: "Negotiate a fee", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Decline the request", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A new trend in retro music emerges and your artist fits the style.",
-        options: [
-          { text: "Shift your artist's style", effect: () => { adjustArtistPopularity(20); return -25000; } },
-          { text: "Launch a retro-themed event", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Ignore the trend", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's manager suggests a risky publicity stunt.",
-        options: [
-          { text: "Go ahead with the stunt", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Modify the stunt", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Reject the idea", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A social media crisis emerges around one of your songs.",
-        options: [
-          { text: "Issue a statement", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Remove the song", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Ignore the crisis", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A breakthrough in audio technology is announced.",
-        options: [
-          { text: "Invest in the new technology", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Wait and see", effect: () => { return 0; } },
-          { text: "Stick with traditional methods", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A major brand wants to sponsor a new music video for your artist.",
-        options: [
-          { text: "Accept the sponsorship", effect: () => { adjustReputation(20); return -35000; } },
-          { text: "Negotiate for better terms", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist gets featured in a popular magazine.",
-        options: [
-          { text: "Leverage the feature for more publicity", effect: () => { adjustReputation(15); return 10000; } },
-          { text: "Host a meet-and-greet event", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Ignore the feature", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A famous producer offers a workshop for your team.",
-        options: [
-          { text: "Attend the workshop", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Send key staff members", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Skip the workshop", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's tour faces unexpected delays.",
-        options: [
-          { text: "Offer compensation to fans", effect: () => { adjustReputation(-5); return -10000; } },
-          { text: "Reschedule promptly", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Provide regular updates", effect: () => { adjustReputation(5); return -5000; } }
-        ]
-      },
-      {
-        question: "An international crisis impacts the music industry.",
-        options: [
-          { text: "Adjust your marketing strategy", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Cut costs", effect: () => { adjustReputation(-5); return 15000; } },
-          { text: "Delay major projects", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A renowned music critic offers a mixed review of your artist.",
-        options: [
-          { text: "Respond constructively", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Ignore the review", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Launch a counter campaign", effect: () => { adjustReputation(10); return -15000; } }
-        ]
-      },
-      {
-        question: "Your artist's collaboration with a famous musician goes viral.",
-        options: [
-          { text: "Promote the collaboration", effect: () => { adjustArtistPopularity(20); return -25000; } },
-          { text: "Negotiate a follow-up project", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Let it fade", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A surprise donation boosts your cash reserves.",
-        options: [
-          { text: "Invest in growth", effect: () => { adjustReputation(10); return 0; } },
-          { text: "Save for a rainy day", effect: () => { return 0; } },
-          { text: "Donate to charity", effect: () => { adjustReputation(-5); return -5000; } }
-        ]
-      },
-      {
-        question: "Your team discovers a hidden talent in the local scene.",
-        options: [
-          { text: "Sign the new talent immediately", effect: () => { adjustReputation(15); return -25000; } },
-          { text: "Develop them slowly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Pass on the opportunity", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A surge in ticket prices boosts revenue but risks alienating fans.",
-        options: [
-          { text: "Reevaluate your pricing strategy", effect: () => { adjustReputation(5); return 0; } },
-          { text: "Invest in fan engagement", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Keep the prices unchanged", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist is nominated for an international award.",
-        options: [
-          { text: "Increase promotion", effect: () => { adjustReputation(15); return -20000; } },
-          { text: "Invest in further training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Wait for the outcome", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A famous social media influencer offers to collaborate on a campaign.",
-        options: [
-          { text: "Collaborate immediately", effect: () => { adjustReputation(20); return -25000; } },
-          { text: "Negotiate terms", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the collaboration", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A security issue disrupts a live event.",
-        options: [
-          { text: "Enhance security measures", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Issue a public apology", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Work with authorities", effect: () => { adjustReputation(5); return -5000; } }
-        ]
-      },
-      {
-        question: "A new competitor enters the market with innovative ideas.",
-        options: [
-          { text: "Innovate your own offerings", effect: () => { adjustReputation(15); return -25000; } },
-          { text: "Focus on your strengths", effect: () => { adjustReputation(10); return 0; } },
-          { text: "Acquire smaller talents", effect: () => { adjustReputation(5); return -15000; } }
-        ]
-      },
-      {
-        question: "Your artist's song is sampled without permission.",
-        options: [
-          { text: "Take legal action", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Negotiate a settlement", effect: () => { adjustReputation(5); return -15000; } },
-          { text: "Ignore the issue", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A positive review from a major publication boosts your profile.",
-        options: [
-          { text: "Amplify the publicity", effect: () => { adjustReputation(15); return -10000; } },
-          { text: "Reinvest in promotion", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Take a measured approach", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A backstage incident creates a stir before a major performance.",
-        options: [
-          { text: "Address it publicly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Downplay the incident", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Offer compensation to affected fans", effect: () => { adjustReputation(10); return -15000; } }
-        ]
-      },
-      {
-        question: "Your artist receives an offer to star in a movie soundtrack.",
-        options: [
-          { text: "Accept the offer", effect: () => { adjustReputation(15); return -20000; } },
-          { text: "Negotiate a higher fee", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A sudden policy change in streaming platforms affects your revenue.",
-        options: [
-          { text: "Adapt your strategy", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Diversify your income sources", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Lobby for change", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's unique style attracts international media attention.",
-        options: [
-          { text: "Embrace the global spotlight", effect: () => { adjustArtistPopularity(20); adjustReputation(15); return -25000; } },
-          { text: "Tailor the style for mainstream appeal", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Maintain your indie vibe", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A social media influencer promotes your artist:",
-        options: [
-          { text: "Pay for the promotion (Cost E25k)", effect: () => { adjustArtistHappiness(5); adjustStaffMorale(0); adjustArtistPopularity(30); adjustReputation(10); return -25000; } },
-          { text: "Stay independent (Safe E20k)", effect: () => { adjustArtistHappiness(5); adjustStaffMorale(5); adjustArtistPopularity(3); adjustReputation(5); return 20000; } },
-          { text: "Do Nothing (Risk E10k)", effect: () => { adjustArtistHappiness(-10); adjustStaffMorale(-5); adjustArtistPopularity(-3); adjustReputation(-5); return -10000; } }
-        ]
-      },
-      {
-        question: "A rival label tries to poach your top artist:",
-        options: [
-          { text: "Counteroffer (Cost E80k)", effect: () => { adjustArtistHappiness(10); adjustStaffMorale(0); adjustArtistPopularity(10); adjustReputation(15); return -80000; } },
-          { text: "Let them go (Gain E40k)", effect: () => { adjustArtistHappiness(-10); adjustStaffMorale(5); adjustArtistPopularity(-5); adjustReputation(-10); return 40000; } },
-          { text: "Do Nothing (Risk Artist Leaving)", effect: () => { adjustArtistHappiness(-15); adjustStaffMorale(-10); adjustArtistPopularity(-20); adjustReputation(-20); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist receives an unexpected invitation to perform at an exclusive event.",
-        options: [
-          { text: "Accept the invitation (Cost E30k)", effect: () => { adjustArtistPopularity(20); adjustReputation(10); return -30000; } },
-          { text: "Decline politely", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Negotiate a higher fee", effect: () => { adjustArtistPopularity(10); adjustReputation(5); return -15000; } }
-        ]
-      },
-      {
-        question: "A renowned producer offers to collaborate with your artist.",
-        options: [
-          { text: "Accept the collaboration (Cost E50k)", effect: () => { adjustArtistPopularity(25); adjustReputation(15); return -50000; } },
-          { text: "Negotiate better terms", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return -30000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A scandal involving one of your artists surfaces in the media.",
-        options: [
-          { text: "Issue a public apology", effect: () => { adjustArtistHappiness(-10); adjustReputation(-5); return -10000; } },
-          { text: "Ignore it", effect: () => { adjustReputation(-15); return 0; } },
-          { text: "Spin it positively", effect: () => { adjustArtistHappiness(5); adjustReputation(10); return -5000; } }
-        ]
-      },
-      {
-        question: "Your artist's latest single goes viral overnight.",
-        options: [
-          { text: "Invest in promotion", effect: () => { adjustArtistPopularity(30); adjustReputation(20); return -40000; } },
-          { text: "Remain cautious", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return 10000; } },
-          { text: "Release a follow-up track immediately", effect: () => { adjustArtistPopularity(10); adjustReputation(5); return -20000; } }
-        ]
-      },
-      {
-        question: "A famous celebrity expresses interest in endorsing your artist.",
-        options: [
-          { text: "Accept the endorsement", effect: () => { adjustReputation(20); adjustArtistPopularity(25); return -35000; } },
-          { text: "Negotiate for a better deal", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Refuse the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A major sponsor offers to fund a world tour for your artist.",
-        options: [
-          { text: "Accept the sponsorship", effect: () => { adjustReputation(25); adjustArtistPopularity(30); return -60000; } },
-          { text: "Negotiate for better terms", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A rival label is rumored to be making a tempting offer to one of your artists.",
-        options: [
-          { text: "Increase their contract offer", effect: () => { adjustArtistHappiness(10); adjustReputation(10); return -40000; } },
-          { text: "Offer additional benefits", effect: () => { adjustArtistHappiness(15); adjustReputation(5); return -35000; } },
-          { text: "Let them go", effect: () => { adjustReputation(-10); return 20000; } }
-        ]
-      },
-      {
-        question: "Your studio equipment gets upgraded unexpectedly by a benefactor.",
-        options: [
-          { text: "Upgrade your marketing strategy", effect: () => { adjustReputation(10); adjustArtistHappiness(5); return 0; } },
-          { text: "Invest extra in training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Keep your current plans", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "An influential music blogger writes a rave review about your artist.",
-        options: [
-          { text: "Capitalize on the publicity", effect: () => { adjustReputation(15); adjustArtistPopularity(20); return 10000; } },
-          { text: "Downplay it", effect: () => { adjustReputation(5); return 0; } },
-          { text: "Ignore the review", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A financial analyst predicts a downturn in the music industry.",
-        options: [
-          { text: "Cut costs immediately", effect: () => { adjustReputation(-5); return 20000; } },
-          { text: "Invest cautiously", effect: () => { adjustReputation(5); return -5000; } },
-          { text: "Double down on promotion", effect: () => { adjustReputation(10); adjustArtistPopularity(15); return -30000; } }
-        ]
-      },
-      {
-        question: "Your artist gets a chance to perform on national TV.",
-        options: [
-          { text: "Invest in the appearance", effect: () => { adjustArtistPopularity(25); adjustReputation(20); return -40000; } },
-          { text: "Skip the opportunity", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Prepare extensively then perform", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return -25000; } }
-        ]
-      },
-      {
-        question: "A new streaming service offers a lucrative deal for your artist's music.",
-        options: [
-          { text: "Sign the deal", effect: () => { adjustReputation(15); return 20000; } },
-          { text: "Negotiate terms", effect: () => { adjustReputation(10); return 10000; } },
-          { text: "Wait for better offers", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A local charity event requests your artist to perform for free.",
-        options: [
-          { text: "Donate the performance", effect: () => { adjustReputation(10); return 0; } },
-          { text: "Charge a reduced fee", effect: () => { adjustReputation(5); return 10000; } },
-          { text: "Decline the request", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's social media following is growing rapidly.",
-        options: [
-          { text: "Launch a targeted campaign", effect: () => { adjustArtistPopularity(20); return -15000; } },
-          { text: "Invest in merchandise", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Do nothing", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A major music festival is seeking new acts.",
-        options: [
-          { text: "Enter the festival", effect: () => { adjustArtistPopularity(25); adjustReputation(15); return -35000; } },
-          { text: "Skip it", effect: () => { return 0; } },
-          { text: "Prepare a special performance", effect: () => { adjustArtistPopularity(15); return -20000; } }
-        ]
-      },
-      {
-        question: "Your artist is invited to an international music conference.",
-        options: [
-          { text: "Attend and network", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Send a representative", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the invitation", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A new trend in music production emerges.",
-        options: [
-          { text: "Invest in new technology", effect: () => { adjustReputation(15); return -40000; } },
-          { text: "Ignore the trend", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Try a small pilot project", effect: () => { adjustArtistPopularity(10); return -20000; } }
-        ]
-      },
-      {
-        question: "Your artist faces harsh criticism from a respected critic.",
-        options: [
-          { text: "Address the criticism publicly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Ignore the criticism", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Offer a counter-review", effect: () => { adjustReputation(10); return -5000; } }
-        ]
-      },
-      {
-        question: "A successful remix of your artist's song is released by an independent DJ.",
-        options: [
-          { text: "Promote the remix", effect: () => { adjustArtistPopularity(15); return 10000; } },
-          { text: "Create an official remix", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Downplay it", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "Your artist wins a local music award.",
-        options: [
-          { text: "Celebrate with a promotion event", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Reinvest in training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Ignore the award", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A viral challenge featuring your artist's music takes off online.",
-        options: [
-          { text: "Launch a related marketing campaign", effect: () => { adjustReputation(15); return -25000; } },
-          { text: "Partner with influencers", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Stay neutral", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A sudden drop in streaming numbers concerns your team.",
-        options: [
-          { text: "Investigate and adjust strategy", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Blame external factors", effect: () => { adjustReputation(-10); return 0; } },
-          { text: "Ignore the drop", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist is approached for a brand partnership.",
-        options: [
-          { text: "Secure the partnership", effect: () => { adjustReputation(20); return -30000; } },
-          { text: "Negotiate terms", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A technical glitch disrupts your live performance.",
-        options: [
-          { text: "Apologize and reschedule", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Offer refunds", effect: () => { adjustReputation(-5); return -5000; } },
-          { text: "Blame technical issues", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A competitor releases a hit single that overshadows your artist.",
-        options: [
-          { text: "Release a new track immediately", effect: () => { adjustArtistPopularity(20); return -30000; } },
-          { text: "Rebrand your artist", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Collaborate with another talent", effect: () => { adjustReputation(15); return -25000; } }
-        ]
-      },
-      {
-        question: "Your artist's merchandise sales skyrocket unexpectedly.",
-        options: [
-          { text: "Expand the merchandise line", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Reinvest profits", effect: () => { adjustReputation(5); return 5000; } },
-          { text: "Keep the status quo", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A new music award show invites your artist to perform.",
-        options: [
-          { text: "Accept the invitation", effect: () => { adjustReputation(15); return -20000; } },
-          { text: "Negotiate a performance fee", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Decline the invitation", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A famous DJ requests a remix of your artist's song.",
-        options: [
-          { text: "Approve the remix", effect: () => { adjustArtistPopularity(15); return 10000; } },
-          { text: "Negotiate a fee", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Decline the request", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A new trend in retro music emerges and your artist fits the style.",
-        options: [
-          { text: "Shift your artist's style", effect: () => { adjustArtistPopularity(20); return -25000; } },
-          { text: "Launch a retro-themed event", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Ignore the trend", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's manager suggests a risky publicity stunt.",
-        options: [
-          { text: "Go ahead with the stunt", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Modify the stunt", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Reject the idea", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A social media crisis emerges around one of your songs.",
-        options: [
-          { text: "Issue a statement", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Remove the song", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Ignore the crisis", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A breakthrough in audio technology is announced.",
-        options: [
-          { text: "Invest in the new technology", effect: () => { adjustReputation(15); return -30000; } },
-          { text: "Wait and see", effect: () => { return 0; } },
-          { text: "Stick with traditional methods", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A major brand wants to sponsor a new music video for your artist.",
-        options: [
-          { text: "Accept the sponsorship", effect: () => { adjustReputation(20); return -35000; } },
-          { text: "Negotiate for better terms", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Decline the offer", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist gets featured in a popular magazine.",
-        options: [
-          { text: "Leverage the feature for more publicity", effect: () => { adjustReputation(15); return 10000; } },
-          { text: "Host a meet-and-greet event", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Ignore the feature", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A famous producer offers a workshop for your team.",
-        options: [
-          { text: "Attend the workshop", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Send key staff members", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Skip the workshop", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist's tour faces unexpected delays.",
-        options: [
-          { text: "Offer compensation to fans", effect: () => { adjustReputation(-5); return -10000; } },
-          { text: "Reschedule promptly", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Provide regular updates", effect: () => { adjustReputation(5); return -5000; } }
-        ]
-      },
-      {
-        question: "An international crisis impacts the music industry.",
-        options: [
-          { text: "Adjust your marketing strategy", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Cut costs", effect: () => { adjustReputation(-5); return 15000; } },
-          { text: "Delay major projects", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "A renowned music critic offers a mixed review of your artist.",
-        options: [
-          { text: "Respond constructively", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Ignore the review", effect: () => { adjustReputation(-5); return 0; } },
-          { text: "Launch a counter campaign", effect: () => { adjustReputation(10); return -15000; } }
-        ]
-      },
-      {
-        question: "Your artist's collaboration with a famous musician goes viral.",
-        options: [
-          { text: "Promote the collaboration", effect: () => { adjustArtistPopularity(20); return -25000; } },
-          { text: "Negotiate a follow-up project", effect: () => { adjustReputation(10); return -20000; } },
-          { text: "Let it fade", effect: () => { return 0; } }
-        ]
-      },
-      {
-        question: "A surprise donation boosts your cash reserves.",
-        options: [
-          { text: "Invest in growth", effect: () => { adjustReputation(10); return 0; } },
-          { text: "Save for a rainy day", effect: () => { return 0; } },
-          { text: "Donate to charity", effect: () => { adjustReputation(-5); return -5000; } }
-        ]
-      },
-      {
-        question: "Your team discovers a hidden talent in the local scene.",
-        options: [
-          { text: "Sign the new talent immediately", effect: () => { adjustReputation(15); return -25000; } },
-          { text: "Develop them slowly", effect: () => { adjustReputation(5); return -10000; } },
-          { text: "Pass on the opportunity", effect: () => { adjustReputation(-5); return 0; } }
-        ]
-      },
-      {
-        question: "A surge in ticket prices boosts revenue but risks alienating fans.",
-        options: [
-          { text: "Reevaluate your pricing strategy", effect: () => { adjustReputation(5); return 0; } },
-          { text: "Invest in fan engagement", effect: () => { adjustReputation(10); return -15000; } },
-          { text: "Keep the prices unchanged", effect: () => { adjustReputation(-10); return 0; } }
-        ]
-      },
-      {
-        question: "Your artist is nominated for an international award.",
-        options: [
-          { text: "Increase promotion", effect: () => { adjustReputation(15); return -20000; } },
-          { text: "Invest in further training", effect: () => { adjustArtistPopularity(10); return -15000; } },
-          { text: "Wait for the outcome", effect: () => { return 0; } }
-        ]
-      },
+    {
+    question: "A social media influencer promotes your artist:",
+    options: [
+      { text: "Pay for the promotion (Cost E35k)", effect: () => { adjustArtistHappiness(10); adjustStaffMorale(5); adjustArtistPopularity(50); adjustReputation(20); return -35000; } },
+      { text: "Stay independent (Gain E30k)", effect: () => { adjustArtistHappiness(10); adjustStaffMorale(10); adjustArtistPopularity(5); adjustReputation(10); return 30000; } },
+      { text: "Do Nothing (Risk E20k)", effect: () => { adjustArtistHappiness(-20); adjustStaffMorale(-15); adjustArtistPopularity(-10); adjustReputation(-15); return -20000; } }
+    ]
+  },
+  {
+    question: "A rival label tries to poach your top artist:",
+    options: [
+      { text: "Counteroffer (Cost E100k)", effect: () => { adjustArtistHappiness(20); adjustStaffMorale(5); adjustArtistPopularity(20); adjustReputation(25); return -100000; } },
+      { text: "Let them go (Gain E60k)", effect: () => { adjustArtistHappiness(-20); adjustStaffMorale(10); adjustArtistPopularity(-10); adjustReputation(-20); return 60000; } },
+      { text: "Do Nothing (Risk Artist Leaving)", effect: () => { adjustArtistHappiness(-30); adjustStaffMorale(-20); adjustArtistPopularity(-30); adjustReputation(-30); return -30000; } }
+    ]
+  },
+  {
+    question: "Your artist receives an unexpected invitation to perform at an exclusive event.",
+    options: [
+      { text: "Accept the invitation (Cost E40k)", effect: () => { adjustArtistPopularity(40); adjustReputation(25); return -40000; } },
+      { text: "Decline politely", effect: () => { adjustReputation(-15); return -10000; } },
+      { text: "Negotiate a higher fee", effect: () => { adjustArtistPopularity(20); adjustReputation(15); return 20000; } }
+    ]
+  },
+  {
+    question: "A renowned producer offers to collaborate with your artist.",
+    options: [
+      { text: "Accept the collaboration (Cost E70k)", effect: () => { adjustArtistPopularity(50); adjustReputation(30); return -70000; } },
+      { text: "Negotiate better terms", effect: () => { adjustArtistPopularity(25); adjustReputation(20); return 30000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A scandal involving one of your artists surfaces in the media.",
+    options: [
+      { text: "Issue a public apology", effect: () => { adjustArtistHappiness(-20); adjustReputation(-15); return -20000; } },
+      { text: "Ignore it", effect: () => { adjustReputation(-30); return -25000; } },
+      { text: "Spin it positively", effect: () => { adjustArtistHappiness(10); adjustReputation(20); return 25000; } }
+    ]
+  },
+  {
+    question: "Your artist's latest single goes viral overnight.",
+    options: [
+      { text: "Invest in promotion (Cost E50k)", effect: () => { adjustArtistPopularity(60); adjustReputation(40); return 50000; } },
+      { text: "Remain cautious", effect: () => { adjustArtistPopularity(25); adjustReputation(15); return 20000; } },
+      { text: "Release a follow-up track immediately", effect: () => { adjustArtistPopularity(15); adjustReputation(10); return -30000; } }
+    ]
+  },
+  {
+    question: "A famous celebrity expresses interest in endorsing your artist.",
+    options: [
+      { text: "Accept the endorsement (Cost E50k)", effect: () => { adjustReputation(40); adjustArtistPopularity(50); return 60000; } },
+      { text: "Negotiate for a better deal", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Refuse the offer", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+  {
+    question: "A major sponsor offers to fund a world tour for your artist.",
+    options: [
+      { text: "Accept the sponsorship (Cost E80k)", effect: () => { adjustReputation(50); adjustArtistPopularity(60); return 80000; } },
+      { text: "Negotiate for better terms", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-25); return -30000; } }
+    ]
+  },
+  {
+    question: "A rival label is rumored to be making a tempting offer to one of your artists.",
+    options: [
+      { text: "Increase their contract offer (Cost E60k)", effect: () => { adjustArtistHappiness(25); adjustReputation(20); return -60000; } },
+      { text: "Offer additional benefits", effect: () => { adjustArtistHappiness(30); adjustReputation(15); return -40000; } },
+      { text: "Let them go (Gain E30k)", effect: () => { adjustReputation(-25); return 30000; } }
+    ]
+  },
+  {
+    question: "Your studio equipment gets upgraded unexpectedly by a benefactor.",
+    options: [
+      { text: "Upgrade your marketing strategy", effect: () => { adjustReputation(25); adjustArtistHappiness(15); return 40000; } },
+      { text: "Invest extra in training", effect: () => { adjustArtistPopularity(20); return -20000; } },
+      { text: "Keep your current plans", effect: () => { adjustReputation(-10); return -10000; } }
+    ]
+  },
+  {
+    question: "An influential music blogger writes a rave review about your artist.",
+    options: [
+      { text: "Capitalize on the publicity", effect: () => { adjustReputation(30); adjustArtistPopularity(40); return 50000; } },
+      { text: "Downplay it", effect: () => { adjustReputation(10); return 15000; } },
+      { text: "Ignore the review", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "A financial analyst predicts a downturn in the music industry.",
+    options: [
+      { text: "Cut costs immediately", effect: () => { adjustReputation(-20); return 40000; } },
+      { text: "Invest cautiously", effect: () => { adjustReputation(10); return -10000; } },
+      { text: "Double down on promotion", effect: () => { adjustReputation(25); adjustArtistPopularity(30); return -50000; } }
+    ]
+  },
+  {
+    question: "Your artist gets a chance to perform on national TV.",
+    options: [
+      { text: "Invest in the appearance (Cost E60k)", effect: () => { adjustArtistPopularity(50); adjustReputation(40); return 60000; } },
+      { text: "Skip the opportunity", effect: () => { adjustReputation(-25); return -20000; } },
+      { text: "Prepare extensively then perform", effect: () => { adjustArtistPopularity(30); adjustReputation(20); return -35000; } }
+    ]
+  },
+  {
+    question: "A new streaming service offers a lucrative deal for your artist's music.",
+    options: [
+      { text: "Sign the deal", effect: () => { adjustReputation(30); return 50000; } },
+      { text: "Negotiate terms", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Wait for better offers", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "A local charity event requests your artist to perform for free.",
+    options: [
+      { text: "Donate the performance", effect: () => { adjustReputation(25); return 20000; } },
+      { text: "Charge a reduced fee", effect: () => { adjustReputation(15); return 15000; } },
+      { text: "Decline the request", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist's social media following is growing rapidly.",
+    options: [
+      { text: "Launch a targeted campaign (Cost E25k)", effect: () => { adjustArtistPopularity(40); return 40000; } },
+      { text: "Invest in merchandise", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Do nothing", effect: () => { adjustReputation(-10); return -10000; } }
+    ]
+  },
+  {
+    question: "A major music festival is seeking new acts.",
+    options: [
+      { text: "Enter the festival (Cost E50k)", effect: () => { adjustArtistPopularity(50); adjustReputation(30); return 60000; } },
+      { text: "Skip it", effect: () => { adjustReputation(-20); return -15000; } },
+      { text: "Prepare a special performance", effect: () => { adjustArtistPopularity(25); return -25000; } }
+    ]
+  },
+  {
+    question: "Your artist is invited to an international music conference.",
+    options: [
+      { text: "Attend and network (Cost E40k)", effect: () => { adjustReputation(40); return 50000; } },
+      { text: "Send a representative", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Decline the invitation", effect: () => { adjustReputation(-25); return -15000; } }
+    ]
+  },
+  {
+    question: "A new trend in music production emerges.",
+    options: [
+      { text: "Invest in new technology (Cost E60k)", effect: () => { adjustReputation(30); return -60000; } },
+      { text: "Ignore the trend", effect: () => { adjustReputation(-20); return -20000; } },
+      { text: "Try a small pilot project", effect: () => { adjustArtistPopularity(20); return -30000; } }
+    ]
+  },
+  {
+    question: "Your artist faces harsh criticism from a respected critic.",
+    options: [
+      { text: "Address the criticism publicly", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Ignore the criticism", effect: () => { adjustReputation(-30); return -25000; } },
+      { text: "Offer a counter-review", effect: () => { adjustReputation(25); return 30000; } }
+    ]
+  },
+  {
+    question: "A successful remix of your artist's song is released by an independent DJ.",
+    options: [
+      { text: "Promote the remix", effect: () => { adjustArtistPopularity(30); return 40000; } },
+      { text: "Create an official remix", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Downplay it", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "Your artist wins a local music award.",
+    options: [
+      { text: "Celebrate with a promotion event (Cost E40k)", effect: () => { adjustReputation(40); return 50000; } },
+      { text: "Reinvest in training", effect: () => { adjustArtistPopularity(20); return -20000; } },
+      { text: "Ignore the award", effect: () => { adjustReputation(-15); return -15000; } }
+    ]
+  },
+  {
+    question: "A viral challenge featuring your artist's music takes off online.",
+    options: [
+      { text: "Launch a related marketing campaign (Cost E35k)", effect: () => { adjustReputation(30); return 45000; } },
+      { text: "Partner with influencers", effect: () => { adjustReputation(20); return -25000; } },
+      { text: "Stay neutral", effect: () => { adjustReputation(-10); return -15000; } }
+    ]
+  },
+  {
+    question: "A sudden drop in streaming numbers concerns your team.",
+    options: [
+      { text: "Investigate and adjust strategy", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Blame external factors", effect: () => { adjustReputation(-25); return -30000; } },
+      { text: "Ignore the drop", effect: () => { adjustReputation(-20); return -25000; } }
+    ]
+  },
+  {
+    question: "Your artist is approached for a brand partnership.",
+    options: [
+      { text: "Secure the partnership (Cost E40k)", effect: () => { adjustReputation(40); return 60000; } },
+      { text: "Negotiate terms", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+  {
+    question: "A technical glitch disrupts your live performance.",
+    options: [
+      { text: "Apologize and reschedule", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Offer refunds", effect: () => { adjustReputation(-20); return -30000; } },
+      { text: "Blame technical issues", effect: () => { adjustReputation(-30); return -25000; } }
+    ]
+  },
+  {
+    question: "A competitor releases a hit single that overshadows your artist.",
+    options: [
+      { text: "Release a new track immediately (Cost E40k)", effect: () => { adjustArtistPopularity(40); return -40000; } },
+      { text: "Rebrand your artist", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Collaborate with another talent", effect: () => { adjustReputation(30); return -35000; } }
+    ]
+  },
+  {
+    question: "Your artist's merchandise sales skyrocket unexpectedly.",
+    options: [
+      { text: "Expand the merchandise line (Cost E25k)", effect: () => { adjustReputation(25); return 50000; } },
+      { text: "Reinvest profits", effect: () => { adjustReputation(15); return 20000; } },
+      { text: "Keep the status quo", effect: () => { adjustReputation(-10); return -10000; } }
+    ]
+  },
+  {
+    question: "A new music award show invites your artist to perform.",
+    options: [
+      { text: "Accept the invitation (Cost E30k)", effect: () => { adjustReputation(30); return 40000; } },
+      { text: "Negotiate a performance fee", effect: () => { adjustReputation(20); return 25000; } },
+      { text: "Decline the invitation", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A famous DJ requests a remix of your artist's song.",
+    options: [
+      { text: "Approve the remix", effect: () => { adjustArtistPopularity(30); return 40000; } },
+      { text: "Negotiate a fee", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Decline the request", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "A new trend in retro music emerges and your artist fits the style.",
+    options: [
+      { text: "Shift your artist's style (Cost E35k)", effect: () => { adjustArtistPopularity(40); return 45000; } },
+      { text: "Launch a retro-themed event", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Ignore the trend", effect: () => { adjustReputation(-15); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist's manager suggests a risky publicity stunt.",
+    options: [
+      { text: "Go ahead with the stunt (Cost E40k)", effect: () => { adjustReputation(30); return 50000; } },
+      { text: "Modify the stunt", effect: () => { adjustReputation(20); return -25000; } },
+      { text: "Reject the idea", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "A social media crisis emerges around one of your songs.",
+    options: [
+      { text: "Issue a statement", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Remove the song", effect: () => { adjustReputation(-20); return -25000; } },
+      { text: "Ignore the crisis", effect: () => { adjustReputation(-30); return -30000; } }
+    ]
+  },
+  {
+    question: "A breakthrough in audio technology is announced.",
+    options: [
+      { text: "Invest in the new technology (Cost E50k)", effect: () => { adjustReputation(30); return -50000; } },
+      { text: "Wait and see", effect: () => { adjustReputation(-10); return -10000; } },
+      { text: "Stick with traditional methods", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A major brand wants to sponsor a new music video for your artist.",
+    options: [
+      { text: "Accept the sponsorship (Cost E50k)", effect: () => { adjustReputation(40); return 60000; } },
+      { text: "Negotiate for better terms", effect: () => { adjustReputation(25); return 30000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist gets featured in a popular magazine.",
+    options: [
+      { text: "Leverage the feature for more publicity", effect: () => { adjustReputation(30); return 40000; } },
+      { text: "Host a meet-and-greet event", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Ignore the feature", effect: () => { adjustReputation(-15); return -15000; } }
+    ]
+  },
+  {
+    question: "A famous producer offers a workshop for your team.",
+    options: [
+      { text: "Attend the workshop (Cost E25k)", effect: () => { adjustReputation(25); return -25000; } },
+      { text: "Send key staff members", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Skip the workshop", effect: () => { adjustReputation(-20); return -10000; } }
+    ]
+  },
+  {
+    question: "Your artist's tour faces unexpected delays.",
+    options: [
+      { text: "Offer compensation to fans", effect: () => { adjustReputation(-15); return -20000; } },
+      { text: "Reschedule promptly", effect: () => { adjustReputation(25); return -25000; } },
+      { text: "Provide regular updates", effect: () => { adjustReputation(15); return -15000; } }
+    ]
+  },
+  {
+    question: "An international crisis impacts the music industry.",
+    options: [
+      { text: "Adjust your marketing strategy", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Cut costs", effect: () => { adjustReputation(-15); return 30000; } },
+      { text: "Delay major projects", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "A renowned music critic offers a mixed review of your artist.",
+    options: [
+      { text: "Respond constructively", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Ignore the review", effect: () => { adjustReputation(-20); return -15000; } },
+      { text: "Launch a counter campaign", effect: () => { adjustReputation(25); return 30000; } }
+    ]
+  },
+  {
+    question: "Your artist's collaboration with a famous musician goes viral.",
+    options: [
+      { text: "Promote the collaboration (Cost E35k)", effect: () => { adjustArtistPopularity(40); return 50000; } },
+      { text: "Negotiate a follow-up project", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Let it fade", effect: () => { adjustReputation(-15); return -15000; } }
+    ]
+  },
+  {
+    question: "A surprise donation boosts your cash reserves.",
+    options: [
+      { text: "Invest in growth", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Save for a rainy day", effect: () => { adjustReputation(10); return 20000; } },
+      { text: "Donate to charity", effect: () => { adjustReputation(-15); return -20000; } }
+    ]
+  },
+  {
+    question: "Your team discovers a hidden talent in the local scene.",
+    options: [
+      { text: "Sign the new talent immediately (Cost E35k)", effect: () => { adjustReputation(30); return -35000; } },
+      { text: "Develop them slowly", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Pass on the opportunity", effect: () => { adjustReputation(-20); return -10000; } }
+    ]
+  },
+  {
+    question: "A surge in ticket prices boosts revenue but risks alienating fans.",
+    options: [
+      { text: "Reevaluate your pricing strategy", effect: () => { adjustReputation(15); return 25000; } },
+      { text: "Invest in fan engagement", effect: () => { adjustReputation(25); return -20000; } },
+      { text: "Keep the prices unchanged", effect: () => { adjustReputation(-25); return -30000; } }
+    ]
+  },
+  {
+    question: "Your artist is nominated for an international award.",
+    options: [
+      { text: "Increase promotion (Cost E30k)", effect: () => { adjustReputation(30); return 40000; } },
+      { text: "Invest in further training", effect: () => { adjustArtistPopularity(20); return -20000; } },
+      { text: "Wait for the outcome", effect: () => { adjustReputation(-15); return -15000; } }
+    ]
+  },
+  {
+    question: "A famous social media influencer offers to collaborate on a campaign.",
+    options: [
+      { text: "Collaborate immediately (Cost E35k)", effect: () => { adjustReputation(40); return 50000; } },
+      { text: "Negotiate terms", effect: () => { adjustReputation(20); return 25000; } },
+      { text: "Decline the collaboration", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "A security issue disrupts a live event.",
+    options: [
+      { text: "Enhance security measures", effect: () => { adjustReputation(25); return -25000; } },
+      { text: "Issue a public apology", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Work with authorities", effect: () => { adjustReputation(10); return -10000; } }
+    ]
+  },
+  {
+    question: "A new competitor enters the market with innovative ideas.",
+    options: [
+      { text: "Innovate your own offerings (Cost E40k)", effect: () => { adjustReputation(30); return -40000; } },
+      { text: "Focus on your strengths", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Acquire smaller talents", effect: () => { adjustReputation(15); return -20000; } }
+    ]
+  },
+  // 52 New Scenarios
+  {
+    question: "Your artist’s music video wins a prestigious award.",
+    options: [
+      { text: "Host a celebration event (Cost E40k)", effect: () => { adjustReputation(40); adjustArtistPopularity(30); return 60000; } },
+      { text: "Promote the win online", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Ignore the achievement", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A competitor spreads false rumors about your label.",
+    options: [
+      { text: "Launch a PR campaign to counter", effect: () => { adjustReputation(25); return -30000; } },
+      { text: "Sue for defamation", effect: () => { adjustReputation(15); return -40000; } },
+      { text: "Do nothing", effect: () => { adjustReputation(-30); return -25000; } }
+    ]
+  },
+  {
+    question: "Your artist is offered a role in a blockbuster movie soundtrack.",
+    options: [
+      { text: "Accept the offer (Cost E60k)", effect: () => { adjustArtistPopularity(60); adjustReputation(40); return 80000; } },
+      { text: "Negotiate for royalties", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Decline to focus on music", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+  {
+    question: "A fan starts a petition for your artist to tour their city.",
+    options: [
+      { text: "Add the city to the tour (Cost E30k)", effect: () => { adjustArtistHappiness(20); adjustReputation(30); return 45000; } },
+      { text: "Send merchandise instead", effect: () => { adjustReputation(15); return -15000; } },
+      { text: "Ignore the petition", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s old demo leaks and gains traction online.",
+    options: [
+      { text: "Release it officially", effect: () => { adjustArtistPopularity(40); return 50000; } },
+      { text: "Suppress the leak", effect: () => { adjustReputation(-20); return -30000; } },
+      { text: "Let it spread naturally", effect: () => { adjustArtistPopularity(20); return 20000; } }
+    ]
+  },
+  {
+    question: "A tech company offers to create an AI version of your artist.",
+    options: [
+      { text: "Partner with them (Cost E50k)", effect: () => { adjustReputation(35); return 60000; } },
+      { text: "Test a pilot version", effect: () => { adjustReputation(20); return -25000; } },
+      { text: "Reject the idea", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s live stream crashes due to high demand.",
+    options: [
+      { text: "Upgrade servers immediately", effect: () => { adjustReputation(25); return -30000; } },
+      { text: "Apologize and reschedule", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Blame the platform", effect: () => { adjustReputation(-30); return -25000; } }
+    ]
+  },
+  {
+    question: "A popular game wants to feature your artist’s song.",
+    options: [
+      { text: "License the song (Cost E20k)", effect: () => { adjustArtistPopularity(50); return 70000; } },
+      { text: "Negotiate a higher fee", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "Your artist’s rival challenges them to a public showdown.",
+    options: [
+      { text: "Accept the challenge (Cost E40k)", effect: () => { adjustArtistPopularity(50); return 60000; } },
+      { text: "Counter with your own event", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Ignore the provocation", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "A sudden tax audit targets your label.",
+    options: [
+      { text: "Hire top accountants", effect: () => { adjustReputation(20); return -40000; } },
+      { text: "Settle quickly", effect: () => { adjustReputation(-15); return -30000; } },
+      { text: "Fight the audit", effect: () => { adjustReputation(-25); return -50000; } }
+    ]
+  },
+  {
+    question: "Your artist’s fanbase launches a surprise crowdfunding campaign.",
+    options: [
+      { text: "Match their funds (Cost E30k)", effect: () => { adjustReputation(40); return 50000; } },
+      { text: "Thank them and invest", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Decline the funds", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A hurricane cancels your artist’s major concert.",
+    options: [
+      { text: "Donate proceeds to relief", effect: () => { adjustReputation(35); return -25000; } },
+      { text: "Reschedule with bonuses", effect: () => { adjustReputation(20); return -30000; } },
+      { text: "Cancel without refund", effect: () => { adjustReputation(-40); return -35000; } }
+    ]
+  },
+  {
+    question: "Your artist is invited to a high-profile fashion show.",
+    options: [
+      { text: "Perform at the show (Cost E35k)", effect: () => { adjustReputation(40); return 55000; } },
+      { text: "Attend as a guest", effect: () => { adjustReputation(20); return 20000; } },
+      { text: "Skip the event", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A viral dance trend uses your artist’s song without credit.",
+    options: [
+      { text: "Claim credit publicly", effect: () => { adjustArtistPopularity(40); return 50000; } },
+      { text: "Sue the creators", effect: () => { adjustReputation(-20); return -30000; } },
+      { text: "Join the trend", effect: () => { adjustArtistPopularity(25); return 30000; } }
+    ]
+  },
+  {
+    question: "Your artist’s mentor offers exclusive coaching.",
+    options: [
+      { text: "Accept the offer (Cost E25k)", effect: () => { adjustArtistHappiness(30); adjustArtistPopularity(20); return -25000; } },
+      { text: "Negotiate a group session", effect: () => { adjustArtistHappiness(15); return -15000; } },
+      { text: "Decline politely", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "A documentary crew wants to feature your artist’s journey.",
+    options: [
+      { text: "Grant full access (Cost E30k)", effect: () => { adjustReputation(35); adjustArtistPopularity(40); return 60000; } },
+      { text: "Limit their scope", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Refuse the project", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s song is banned in a major market.",
+    options: [
+      { text: "Fight the ban legally", effect: () => { adjustReputation(20); return -40000; } },
+      { text: "Adapt the song", effect: () => { adjustReputation(15); return -25000; } },
+      { text: "Accept the ban", effect: () => { adjustReputation(-30); return -30000; } }
+    ]
+  },
+  {
+    question: "A billionaire fan offers to fund your next project.",
+    options: [
+      { text: "Accept the funding", effect: () => { adjustReputation(40); return 80000; } },
+      { text: "Negotiate terms", effect: () => { adjustReputation(25); return 50000; } },
+      { text: "Decline politely", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s equipment is stolen before a gig.",
+    options: [
+      { text: "Replace it urgently", effect: () => { adjustReputation(20); return -35000; } },
+      { text: "Improvise with rentals", effect: () => { adjustReputation(10); return -20000; } },
+      { text: "Cancel the show", effect: () => { adjustReputation(-30); return -25000; } }
+    ]
+  },
+  {
+    question: "A rival label copies your marketing strategy.",
+    options: [
+      { text: "Innovate a new approach", effect: () => { adjustReputation(30); return -30000; } },
+      { text: "Confront them legally", effect: () => { adjustReputation(15); return -40000; } },
+      { text: "Do nothing", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s song tops the charts unexpectedly.",
+    options: [
+      { text: "Launch a tour (Cost E50k)", effect: () => { adjustArtistPopularity(60); adjustReputation(40); return 80000; } },
+      { text: "Release bonus content", effect: () => { adjustArtistPopularity(30); return 40000; } },
+      { text: "Maintain momentum", effect: () => { adjustReputation(15); return 20000; } }
+    ]
+  },
+  {
+    question: "A political group wants to use your song in their campaign.",
+    options: [
+      { text: "Allow it for a fee", effect: () => { adjustReputation(-20); return 50000; } },
+      { text: "Deny permission", effect: () => { adjustReputation(25); return -15000; } },
+      { text: "Negotiate neutrality", effect: () => { adjustReputation(15); return 30000; } }
+    ]
+  },
+  {
+    question: "Your artist’s health declines due to tour stress.",
+    options: [
+      { text: "Pause the tour for recovery", effect: () => { adjustArtistHappiness(30); adjustReputation(20); return -30000; } },
+      { text: "Hire a substitute", effect: () => { adjustReputation(-15); return -20000; } },
+      { text: "Push through", effect: () => { adjustArtistHappiness(-40); adjustReputation(-30); return -35000; } }
+    ]
+  },
+  {
+    question: "A new genre surges in popularity.",
+    options: [
+      { text: "Adapt your artist’s style (Cost E35k)", effect: () => { adjustArtistPopularity(50); return 60000; } },
+      { text: "Experiment cautiously", effect: () => { adjustArtistPopularity(25); return -20000; } },
+      { text: "Stick to your roots", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s fans start a boycott over a misinterpreted lyric.",
+    options: [
+      { text: "Clarify the meaning", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Apologize and edit", effect: () => { adjustReputation(15); return -25000; } },
+      { text: "Dismiss the backlash", effect: () => { adjustReputation(-35); return -30000; } }
+    ]
+  },
+  {
+    question: "A music school offers your artist an honorary degree.",
+    options: [
+      { text: "Accept and attend (Cost E20k)", effect: () => { adjustReputation(30); return 40000; } },
+      { text: "Accept quietly", effect: () => { adjustReputation(15); return 20000; } },
+      { text: "Decline the honor", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s collaborator demands a bigger cut of profits.",
+    options: [
+      { text: "Agree to their terms", effect: () => { adjustArtistHappiness(20); return -30000; } },
+      { text: "Renegotiate fairly", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "End the collaboration", effect: () => { adjustReputation(-25); return -25000; } }
+    ]
+  },
+  {
+    question: "A surprise duet opportunity arises with a global star.",
+    options: [
+      { text: "Seize the chance (Cost E60k)", effect: () => { adjustArtistPopularity(70); adjustReputation(50); return 90000; } },
+      { text: "Propose a future project", effect: () => { adjustReputation(25); return 30000; } },
+      { text: "Pass on it", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+  {
+    question: "Your label’s website gets hacked.",
+    options: [
+      { text: "Hire cybersecurity experts", effect: () => { adjustReputation(20); return -35000; } },
+      { text: "Fix it internally", effect: () => { adjustReputation(10); return -20000; } },
+      { text: "Ignore the breach", effect: () => { adjustReputation(-40); return -30000; } }
+    ]
+  },
+  {
+    question: "A viral meme boosts your artist’s song unexpectedly.",
+    options: [
+      { text: "Ride the wave with promotion (Cost E25k)", effect: () => { adjustArtistPopularity(50); return 60000; } },
+      { text: "Create a meme-inspired video", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Let it die out", effect: () => { adjustReputation(-15); return -10000; } }
+    ]
+  },
+  {
+    question: "Your artist’s tour bus breaks down mid-tour.",
+    options: [
+      { text: "Replace it immediately", effect: () => { adjustReputation(20); return -40000; } },
+      { text: "Repair and delay shows", effect: () => { adjustReputation(-15); return -25000; } },
+      { text: "Cancel remaining dates", effect: () => { adjustReputation(-35); return -30000; } }
+    ]
+  },
+  {
+    question: "A competitor offers to merge labels with you.",
+    options: [
+      { text: "Merge for growth", effect: () => { adjustReputation(40); return 70000; } },
+      { text: "Negotiate a partnership", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Reject the merger", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s unreleased track is leaked by a staff member.",
+    options: [
+      { text: "Release it early", effect: () => { adjustArtistPopularity(40); return 50000; } },
+      { text: "Fire the staff and sue", effect: () => { adjustReputation(-20); return -30000; } },
+      { text: "Investigate quietly", effect: () => { adjustReputation(15); return -20000; } }
+    ]
+  },
+  {
+    question: "A reality TV show wants your artist as a judge.",
+    options: [
+      { text: "Accept the role (Cost E40k)", effect: () => { adjustArtistPopularity(60); adjustReputation(40); return 80000; } },
+      { text: "Negotiate appearance fees", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Decline the spotlight", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s fans crash a venue due to overselling.",
+    options: [
+      { text: "Compensate and upgrade security", effect: () => { adjustReputation(25); return -35000; } },
+      { text: "Apologize publicly", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Blame the venue", effect: () => { adjustReputation(-30); return -30000; } }
+    ]
+  },
+  {
+    question: "A new streaming platform offers exclusive rights to your catalog.",
+    options: [
+      { text: "Sign the exclusivity deal", effect: () => { adjustReputation(35); return 70000; } },
+      { text: "Keep it multi-platform", effect: () => { adjustReputation(20); return 30000; } },
+      { text: "Reject the deal", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "Your artist’s performance goes viral for the wrong reasons.",
+    options: [
+      { text: "Spin it into a positive", effect: () => { adjustReputation(20); return 40000; } },
+      { text: "Issue an apology", effect: () => { adjustReputation(10); return -20000; } },
+      { text: "Ignore the backlash", effect: () => { adjustReputation(-35); return -30000; } }
+    ]
+  },
+  {
+    question: "A fan-made cover of your song outshines the original.",
+    options: [
+      { text: "Collaborate with the fan", effect: () => { adjustArtistPopularity(40); return 50000; } },
+      { text: "Promote the original harder", effect: () => { adjustReputation(15); return -25000; } },
+      { text: "Demand it be taken down", effect: () => { adjustReputation(-30); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist is offered a residency in a major city.",
+    options: [
+      { text: "Accept the residency (Cost E50k)", effect: () => { adjustArtistPopularity(60); adjustReputation(40); return 80000; } },
+      { text: "Negotiate shorter terms", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Decline the offer", effect: () => { adjustReputation(-20); return -15000; } }
+    ]
+  },
+  {
+    question: "A sudden boycott targets your label over a staff tweet.",
+    options: [
+      { text: "Address and fire the staff", effect: () => { adjustReputation(20); return -25000; } },
+      { text: "Apologize and retrain", effect: () => { adjustReputation(15); return -20000; } },
+      { text: "Dismiss the boycott", effect: () => { adjustReputation(-35); return -30000; } }
+    ]
+  },
+  {
+    question: "Your artist’s charity single raises unexpected funds.",
+    options: [
+      { text: "Donate all proceeds", effect: () => { adjustReputation(40); return -20000; } },
+      { text: "Split with promotion", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Keep the funds", effect: () => { adjustReputation(-30); return 60000; } }
+    ]
+  },
+  {
+    question: "A rival poaches your top producer.",
+    options: [
+      { text: "Hire a better replacement", effect: () => { adjustReputation(25); return -40000; } },
+      { text: "Sue for breach of contract", effect: () => { adjustReputation(15); return -30000; } },
+      { text: "Let it go", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s album is delayed due to perfectionism.",
+    options: [
+      { text: "Push for release", effect: () => { adjustArtistHappiness(-20); adjustReputation(20); return 50000; } },
+      { text: "Give them more time", effect: () => { adjustArtistHappiness(30); return -25000; } },
+      { text: "Cancel the project", effect: () => { adjustReputation(-30); return -35000; } }
+    ]
+  },
+  {
+    question: "A major festival cancels due to funding issues.",
+    options: [
+      { text: "Host a replacement event", effect: () => { adjustReputation(30); return -40000; } },
+      { text: "Offer refunds", effect: () => { adjustReputation(15); return -25000; } },
+      { text: "Blame organizers", effect: () => { adjustReputation(-25); return -20000; } }
+    ]
+  },
+  {
+    question: "Your artist’s fan club organizes a flash mob.",
+    options: [
+      { text: "Join and promote it (Cost E20k)", effect: () => { adjustArtistPopularity(40); adjustReputation(30); return 50000; } },
+      { text: "Send merchandise", effect: () => { adjustReputation(20); return -15000; } },
+      { text: "Ignore the effort", effect: () => { adjustReputation(-20); return -10000; } }
+    ]
+  },
+  {
+    question: "A leaked contract reveals high artist pay.",
+    options: [
+      { text: "Justify the investment", effect: () => { adjustReputation(20); return -20000; } },
+      { text: "Renegotiate publicly", effect: () => { adjustReputation(15); return 30000; } },
+      { text: "Deny the leak", effect: () => { adjustReputation(-30); return -25000; } }
+    ]
+  },
+  {
+    question: "Your artist’s music inspires a hit TV show theme.",
+    options: [
+      { text: "License it officially", effect: () => { adjustArtistPopularity(50); return 70000; } },
+      { text: "Negotiate royalties", effect: () => { adjustReputation(25); return 40000; } },
+      { text: "Demand they stop", effect: () => { adjustReputation(-20); return -20000; } }
+    ]
+  },
+
       {
         question: "A famous social media influencer offers to collaborate on a campaign.",
         options: [
