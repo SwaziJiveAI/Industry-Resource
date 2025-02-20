@@ -1174,98 +1174,135 @@
       });
     }
 
-    const marketData = {
+    const baseMarketData = {
       shows: [
-        { name: "Local Club Show", cost: 5000, popularity: 5, duration: 1 },
-        { name: "Radio Station Performance", cost: 15000, popularity: 15, duration: 2 },
-        { name: "Music Festival Slot", cost: 50000, popularity: 30, duration: 3 },
-        { name: "National TV Show", cost: 75000, popularity: 40, duration: 4 },
-        { name: "International Tour", cost: 100000, popularity: 50, duration: 5 },
-        { name: "Charity Concert", cost: 20000, popularity: 20, duration: 2 },
-        { name: "Private Event", cost: 30000, popularity: 25, duration: 3 }
+        { name: "Local Club Show", baseCost: 5000, popularity: 5, duration: 1 },
+        { name: "Radio Station Performance", baseCost: 15000, popularity: 15, duration: 2 },
+        { name: "Music Festival Slot", baseCost: 50000, popularity: 30, duration: 3 },
+        { name: "National TV Show", baseCost: 75000, popularity: 40, duration: 4 },
+        { name: "International Tour", baseCost: 100000, popularity: 50, duration: 5 },
+        { name: "Charity Concert", baseCost: 20000, popularity: 20, duration: 2 },
+        { name: "Private Event", baseCost: 30000, popularity: 25, duration: 3 }
       ],
       deals: [
-        { name: "Merchandise Deal", cost: 20000, revenue: 5000, duration: 5 },
-        { name: "Brand Sponsorship", cost: 50000, revenue: 15000, duration: 7 },
-        { name: "Distribution Deal", cost: 100000, revenue: 25000, duration: 10 },
-        { name: "Streaming Partnership", cost: 80000, revenue: 20000, duration: 8 },
-        { name: "Endorsement Contract", cost: 60000, revenue: 18000, duration: 6 }
+        { name: "Merchandise Deal", baseCost: 20000, revenue: 5000, duration: 5 },
+        { name: "Brand Sponsorship", baseCost: 50000, revenue: 15000, duration: 7 },
+        { name: "Distribution Deal", baseCost: 100000, revenue: 25000, duration: 10 },
+        { name: "Streaming Partnership", baseCost: 80000, revenue: 20000, duration: 8 },
+        { name: "Endorsement Contract", baseCost: 60000, revenue: 18000, duration: 6 }
       ],
       artists: [
-  { name: "Rising Star", genre: "Afropop", cost: 30000, popularity: 35, contractCost: 5000 },
-  { name: "Underground Talent", genre: "Hip-hop", cost: 25000, popularity: 30, contractCost: 4000 },
-  { name: "Traditional Artist", genre: "Sibhaca", cost: 40000, popularity: 45, contractCost: 6000 },
-  { name: "Pop Sensation", genre: "Pop", cost: 85000, popularity: 90, contractCost: 7000 },
-  { name: "Jazz Virtuoso", genre: "Jazz", cost: 35000, popularity: 40, contractCost: 5500 },
-  { name: "Lihlombe 12", genre: "sibhaca", cost: 35000, popularity: 25, contractCost: 6000 },
-  { name: "Mbabane Beats", genre: "hiphop", cost: 35000, popularity: 40, contractCost: 6000 },
-  { name: "Electric Echo", genre: "Electronic", cost: 60000, popularity: 55, contractCost: 6500 },
-  { name: "Soul Serenade", genre: "Soul", cost: 32000, popularity: 38, contractCost: 5200 },
-  { name: "Rock Legend", genre: "Rock", cost: 70000, popularity: 80, contractCost: 7500 },
-  { name: "Country Roads", genre: "Country", cost: 28000, popularity: 32, contractCost: 4500 },
-  { name: "Rhythm Rebellion", genre: "Reggae", cost: 40000, popularity: 50, contractCost: 5800 },
-  { name: "Indie Icon", genre: "Indie", cost: 45000, popularity: 60, contractCost: 6200 },
-  { name: "R&B Royalty", genre: "R&B", cost: 50000, popularity: 70, contractCost: 6800 },
-  { name: "Latin Flame", genre: "Latin", cost: 42000, popularity: 48, contractCost: 5600 },
-  { name: "Alternative Visionary", genre: "Alternative", cost: 37000, popularity: 42, contractCost: 5300 },
-  { name: "Folk Maestro", genre: "Folk", cost: 30000, popularity: 35, contractCost: 4900 }
+  { name: "Rising Star", genre: "Afropop", baseCost: 30000, popularity: 35, contractCost: 5000 },
+  { name: "Underground Talent", genre: "Hip-hop", baseCost: 25000, popularity: 30, contractCost: 4000 },
+  { name: "Traditional Artist", genre: "Sibhaca", baseCost: 40000, popularity: 45, contractCost: 6000 },
+  { name: "Pop Sensation", genre: "Pop", baseCost: 85000, popularity: 90, contractCost: 7000 },
+  { name: "Jazz Virtuoso", genre: "Jazz", baseCost: 35000, popularity: 40, contractCost: 5500 },
+  { name: "Lihlombe 12", genre: "sibhaca", baseCost: 35000, popularity: 25, contractCost: 6000 },
+  { name: "Mbabane Beats", genre: "hiphop", baseCost: 35000, popularity: 40, contractCost: 6000 },
+  { name: "Electric Echo", genre: "Electronic", baseCost: 60000, popularity: 55, contractCost: 6500 },
+  { name: "Soul Serenade", genre: "Soul", baseCost: 32000, popularity: 38, contractCost: 5200 },
+  { name: "Rock Legend", genre: "Rock", baseCost: 70000, popularity: 80, contractCost: 7500 },
+  { name: "Country Roads", genre: "Country", baseCost: 28000, popularity: 32, contractCost: 4500 },
+  { name: "Rhythm Rebellion", genre: "Reggae", baseCost: 40000, popularity: 50, contractCost: 5800 },
+  { name: "Indie Icon", genre: "Indie", baseCost: 45000, popularity: 60, contractCost: 6200 },
+  { name: "R&B Royalty", genre: "R&B", baseCost: 50000, popularity: 70, contractCost: 6800 },
+  { name: "Latin Flame", genre: "Latin", baseCost: 42000, popularity: 48, contractCost: 5600 },
+  { name: "Alternative Visionary", genre: "Alternative", baseCost: 37000, popularity: 42, contractCost: 5300 },
+  { name: "Folk Maestro", genre: "Folk", baseCost: 30000, popularity: 35, contractCost: 4900 }
 ],
 equipment: [
-  { name: "Studio Microphone", cost: 8000, quality: 10, maintenance: 500 },
-  { name: "Mixing Console", cost: 25000, quality: 20, maintenance: 1000 },
-  { name: "Recording Suite", cost: 60000, quality: 35, maintenance: 2000 },
-  { name: "Live Sound System", cost: 40000, quality: 25, maintenance: 1500 },
-  { name: "Lighting Rig", cost: 15000, quality: 15, maintenance: 700 },
-  { name: "Guitar Amp", cost: 12000, quality: 18, maintenance: 600 },
-  { name: "Drum Kit", cost: 18000, quality: 22, maintenance: 800 },
-  { name: "Keyboard Synthesizer", cost: 22000, quality: 28, maintenance: 900 },
-  { name: "Bass Amplifier", cost: 10000, quality: 16, maintenance: 550 },
-  { name: "Acoustic Panels", cost: 5000, quality: 12, maintenance: 300 },
-  { name: "DJ Turntable", cost: 15000, quality: 20, maintenance: 700 },
-  { name: "Sound Mixer", cost: 20000, quality: 23, maintenance: 850 },
-  { name: "Wireless Microphone", cost: 9000, quality: 14, maintenance: 450 },
-  { name: "Projector Screen", cost: 7000, quality: 10, maintenance: 400 },
-  { name: "Digital Audio Workstation", cost: 45000, quality: 30, maintenance: 1200 }
+  { name: "Studio Microphone", baseCost: 8000, quality: 10, maintenance: 500 },
+  { name: "Mixing Console", baseCost: 25000, quality: 20, maintenance: 1000 },
+  { name: "Recording Suite", baseCost: 60000, quality: 35, maintenance: 2000 },
+  { name: "Live Sound System", baseCost: 40000, quality: 25, maintenance: 1500 },
+  { name: "Lighting Rig", baseCost: 15000, quality: 15, maintenance: 700 },
+  { name: "Guitar Amp", baseCost: 12000, quality: 18, maintenance: 600 },
+  { name: "Drum Kit", baseCost: 18000, quality: 22, maintenance: 800 },
+  { name: "Keyboard Synthesizer", baseCost: 22000, quality: 28, maintenance: 900 },
+  { name: "Bass Amplifier", baseCost: 10000, quality: 16, maintenance: 550 },
+  { name: "Acoustic Panels", baseCost: 5000, quality: 12, maintenance: 300 },
+  { name: "DJ Turntable", baseCost: 15000, quality: 20, maintenance: 700 },
+  { name: "Sound Mixer", baseCost: 20000, quality: 23, maintenance: 850 },
+  { name: "Wireless Microphone", baseCost: 9000, quality: 14, maintenance: 450 },
+  { name: "Projector Screen", baseCost: 7000, quality: 10, maintenance: 400 },
+  { name: "Digital Audio Workstation", baseCost: 45000, quality: 30, maintenance: 1200 }
 ],
 training: [
-  { name: "Vocal Workshop", cost: 12000, skillBoost: 15, duration: 3 },
-  { name: "Dance Training", cost: 18000, skillBoost: 20, duration: 5 },
-  { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
-  { name: "Songwriting Masterclass", cost: 25000, skillBoost: 22, duration: 6 },
-  { name: "Stage Presence Seminar", cost: 20000, skillBoost: 18, duration: 4 },
-  { name: "Production Course", cost: 30000, skillBoost: 25, duration: 7 },
-  { name: "Advanced Production Course", cost: 50000, skillBoost: 30, duration: 10 },
-  { name: "Instrument Mastery Program", cost: 22000, skillBoost: 19, duration: 4 },
-  { name: "Advanced Vocal Techniques", cost: 14000, skillBoost: 17, duration: 3 },
-  { name: "Music Theory Intensive", cost: 16000, skillBoost: 20, duration: 5 },
-  { name: "Beat Making Bootcamp", cost: 28000, skillBoost: 23, duration: 6 },
-  { name: "Improvisation Lab", cost: 13000, skillBoost: 16, duration: 3 },
-  { name: "Sound Engineering Seminar", cost: 32000, skillBoost: 27, duration: 8 },
-  { name: "Digital Music Production", cost: 40000, skillBoost: 30, duration: 9 },
-  { name: "Live Performance Coaching", cost: 26000, skillBoost: 21, duration: 5 },
-  { name: "Song Arrangement Workshop", cost: 21000, skillBoost: 19, duration: 4 },
-  { name: "Creative Collaboration Retreat", cost: 35000, skillBoost: 28, duration: 7 }
+  { name: "Vocal Workshop", baseCost: 12000, skillBoost: 15, duration: 3 },
+  { name: "Dance Training", baseCost: 18000, skillBoost: 20, duration: 5 },
+  { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
+  { name: "Songwriting Masterclass", baseCost: 25000, skillBoost: 22, duration: 6 },
+  { name: "Stage Presence Seminar", baseCost: 20000, skillBoost: 18, duration: 4 },
+  { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
+  { name: "Advanced Production Course", baseCost: 50000, skillBoost: 30, duration: 10 },
+  { name: "Instrument Mastery Program", baseCost: 22000, skillBoost: 19, duration: 4 },
+  { name: "Advanced Vocal Techniques", baseCost: 14000, skillBoost: 17, duration: 3 },
+  { name: "Music Theory Intensive", baseCost: 16000, skillBoost: 20, duration: 5 },
+  { name: "Beat Making Bootcamp", baseCost: 28000, skillBoost: 23, duration: 6 },
+  { name: "Improvisation Lab", baseCost: 13000, skillBoost: 16, duration: 3 },
+  { name: "Sound Engineering Seminar", baseCost: 32000, skillBoost: 27, duration: 8 },
+  { name: "Digital Music Production", baseCost: 40000, skillBoost: 30, duration: 9 },
+  { name: "Live Performance Coaching", baseCost: 26000, skillBoost: 21, duration: 5 },
+  { name: "Song Arrangement Workshop", baseCost: 21000, skillBoost: 19, duration: 4 },
+  { name: "Creative Collaboration Retreat", baseCost: 35000, skillBoost: 28, duration: 7 }
 ],
 marketing: [
-  { name: "Social Media Campaign", cost: 15000, exposure: 20, duration: 5 },
-  { name: "Radio Advertisement", cost: 25000, exposure: 30, duration: 7 },
-  { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
-  { name: "Billboard Promotion", cost: 35000, exposure: 40, duration: 8 },
-  { name: "Influencer Collaboration", cost: 20000, exposure: 25, duration: 6 },
-  { name: "TV Commercial", cost: 50000, exposure: 50, duration: 10 },
-  { name: "International Billboard Campaign", cost: 120000, exposure: 80, duration: 15 },
-  { name: "Press Release Distribution", cost: 18000, exposure: 22, duration: 5 },
-  { name: "Music Video Promotion", cost: 30000, exposure: 35, duration: 7 },
-  { name: "Concert Sponsorship", cost: 70000, exposure: 60, duration: 12 },
-  { name: "Streaming Platform Ads", cost: 28000, exposure: 33, duration: 6 },
-  { name: "Merchandising Campaign", cost: 40000, exposure: 45, duration: 9 },
-  { name: "Event Partnerships", cost: 55000, exposure: 55, duration: 11 },
-  { name: "Street Team Marketing", cost: 12000, exposure: 18, duration: 4 },
-  { name: "Music Festival Sponsorship", cost: 90000, exposure: 75, duration: 14 },
-  { name: "Podcast Advertising", cost: 22000, exposure: 28, duration: 6 },
-  { name: "Magazine Feature", cost: 26000, exposure: 30, duration: 7 }
+  { name: "Social Media Campaign", baseCost: 15000, exposure: 20, duration: 5 },
+  { name: "Radio Advertisement", baseCost: 25000, exposure: 30, duration: 7 },
+  { name: "TV Commercial", baseCost: 50000, exposure: 50, duration: 10 },
+  { name: "Billboard Promotion", baseCost: 35000, exposure: 40, duration: 8 },
+  { name: "Influencer Collaboration", baseCost: 20000, exposure: 25, duration: 6 },
+  { name: "TV Commercial", baseCost: 50000, exposure: 50, duration: 10 },
+  { name: "International Billboard Campaign", baseCost: 120000, exposure: 80, duration: 15 },
+  { name: "Press Release Distribution", baseCost: 18000, exposure: 22, duration: 5 },
+  { name: "Music Video Promotion", baseCost: 30000, exposure: 35, duration: 7 },
+  { name: "Concert Sponsorship", baseCost: 70000, exposure: 60, duration: 12 },
+  { name: "Streaming Platform Ads", baseCost: 28000, exposure: 33, duration: 6 },
+  { name: "Merchandising Campaign", baseCost: 40000, exposure: 45, duration: 9 },
+  { name: "Event Partnerships", baseCost: 55000, exposure: 55, duration: 11 },
+  { name: "Street Team Marketing", baseCost: 12000, exposure: 18, duration: 4 },
+  { name: "Music Festival Sponsorship", baseCost: 90000, exposure: 75, duration: 14 },
+  { name: "Podcast Advertising", baseCost: 22000, exposure: 28, duration: 6 },
+  { name: "Magazine Feature", baseCost: 26000, exposure: 30, duration: 7 }
 ]
     };
+    function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
+  const demandFactor = 1 + (popularity / 100); // Increase cost based on popularity
+  const volatilityFactor = isVolatile ? 0.5 : 0.2; // Higher volatility for certain items
+  const randomFactor = 1 + (Math.random() - 0.5) * volatilityFactor; // Random fluctuation
+  const timeFactor = 1 + (gameState.day / 1000); // Simulate inflation over time
+  return Math.round(baseValue * demandFactor * randomFactor * timeFactor);
+}
+
+function createMarketData() {
+  return {
+    shows: baseMarketData.shows.map(show => ({
+      ...show,
+      cost: fluctuateValue(show.baseCost, show.popularity)
+    })),
+    deals: baseMarketData.deals.map(deal => ({
+      ...deal,
+      cost: fluctuateValue(deal.baseCost)
+    })),
+    artists: baseMarketData.artists.map(artist => ({
+      ...artist,
+      cost: fluctuateValue(artist.baseCost, artist.popularity, true) // Artists are volatile
+    })),
+    equipment: baseMarketData.equipment.map(item => ({
+      ...item,
+      cost: fluctuateValue(item.baseCost)
+    })),
+    training: baseMarketData.training.map(course => ({
+      ...course,
+      cost: fluctuateValue(course.baseCost, 0, true) // Training is volatile
+    })),
+    marketing: baseMarketData.marketing.map(campaign => ({
+      ...campaign,
+      cost: fluctuateValue(campaign.baseCost, 0, true) // Marketing is volatile
+    }))
+  };
+}
+
 
     function updateMarketplaces() {
       updateShowsMarket();
@@ -1490,9 +1527,10 @@ marketing: [
         endGame();
         return;
       }
-      
+      marketData = createMarketData();
       let dailyRevenue = 0;
       let maintenanceCost = 0;
+      updateMarketplaces();
       
       gameState.equipment.forEach(item => {
         maintenanceCost += item.maintenance;
