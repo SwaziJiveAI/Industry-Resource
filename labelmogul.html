@@ -98,11 +98,10 @@
           <!-- Log messages go here -->
           <div id="log-container">
               <div class="scenario-box">
-                  ▶️ Welcome to eSwatini Music Mogul!<br>
-                  ▶️ You are now officially the Swazi Jive Records President.<br>
-                  ▶️ Sakhile expects you to get the record label back to its celebrated status.<br>
-                  ▶️ You have 50 days to make your impression in the industry!<br>
-                  ▶️ Day 1: Start building your music empire!
+                  ▶️ Welcome! You are now officially the Swazi Jive Records President<br>
+                  ▶️ Sakhile expects you to get the record label back to the top!<br>
+                  ▶️ You have 50 days above to make your impression in the industry!<br>
+                  ▶️ Start building your music empire,increase your reputation to unlock more content!
               </div>
           </div>
           <!-- Current scenario prompt -->
@@ -1199,15 +1198,6 @@
   { name: "Jazz Virtuoso", genre: "Jazz", baseCost: 35000, popularity: 40, contractCost: 5500 },
   { name: "Lihlombe 12", genre: "sibhaca", baseCost: 35000, popularity: 25, contractCost: 6000 },
   { name: "Mbabane Beats", genre: "hiphop", baseCost: 35000, popularity: 40, contractCost: 6000 },
-  { name: "Electric Echo", genre: "Electronic", baseCost: 60000, popularity: 55, contractCost: 6500 },
-  { name: "Soul Serenade", genre: "Soul", baseCost: 32000, popularity: 38, contractCost: 5200 },
-  { name: "Rock Legend", genre: "Rock", baseCost: 70000, popularity: 80, contractCost: 7500 },
-  { name: "Country Roads", genre: "Country", baseCost: 28000, popularity: 32, contractCost: 4500 },
-  { name: "Rhythm Rebellion", genre: "Reggae", baseCost: 40000, popularity: 50, contractCost: 5800 },
-  { name: "Indie Icon", genre: "Indie", baseCost: 45000, popularity: 60, contractCost: 6200 },
-  { name: "R&B Royalty", genre: "R&B", baseCost: 50000, popularity: 70, contractCost: 6800 },
-  { name: "Latin Flame", genre: "Latin", baseCost: 42000, popularity: 48, contractCost: 5600 },
-  { name: "Alternative Visionary", genre: "Alternative", baseCost: 37000, popularity: 42, contractCost: 5300 },
   { name: "Folk Maestro", genre: "Folk", baseCost: 30000, popularity: 35, contractCost: 4900 }
 ],
 equipment: [
@@ -1216,14 +1206,6 @@ equipment: [
   { name: "Recording Suite", baseCost: 60000, quality: 35, maintenance: 2000 },
   { name: "Live Sound System", baseCost: 40000, quality: 25, maintenance: 1500 },
   { name: "Lighting Rig", baseCost: 15000, quality: 15, maintenance: 700 },
-  { name: "Guitar Amp", baseCost: 12000, quality: 18, maintenance: 600 },
-  { name: "Drum Kit", baseCost: 18000, quality: 22, maintenance: 800 },
-  { name: "Keyboard Synthesizer", baseCost: 22000, quality: 28, maintenance: 900 },
-  { name: "Bass Amplifier", baseCost: 10000, quality: 16, maintenance: 550 },
-  { name: "Acoustic Panels", baseCost: 5000, quality: 12, maintenance: 300 },
-  { name: "DJ Turntable", baseCost: 15000, quality: 20, maintenance: 700 },
-  { name: "Sound Mixer", baseCost: 20000, quality: 23, maintenance: 850 },
-  { name: "Wireless Microphone", baseCost: 9000, quality: 14, maintenance: 450 },
   { name: "Projector Screen", baseCost: 7000, quality: 10, maintenance: 400 },
   { name: "Digital Audio Workstation", baseCost: 45000, quality: 30, maintenance: 1200 }
 ],
@@ -1233,7 +1215,81 @@ training: [
   { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
   { name: "Songwriting Masterclass", baseCost: 25000, skillBoost: 22, duration: 6 },
   { name: "Stage Presence Seminar", baseCost: 20000, skillBoost: 18, duration: 4 },
-  { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
+  { name: "Creative Collaboration Retreat", baseCost: 35000, skillBoost: 28, duration: 7 }
+],
+marketing: [
+  { name: "Social Media Campaign", baseCost: 5000, exposure: 20, duration: 5 },
+  { name: "Radio Advertisement", baseCost: 25000, exposure: 30, duration: 7 },
+  { name: "TV Commercial", baseCost: 50000, exposure: 50, duration: 10 },
+  { name: "Billboard Promotion", baseCost: 35000, exposure: 40, duration: 8 },
+  { name: "Influencer Collaboration", baseCost: 15000, exposure: 25, duration: 6 },
+  { name: "TV Commercial", baseCost: 90000, exposure: 50, duration: 10 },
+  { name: "International Billboard Campaign", baseCost: 120000, exposure: 80, duration: 15 },
+  { name: "Press Release Distribution", baseCost: 18000, exposure: 22, duration: 5 },
+  { name: "Music Video Promotion", baseCost: 30000, exposure: 35, duration: 7 },
+  { name: "Concert Sponsorship", baseCost: 130000, exposure: 60, duration: 12 },
+  { name: "Streaming Platform Ads", baseCost: 128000, exposure: 33, duration: 6 },
+  { name: "Merchandising Campaign", baseCost: 45000, exposure: 45, duration: 9 },
+  { name: "Event Partnerships", baseCost: 155000, exposure: 55, duration: 11 },
+  { name: "Street Team Marketing", baseCost: 12000, exposure: 18, duration: 4 },
+  { name: "Music Festival Sponsorship", baseCost: 190000, exposure: 75, duration: 14 },
+  { name: "Podcast Advertising", baseCost: 22000, exposure: 28, duration: 6 },
+  { name: "Magazine Feature", baseCost: 26000, exposure: 30, duration: 7 }
+]
+    };
+
+    const unlockableContent = {
+  2: { 
+      newArtists: [
+        { name: "Emerging Star", genre: "Pop", baseCost: 50000, popularity: 240, contractCost: 70000 },
+        { name: "Electric Echo", genre: "Electronic", baseCost: 60000, popularity: 55, contractCost: 6500 },
+  { name: "Soul Serenade", genre: "Soul", baseCost: 32000, popularity: 38, contractCost: 5200 },
+  { name: "Rock Legend", genre: "Rock", baseCost: 70000, popularity: 80, contractCost: 7500 },
+  { name: "Country Roads", genre: "Country", baseCost: 28000, popularity: 32, contractCost: 4500 },
+  { name: "Rhythm Rebellion", genre: "Reggae", baseCost: 40000, popularity: 50, contractCost: 5800 },
+  { name: "Indie Icon", genre: "Indie", baseCost: 45000, popularity: 60, contractCost: 6200 },
+  { name: "R&B Royalty", genre: "R&B", baseCost: 50000, popularity: 70, contractCost: 6800 },
+  { name: "Latin Flame", genre: "Latin", baseCost: 42000, popularity: 48, contractCost: 5600 },
+  { name: "Alternative Visionary", genre: "Alternative", baseCost: 37000, popularity: 42, contractCost: 5300 },
+        { name: "The Dreamers", genre: "Indie Rock", baseCost: 65000, popularity: 290, contractCost: 50000 },
+        { name: "Harmony Heights", genre: "Pop", baseCost: 95000, popularity: 365, contractCost: 75000 },
+        { name: "Rock Legends", genre: "Rock", baseCost: 170000, popularity: 465, contractCost: 110000 },
+        { name: "Soulful Serenades", genre: "R&B", baseCost: 320000, popularity: 500, contractCost: 150000 }
+      ]
+      
+    },
+    
+    
+  3: { 
+      newDeals: [
+        { name: "Global Sponsorship", baseCost: 1500000, revenue: 500000, duration: 10 },
+        { name: "Online Streaming Deal", baseCost: 1000000, revenue: 400000, duration: 12 },
+        { name: "Live Concert Tour Sponsorship", baseCost: 2000000, revenue: 600000, duration: 6 },
+        { name: "Merch Collaboration", baseCost: 800000, revenue: 300000, duration: 8 },
+        { name: "Global Marketing Campaign", baseCost: 1800000, revenue: 550000, duration: 9 }
+      ]
+    },
+  4: { 
+      newEquipment: [
+        { name: "Advanced Sound System", baseCost: 800000, quality: 40, maintenance: 25000 },
+        { name: "Studio Pro Mic", baseCost: 200000, quality: 30, maintenance: 10000 },
+        { name: "Guitar Amp", baseCost: 12000, quality: 18, maintenance: 600 },
+  { name: "Drum Kit", baseCost: 18000, quality: 22, maintenance: 800 },
+  { name: "Keyboard Synthesizer", baseCost: 22000, quality: 28, maintenance: 900 },
+  { name: "Bass Amplifier", baseCost: 10000, quality: 16, maintenance: 550 },
+  { name: "Acoustic Panels", baseCost: 5000, quality: 12, maintenance: 300 },
+  { name: "DJ Turntable", baseCost: 15000, quality: 20, maintenance: 700 },
+  { name: "Sound Mixer", baseCost: 20000, quality: 23, maintenance: 850 },
+  { name: "Wireless Microphone", baseCost: 9000, quality: 14, maintenance: 450 },
+        { name: "Premium Mixing Desk", baseCost: 1200000, quality: 50, maintenance: 30000 },
+        { name: "Portable Stage Lights", baseCost: 500000, quality: 35, maintenance: 15000 },
+        { name: "Artist Couture Collection", baseCost: 400000, quality: 45, maintenance: 20000 }
+      ]
+    },
+  5: { 
+      newTraining: [
+        { name: "Elite Performance Coaching", baseCost: 600000, skillBoost: 35, duration: 10 },
+        { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
   { name: "Advanced Production Course", baseCost: 50000, skillBoost: 30, duration: 10 },
   { name: "Instrument Mastery Program", baseCost: 22000, skillBoost: 19, duration: 4 },
   { name: "Advanced Vocal Techniques", baseCost: 14000, skillBoost: 17, duration: 3 },
@@ -1244,28 +1300,53 @@ training: [
   { name: "Digital Music Production", baseCost: 40000, skillBoost: 30, duration: 9 },
   { name: "Live Performance Coaching", baseCost: 26000, skillBoost: 21, duration: 5 },
   { name: "Song Arrangement Workshop", baseCost: 21000, skillBoost: 19, duration: 4 },
-  { name: "Creative Collaboration Retreat", baseCost: 35000, skillBoost: 28, duration: 7 }
-],
-marketing: [
-  { name: "Social Media Campaign", baseCost: 15000, exposure: 20, duration: 5 },
-  { name: "Radio Advertisement", baseCost: 25000, exposure: 30, duration: 7 },
-  { name: "TV Commercial", baseCost: 50000, exposure: 50, duration: 10 },
-  { name: "Billboard Promotion", baseCost: 35000, exposure: 40, duration: 8 },
-  { name: "Influencer Collaboration", baseCost: 20000, exposure: 25, duration: 6 },
-  { name: "TV Commercial", baseCost: 50000, exposure: 50, duration: 10 },
-  { name: "International Billboard Campaign", baseCost: 120000, exposure: 80, duration: 15 },
-  { name: "Press Release Distribution", baseCost: 18000, exposure: 22, duration: 5 },
-  { name: "Music Video Promotion", baseCost: 30000, exposure: 35, duration: 7 },
-  { name: "Concert Sponsorship", baseCost: 70000, exposure: 60, duration: 12 },
-  { name: "Streaming Platform Ads", baseCost: 28000, exposure: 33, duration: 6 },
-  { name: "Merchandising Campaign", baseCost: 40000, exposure: 45, duration: 9 },
-  { name: "Event Partnerships", baseCost: 55000, exposure: 55, duration: 11 },
-  { name: "Street Team Marketing", baseCost: 12000, exposure: 18, duration: 4 },
-  { name: "Music Festival Sponsorship", baseCost: 90000, exposure: 75, duration: 14 },
-  { name: "Podcast Advertising", baseCost: 22000, exposure: 28, duration: 6 },
-  { name: "Magazine Feature", baseCost: 26000, exposure: 30, duration: 7 }
-]
-    };
+        { name: "Vocal Technique Workshop", baseCost: 400000, skillBoost: 25, duration: 8 },
+        { name: "Songwriting Masterclass", baseCost: 500000, skillBoost: 30, duration: 12 },
+        { name: "Performance Enhancement Training", baseCost: 700000, skillBoost: 40, duration: 10 },
+        { name: "Instrumental Diversity Course", baseCost: 800000, skillBoost: 45, duration: 15 }
+      ]
+    }
+};
+
+// Function to unlock content based on reputation level
+function unlockContent() {
+  const level = getCurrentReputationLevel();
+  if (unlockableContent[level]) {
+    if (unlockableContent[level].newArtists) {
+      baseMarketData.artists.push(...unlockableContent[level].newArtists);
+    }
+    if (unlockableContent[level].newDeals) {
+      baseMarketData.deals.push(...unlockableContent[level].newDeals);
+    }
+    if (unlockableContent[level].newEquipment) {
+      baseMarketData.equipment.push(...unlockableContent[level].newEquipment);
+    }
+    if (unlockableContent[level].newTraining) {
+      baseMarketData.training.push(...unlockableContent[level].newTraining);
+    }
+    addMessage(`🎉 New content to shop unlocked at reputation level ${level}!`);
+  }
+}
+
+// Call unlockContent whenever the reputation level is updated
+function updateReputationDisplay() {
+  const level = getCurrentReputationLevel();
+  const levelElement = document.getElementById('reputation-level');
+  levelElement.textContent = ["Basic", "Rising", "Notable", "Celebrated", "Legendary"][level - 1];
+  document.getElementById('reputation-points').textContent = Math.floor(gameState.cash / 500000 * 100);
+  levelElement.classList.remove(
+      'reputation-level-basic',
+      'reputation-level-rising',
+      'reputation-level-notable',
+      'reputation-level-celebrated',
+      'reputation-level-legendary'
+  );
+  levelElement.classList.add(`reputation-level-${["basic","rising","notable","celebrated","legendary"][level - 1]}`);
+  
+  // Unlock content based on the current reputation level
+  unlockContent();
+}
+
     function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
   const demandFactor = 1 + (popularity / 100); // Increase cost based on popularity
   const volatilityFactor = isVolatile ? 0.5 : 0.2; // Higher volatility for certain items
