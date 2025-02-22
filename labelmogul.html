@@ -84,74 +84,108 @@
     .reputation-level-notable { background: #E5FFE5 !important; }
     .reputation-level-celebrated { background: #E5F0FF !important; }
     .reputation-level-legendary { background: #F2E5FF !important; }
+
+    #negotiation-container {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .negotiation-box {
+      background: white; padding: 20px; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); width: 400px; text-align: center;
+    }
+    .negotiation-box h3 { margin-top: 0; }
+    .negotiation-box p { margin: 10px 0; }
+    .negotiation-btn {
+      margin: 5px; padding: 10px 15px;
+      background: #4CAF50; color: white;
+      border: none; border-radius: 4px;
+      cursor: pointer;
+    }
+    .negotiation-btn:hover { background: #45a049; }
   </style>
 </head>
 <body>
   <div class="status-bar">
-      <div>💰 Cash: <span id="cash">E150,000</span></div>
-      <div>📅 Day: <span id="day">1</span>/50</div>
-      <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
+    <div>💰 Cash: <span id="cash">E150,000</span></div>
+    <div>📅 Day: <span id="day">1</span>/50</div>
+    <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
   </div>
 
   <div class="game-container">
-      <div class="main-panel">
-          <!-- Log messages go here -->
-          <div id="log-container">
-              <div class="scenario-box">
-                  ▶️ Welcome! You are now officially the Swazi Jive Records President<br>
-                  ▶️ Sakhile expects you to get the record label back to the top!<br>
-                  ▶️ You have 50 days above to make your impression in the industry!<br>
-                  ▶️ Start building your music empire,increase your reputation to unlock more content!
-              </div>
-          </div>
-          <!-- Current scenario prompt -->
-          <div id="scenario-container"></div>
-          <div class="marketplace-container">
-              <div class="marketplace-section">
-                  <h3>🎭 Shows</h3>
-                  <div id="shows-market" class="market-scroll"></div>
-              </div>
-              <div class="marketplace-section">
-                  <h3>📝 Deals</h3>
-                  <div id="deals-market" class="market-scroll"></div>
-              </div>
-              <div class="marketplace-section">
-                  <h3>🎤 Artists Market</h3>
-                  <div id="artists-market" class="market-scroll"></div>
-              </div>
-              <div class="marketplace-section">
-                  <h3>🎛️ Equipment</h3>
-                  <div id="equipment-market" class="market-scroll"></div>
-              </div>
-              <div class="marketplace-section">
-                  <h3>📚 Training</h3>
-                  <div id="training-market" class="market-scroll"></div>
-              </div>
-              <div class="marketplace-section">
-                  <h3>📣 Marketing</h3>
-                  <div id="marketing-market" class="market-scroll"></div>
-              </div>
-          </div>
+    <div class="main-panel">
+      <div id="log-container">
+        <div class="scenario-box">
+          ▶️ Welcome! You are now officially the Swazi Jive Records President<br>
+          ▶️ Sakhile expects you to get the record label back to the top!<br>
+          ▶️ You have 50 days above to make your impression in the industry!<br>
+          ▶️ Start building your music empire, increase your reputation to unlock more content!
+        </div>
       </div>
+      <div id="scenario-container"></div>
+      <div class="marketplace-container">
+        <div class="marketplace-section">
+          <h3>🎭 Shows</h3>
+          <div id="shows-market" class="market-scroll"></div>
+        </div>
+        <div class="marketplace-section">
+          <h3>📝 Deals</h3>
+          <div id="deals-market" class="market-scroll"></div>
+        </div>
+        <div class="marketplace-section">
+          <h3>🎤 Artists Market</h3>
+          <div id="artists-market" class="market-scroll"></div>
+        </div>
+        <div class="marketplace-section">
+          <h3>🎛️ Equipment</h3>
+          <div id="equipment-market" class="market-scroll"></div>
+        </div>
+        <div class="marketplace-section">
+          <h3>📚 Training</h3>
+          <div id="training-market" class="market-scroll"></div>
+        </div>
+        <div class="marketplace-section">
+          <h3>📣 Marketing</h3>
+          <div id="marketing-market" class="market-scroll"></div>
+        </div>
+      </div>
+    </div>
 
-      <div class="side-panel">
-          <div class="info-box">
-              <h3>🎤 Artists</h3>
-              <div id="artist-roster" class="scroll-box"></div>
-          </div>
-          <div class="info-box">
-              <h3>📦 Inventory</h3>
-              <div id="inventory-list" class="scroll-box"></div>
-          </div>
-          <div class="info-box">
-              <h3>👥 Staff</h3>
-              <div id="staff-list" class="scroll-box"></div>
-          </div>
+    <div class="side-panel">
+      <div class="info-box">
+        <h3>🎤 Artists</h3>
+        <div id="artist-roster" class="scroll-box"></div>
       </div>
+      <div class="info-box">
+        <h3>📦 Inventory</h3>
+        <div id="inventory-list" class="scroll-box"></div>
+      </div>
+      <div class="info-box">
+        <h3>👥 Staff</h3>
+        <div id="staff-list" class="scroll-box"></div>
+      </div>
+    </div>
   </div>
+
+  <div id="negotiation-container">
+    <div class="negotiation-box">
+      <h3>Negotiate with <span id="negotiation-artist-name"></span></h3>
+      <p>Artist's Demand: E<span id="artist-demand"></span></p>
+      <p>Your Offer: E<span id="your-offer"></span></p>
+      <button class="negotiation-btn" onclick="acceptDemand()">Submit Bid</button>
+      <button class="negotiation-btn" onclick="offerLess()">Offer Less</button>
+      <button class="negotiation-btn" onclick="offerMore()">Offer More</button>
+      <button class="negotiation-btn" onclick="declineOffer()">Decline</button>
+    </div>
 
   <script>
     let gameState;
+    let marketData;
+    let currentNegotiationArtist = null;
+    let currentOffer = 0;
 
     // List of 52 unique scenarios
     const allScenarios = [
@@ -1074,16 +1108,16 @@
       levelElement.textContent = ["Basic", "Rising", "Notable", "Celebrated", "Legendary"][level - 1];
       document.getElementById('reputation-points').textContent = Math.floor(gameState.cash / 500000 * 100);
       levelElement.classList.remove(
-          'reputation-level-basic',
-          'reputation-level-rising',
-          'reputation-level-notable',
-          'reputation-level-celebrated',
-          'reputation-level-legendary'
+        'reputation-level-basic',
+        'reputation-level-rising',
+        'reputation-level-notable',
+        'reputation-level-celebrated',
+        'reputation-level-legendary'
       );
       levelElement.classList.add(`reputation-level-${["basic","rising","notable","celebrated","legendary"][level - 1]}`);
+      unlockContent();
     }
 
-    // Append new messages to the log container
     function addMessage(message) {
       const container = document.getElementById('log-container');
       container.innerHTML += `<div>${message}</div>`;
@@ -1094,7 +1128,7 @@
       document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
       document.getElementById('day').textContent = gameState.day;
       document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
-        <div class="artist-card">
+        <div class="artist-card" onclick='startNegotiation(${JSON.stringify(artist)}, false)'>
           <strong>${artist.name}</strong> (${artist.genre})<br>
           📈 Popularity: ${artist.popularity}<br>
           😊 Happiness: ${artist.happiness}%<br>
@@ -1238,6 +1272,9 @@ marketing: [
         { name: "Merch Collaboration", baseCost: 800000, revenue: 300000, duration: 8 },
         { name: "Global Marketing Campaign", baseCost: 1800000, revenue: 550000, duration: 9 }
       ]
+
+
+      
     },
   4: { 
       newEquipment: [
@@ -1280,80 +1317,60 @@ marketing: [
 
 // Function to unlock content based on reputation level
 function unlockContent() {
-  const level = getCurrentReputationLevel();
-  if (unlockableContent[level]) {
-    if (unlockableContent[level].newArtists) {
-      baseMarketData.artists.push(...unlockableContent[level].newArtists);
+      const level = getCurrentReputationLevel();
+      if (unlockableContent[level]) {
+        if (unlockableContent[level].newArtists) {
+          baseMarketData.artists.push(...unlockableContent[level].newArtists);
+        }
+        if (unlockableContent[level].newDeals) {
+          baseMarketData.deals.push(...unlockableContent[level].newDeals);
+        }
+        if (unlockableContent[level].newEquipment) {
+          baseMarketData.equipment.push(...unlockableContent[level].newEquipment);
+        }
+        if (unlockableContent[level].newTraining) {
+          baseMarketData.training.push(...unlockableContent[level].newTraining);
+        }
+        addMessage(`🎉 New content to shop unlocked at reputation level ${level}!`);
+      }
     }
-    if (unlockableContent[level].newDeals) {
-      baseMarketData.deals.push(...unlockableContent[level].newDeals);
-    }
-    if (unlockableContent[level].newEquipment) {
-      baseMarketData.equipment.push(...unlockableContent[level].newEquipment);
-    }
-    if (unlockableContent[level].newTraining) {
-      baseMarketData.training.push(...unlockableContent[level].newTraining);
-    }
-    addMessage(`🎉 New content to shop unlocked at reputation level ${level}!`);
-  }
-}
-
-// Call unlockContent whenever the reputation level is updated
-function updateReputationDisplay() {
-  const level = getCurrentReputationLevel();
-  const levelElement = document.getElementById('reputation-level');
-  levelElement.textContent = ["Basic", "Rising", "Notable", "Celebrated", "Legendary"][level - 1];
-  document.getElementById('reputation-points').textContent = Math.floor(gameState.cash / 500000 * 100);
-  levelElement.classList.remove(
-      'reputation-level-basic',
-      'reputation-level-rising',
-      'reputation-level-notable',
-      'reputation-level-celebrated',
-      'reputation-level-legendary'
-  );
-  levelElement.classList.add(`reputation-level-${["basic","rising","notable","celebrated","legendary"][level - 1]}`);
-  
-  // Unlock content based on the current reputation level
-  unlockContent();
-}
 
     function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
-  const demandFactor = 1 + (popularity / 100); // Increase cost based on popularity
-  const volatilityFactor = isVolatile ? 0.5 : 0.2; // Higher volatility for certain items
-  const randomFactor = 1 + (Math.random() - 0.5) * volatilityFactor; // Random fluctuation
-  const timeFactor = 1 + (gameState.day / 1000); // Simulate inflation over time
-  return Math.round(baseValue * demandFactor * randomFactor * timeFactor);
-}
+      const demandFactor = 1 + (popularity / 100);
+      const volatilityFactor = isVolatile ? 0.5 : 0.2;
+      const randomFactor = 1 + (Math.random() - 0.5) * volatilityFactor;
+      const timeFactor = 1 + (gameState.day / 1000);
+      return Math.round(baseValue * demandFactor * randomFactor * timeFactor);
+    }
 
-function createMarketData() {
-  return {
-    shows: baseMarketData.shows.map(show => ({
-      ...show,
-      cost: fluctuateValue(show.baseCost, show.popularity)
-    })),
-    deals: baseMarketData.deals.map(deal => ({
-      ...deal,
-      cost: fluctuateValue(deal.baseCost)
-    })),
-    artists: baseMarketData.artists.map(artist => ({
-      ...artist,
-      cost: fluctuateValue(artist.baseCost, artist.popularity, true) // Artists are volatile
-    })),
-    equipment: baseMarketData.equipment.map(item => ({
-      ...item,
-      cost: fluctuateValue(item.baseCost)
-    })),
-    training: baseMarketData.training.map(course => ({
-      ...course,
-      cost: fluctuateValue(course.baseCost, 0, true) // Training is volatile
-    })),
-    marketing: baseMarketData.marketing.map(campaign => ({
-      ...campaign,
-      cost: fluctuateValue(campaign.baseCost, 0, true) // Marketing is volatile
-    }))
-  };
-}
-
+    function createMarketData() {
+      return {
+        shows: baseMarketData.shows.map(show => ({
+          ...show,
+          cost: fluctuateValue(show.baseCost, show.popularity)
+        })),
+        deals: baseMarketData.deals.map(deal => ({
+          ...deal,
+          cost: fluctuateValue(deal.baseCost)
+        })),
+        artists: baseMarketData.artists.map(artist => ({
+          ...artist,
+          cost: fluctuateValue(artist.baseCost, artist.popularity, true)
+        })),
+        equipment: baseMarketData.equipment.map(item => ({
+          ...item,
+          cost: fluctuateValue(item.baseCost)
+        })),
+        training: baseMarketData.training.map(course => ({
+          ...course,
+          cost: fluctuateValue(course.baseCost, 0, true)
+        })),
+        marketing: baseMarketData.marketing.map(campaign => ({
+          ...campaign,
+          cost: fluctuateValue(campaign.baseCost, 0, true)
+        }))
+      };
+    }
 
     function updateMarketplaces() {
       updateShowsMarket();
@@ -1388,10 +1405,10 @@ function createMarketData() {
 
     function updateArtistsMarket() {
       document.getElementById('artists-market').innerHTML = marketData.artists.map(artist => `
-        <div class="market-item" onclick="signArtist('${artist.name}', '${artist.genre}', ${artist.cost}, ${artist.popularity}, ${artist.contractCost})">
+        <div class="market-item" onclick='startNegotiation(${JSON.stringify(artist)}, true)'>
           <strong>${artist.name}</strong><br>
           🎵 Genre: ${artist.genre}<br>
-          💰 Signing Cost: E${artist.cost.toLocaleString()}<br>
+          💰 Cost: E${artist.cost.toLocaleString()}<br>
           📈 Popularity: ${artist.popularity}<br>
           📅 Contract: 30 days
         </div>
@@ -1453,7 +1470,6 @@ function createMarketData() {
       log.scrollTop = log.scrollHeight;
     }
 
-    // Global startNewGame so it’s accessible by retry buttons
     function startNewGame() {
       initializeGameState();
       startNewDay();
@@ -1528,65 +1544,124 @@ function createMarketData() {
       updateGameDisplay();
     }
 
-    function signArtist(name, genre, cost, popularity, contractCost) {
-      if (gameState.cash < cost) {
-        addMessage(`❌ Not enough cash to sign ${name}`);
-        return;
-      }
-      gameState.cash -= cost;
-      gameState.artists.push({
-        name,
-        genre,
-        popularity,
-        happiness: 100,
-        contractDays: 30
-      });
-      adjustReputation(15);
-      addMessage(`🎤 Signed ${name} for E${cost.toLocaleString()}`);
-      updateGameDisplay();
+    function startNegotiation(artist, isNewArtist) {
+      currentNegotiationArtist = { ...artist, isNewArtist };
+      currentOffer = isNewArtist ? artist.cost : Math.floor(artist.popularity * 1000);
+      document.getElementById('negotiation-artist-name').textContent = artist.name;
+      document.getElementById('artist-demand').textContent = currentOffer.toLocaleString();
+      document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+      document.getElementById('negotiation-container').style.display = 'flex';
     }
 
-    // New function to display action summary with rating, cash flow, and reputation effect.
+    function acceptDemand() {
+      if (currentNegotiationArtist) {
+        if (gameState.cash < currentOffer) {
+          addMessage(`❌ Not enough cash to meet ${currentNegotiationArtist.name}'s demand`);
+          return;
+        }
+        gameState.cash -= currentOffer;
+        if (checkBankruptcy()) return;
+        if (currentNegotiationArtist.isNewArtist) {
+          const newArtist = {
+            name: currentNegotiationArtist.name,
+            genre: currentNegotiationArtist.genre,
+            popularity: currentNegotiationArtist.popularity,
+            happiness: 100,
+            contractDays: 30,
+            contractCost: currentOffer
+          };
+          gameState.artists.push(newArtist);
+          addMessage(`🎤 Signed ${newArtist.name} for E${currentOffer.toLocaleString()}`);
+        } else {
+          currentNegotiationArtist.contractDays = 30;
+          currentNegotiationArtist.contractCost = currentOffer;
+          addMessage(`✨ Renewed contract with ${currentNegotiationArtist.name} for E${currentOffer.toLocaleString()}`);
+        }
+        adjustReputation(15);
+        closeNegotiation();
+        updateGameDisplay();
+      }
+    }
+
+    function offerLess() {
+      if (currentNegotiationArtist) {
+        let happiness = currentNegotiationArtist.happiness || 50;
+        let successChance = (happiness + gameState.reputation) / 200;
+        let proposedOffer = Math.floor(currentOffer * 0.8); // Offer 80% of the demand
+        if (Math.random() < successChance) {
+          currentOffer = proposedOffer;
+          addMessage(`${currentNegotiationArtist.name} accepted your lower offer of E${currentOffer.toLocaleString()}`);
+          document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+        } else {
+          addMessage(`${currentNegotiationArtist.name} rejected your lower offer.`);
+          declineOffer();
+        }
+      }
+    }
+
+    function offerMore() {
+      if (currentNegotiationArtist) {
+        let proposedOffer = Math.floor(currentOffer * 1.2); // Offer 120% of the demand
+        currentOffer = proposedOffer;
+        addMessage(`${currentNegotiationArtist.name} accepted your higher offer of E${currentOffer.toLocaleString()}`);
+        document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+      }
+    }
+
+    function declineOffer() {
+      if (currentNegotiationArtist) {
+        addMessage(`Negotiation with ${currentNegotiationArtist.name} declined.`);
+        if (!currentNegotiationArtist.isNewArtist) {
+          adjustReputation(-5); // Small penalty for declining a renewal
+        }
+        closeNegotiation();
+      }
+    }
+
+    function closeNegotiation() {
+      document.getElementById('negotiation-container').style.display = 'none';
+      currentNegotiationArtist = null;
+      currentOffer = 0;
+    }
+
     function showActionSummary(cashEffect, repChange) {
       let rating;
       if (cashEffect > 0 && repChange > 0) {
-          rating = "Excellent decision!";
+        rating = "Excellent decision!";
       } else if (cashEffect > 0 || repChange > 0) {
-          rating = "Good decision!";
+        rating = "Good decision!";
       } else if (cashEffect < 0 && repChange < 0) {
-          rating = "Poor decision!";
+        rating = "Poor decision!";
       } else {
-          rating = "Mixed results.";
+        rating = "Mixed results.";
       }
       let summary = `Action Summary: ${rating} Cash ${cashEffect >= 0 ? "inflow" : "outflow"}: E${Math.abs(cashEffect).toLocaleString()}, Reputation change: ${repChange >= 0 ? "+" : ""}${repChange}.`;
       addMessage(summary);
     }
 
-    // Select a new scenario from availableScenarios ensuring no repeats
     function selectNewScenario() {
       if (gameState.availableScenarios.length === 0) {
-        // Reset if all scenarios have been used
         gameState.availableScenarios = [...allScenarios];
       }
       const randomIndex = Math.floor(Math.random() * gameState.availableScenarios.length);
       gameState.currentScenario = gameState.availableScenarios.splice(randomIndex, 1)[0];
     }
 
-    // Start a new day: process revenue, update contracts, and pick a new scenario
     function startNewDay() {
       if (gameState.day >= 50) {
         endGame();
         return;
       }
+
+      gameState.day++;
       marketData = createMarketData();
       let dailyRevenue = 0;
       let maintenanceCost = 0;
-      updateMarketplaces();
-      
+
       gameState.equipment.forEach(item => {
         maintenanceCost += item.maintenance;
       });
-      
+
       gameState.activeDeals = gameState.activeDeals.filter(deal => {
         deal.daysLeft--;
         if (deal.daysLeft > 0) {
@@ -1596,65 +1671,49 @@ function createMarketData() {
         addMessage(`📝 Deal expired: ${deal.name} has been removed`);
         return false;
       });
-      
+
       gameState.artists.forEach(artist => {
         const artistRevenue = Math.floor(artist.popularity * 1000 * (1 + gameState.reputation / 100));
         dailyRevenue += artistRevenue;
         addMessage(`💫 ${artist.name} generated E${artistRevenue.toLocaleString()} today`);
+        artist.contractDays--;
+        if (artist.contractDays < 0) {
+          addMessage(`🎤 Contract expired: ${artist.name} has left the label`);
+          adjustReputation(-5);
+        } else {
+          const totalEquipmentQuality = gameState.equipment.reduce((sum, item) => sum + item.quality, 0);
+          const happinessBoost = Math.floor(totalEquipmentQuality / 10);
+          artist.happiness = Math.min(100, artist.happiness + happinessBoost);
+          if (artist.contractDays <= 5) {
+            addMessage(`⚠️ ${artist.name}'s contract expires in ${artist.contractDays} day${artist.contractDays > 1 ? 's' : ''}! Click to negotiate renewal.`);
+          }
+        }
       });
-      
+
+      gameState.artists = gameState.artists.filter(artist => artist.contractDays >= 0);
+
       if (maintenanceCost > 0) {
         gameState.cash -= maintenanceCost;
         addMessage(`🔧 Daily equipment maintenance cost: E${maintenanceCost.toLocaleString()}`);
       }
-      
+
       if (dailyRevenue > 0) {
         gameState.cash += dailyRevenue;
         addMessage(`💰 Total daily revenue: E${dailyRevenue.toLocaleString()}`);
         adjustReputation(Math.floor(dailyRevenue / 10000));
       }
-      
-      gameState.artists = gameState.artists.filter(artist => {
-        artist.contractDays--;
-        const totalEquipmentQuality = gameState.equipment.reduce((sum, item) => sum + item.quality, 0);
-        const happinessBoost = Math.floor(totalEquipmentQuality / 10);
-        artist.happiness = Math.min(100, artist.happiness + happinessBoost);
-        
-        if (artist.contractDays <= 5 && artist.contractDays > 0) {
-          const renewalCost = Math.floor(artist.popularity * 1000);
-          addMessage(`⚠️ ${artist.name}'s contract expires in ${artist.contractDays} day${artist.contractDays > 1 ? 's' : ''}!`);
-          addMessage(`💼 Renewal cost will be E${renewalCost.toLocaleString()}`);
-          return true;
-        } else if (artist.contractDays === 0) {
-          const renewalCost = Math.floor(artist.popularity * 1000);
-          if (gameState.cash >= renewalCost && artist.happiness >= 70) {
-            gameState.cash -= renewalCost;
-            artist.contractDays = 30;
-            addMessage(`✨ ${artist.name} renewed their contract for E${renewalCost.toLocaleString()}!`);
-            adjustReputation(10);
-            return true;
-          } else {
-            addMessage(`🎤 Contract expired: ${artist.name} has left the label`);
-            adjustReputation(-5);
-            return false;
-          }
-        }
-        return true;
-      });
-      
-      gameState.day++;
+
       selectNewScenario();
       showNextScenario();
       updateGameDisplay();
       updateMarketplaces();
-      
+
       if (gameState.artists.length === 0) {
         addMessage("⚠️ Warning: You have no artists! Sign new talent quickly!");
       }
       checkBankruptcy();
     }
 
-    // Display the current scenario prompt in the dedicated container.
     function showNextScenario() {
       const scenario = gameState.currentScenario;
       if (!scenario) return;
@@ -1678,20 +1737,19 @@ function createMarketData() {
       const cashEffect = scenario.options[optionIndex].effect();
       let repAfter = gameState.reputation;
       let repChange = repAfter - repBefore;
-      
+
       gameState.cash += cashEffect;
       if (checkBankruptcy()) return;
-      
+
       addMessage(`Decision made: ${scenario.options[optionIndex].text}`);
       if (cashEffect > 0) {
         addMessage(`💰 Gained E${Math.abs(cashEffect).toLocaleString()}`);
       } else if (cashEffect < 0) {
         addMessage(`💸 Spent E${Math.abs(cashEffect).toLocaleString()}`);
       }
-      
-      // Display the action summary
+
       showActionSummary(cashEffect, repChange);
-      
+
       if (gameState.day > 50) {
         endGame();
       } else {
