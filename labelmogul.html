@@ -8,6 +8,16 @@
     .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .side-panel { display: flex; flex-direction: column; gap: 20px; }
     .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .staff-card { 
+      border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; 
+      border-radius: 5px; cursor: pointer; 
+      transition: background 0.2s;
+    }
+    .staff-card:hover { background: #e8e8e8; }
+    .decision-btn, .new-game-btn {
+      margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
+    }
+
     .decision-btn {
       margin: 5px; padding: 10px 15px;
       background: #4CAF50; color: white;
@@ -127,6 +137,29 @@
     background: #ff1a40; 
 }
 
+#staff-advice-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .staff-advice-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+
+
   </style>
 </head>
 <body>
@@ -194,19 +227,9 @@
         <h3>👥 Staff</h3>
         <div id="staff-list" class="scroll-box"></div>
       </div>
-    
-    </div>   
-   
     </div>
 
   </div>
-
-
-  
-  
-
-
-
 
 
   <div id="negotiation-container">
@@ -222,8 +245,18 @@
       <button class="negotiation-btn" onclick="bluff()">Bluff</button>
       <button class="negotiation-btn" onclick="closeNegotiation()">Close</button>
     </div>
+  </div>
 </div>
-  <script>
+
+<div id="staff-advice-container">
+  <div class="staff-advice-box">
+    <h3>Staff Advice from <span id="staff-member-name"></span></h3>
+    <p id="staff-advice-content"></p>
+    <button class="decision-btn" onclick="closeStaffAdvice()">Close</button>
+  </div>
+</div>
+
+<script>
     let gameState;
     let marketData;
     let currentNegotiationArtist = null;
@@ -1147,7 +1180,23 @@ const artistMoods = [
       gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
       updateReputationDisplay();
     }
-
+   // Function that triggers when a staff card is clicked; shows context-sensitive advice
+   function showStaffHint(role, morale) {
+      let advice = "";
+      if (role.toLowerCase().includes("manager")) {
+        advice = "Manager's Advice: Carefully weigh the costs and benefits of each scenario option before deciding.";
+      } else if (role.toLowerCase().includes("publicist")) {
+        advice = "Publicist's Advice: Stay updated with market news and trends—shifts in streaming can influence your strategy.";
+      } else {
+        advice = "Staff Advice: Monitor team morale to ensure their advice is effective.";
+      }
+      if (morale >= 70) {
+        advice += " High morale boosts their effectiveness!";
+      } else if (morale <= 30) {
+        advice += " Consider improving staff morale to enhance their impact.";
+      }
+      document.getElementById('staff-hint').textContent = advice;
+    }
     function getCurrentReputationLevel() {
       let level = 1;
       for (const [key, value] of Object.entries({
@@ -1196,7 +1245,7 @@ const artistMoods = [
         </div>
       `).join('');
       document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
-        <div class="staff-card">
+        <div class="staff-card" onclick="showStaffAdvice('${staff.role}', ${staff.morale})">
           <strong>${staff.role}</strong><br>
           😊 Morale: ${staff.morale}%
         </div>
@@ -1507,6 +1556,38 @@ function unlockContent() {
           ⏱️ Duration: ${campaign.duration} days
         </div>
       `).join('');
+    }
+
+    function showStaffAdvice(role, morale) {
+      // Show container and initial message immediately
+      const container = document.getElementById('staff-advice-container');
+      document.getElementById('staff-member-name').textContent = role;
+      document.getElementById('staff-advice-content').textContent = "Let me think about this situation...";
+      container.style.display = 'flex';
+      
+      // Update with actual advice after a delay
+      setTimeout(() => {
+        let advice = "";
+        if (role.toLowerCase().includes("manager")) {
+          advice = morale > 70 
+            ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
+            : "We should be cautious with our spending and focus on rebuilding our reputation.";
+        } else if (role.toLowerCase().includes("publicist")) {
+          advice = morale > 70
+            ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
+            : "We need to focus on damage control and rebuilding our public image.";
+        }
+        
+        if (morale < 30) {
+          advice += " (Note: Low staff morale may affect advice quality)";
+        }
+        
+        document.getElementById('staff-advice-content').textContent = advice;
+      }, 1000);
+    }
+
+    function closeStaffAdvice() {
+      document.getElementById('staff-advice-container').style.display = 'none';
     }
 
     function updateNewsDisplay() {
