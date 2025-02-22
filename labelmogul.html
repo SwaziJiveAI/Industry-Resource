@@ -105,7 +105,27 @@
       border: none; border-radius: 4px;
       cursor: pointer;
     }
-    .negotiation-btn:hover { background: #45a049; }
+    .negotiation-btn:hover { background: #ff1a40; }
+
+    #news-container {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-top: 20px;
+      height: 200px;
+      overflow-y: auto;
+    }
+    .news-item {
+      margin-bottom: 10px;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .negotiation-btn:hover { 
+    background: #ff1a40; 
+}
+
   </style>
 </head>
 <body>
@@ -126,7 +146,9 @@
         </div>
       </div>
       <div id="scenario-container"></div>
+  
       <div class="marketplace-container">
+        
         <div class="marketplace-section">
           <h3>🎭 Shows</h3>
           <div id="shows-market" class="market-scroll"></div>
@@ -153,7 +175,7 @@
         </div>
       </div>
     </div>
-
+   
     <div class="side-panel">
       <div class="info-box">
         <h3>🎤 Artists</h3>
@@ -167,20 +189,39 @@
         <h3>👥 Staff</h3>
         <div id="staff-list" class="scroll-box"></div>
       </div>
+      <div class="info-box">
+        <h3>📰 News Updates</h3>
+        <div id="news-updates" class="scroll-box"></div>  
+      </div>
+    
+    </div>   
+   
     </div>
+
   </div>
+
+
+  
+  
+
+
+
+
 
   <div id="negotiation-container">
     <div class="negotiation-box">
       <h3>Negotiate with <span id="negotiation-artist-name"></span></h3>
+      <p>Artist's Mood: <span id="artist-mood"></span></p>
       <p>Artist's Demand: E<span id="artist-demand"></span></p>
       <p>Your Offer: E<span id="your-offer"></span></p>
-      <button class="negotiation-btn" onclick="acceptDemand()">Submit Bid</button>
+      <button class="negotiation-btn" onclick="acceptDemand()">Accept the Demand</button>
       <button class="negotiation-btn" onclick="offerLess()">Offer Less</button>
       <button class="negotiation-btn" onclick="offerMore()">Offer More</button>
       <button class="negotiation-btn" onclick="declineOffer()">Decline</button>
+      <button class="negotiation-btn" onclick="bluff()">Bluff</button>
+      <button class="negotiation-btn" onclick="closeNegotiation()">Close</button>
     </div>
-
+</div>
   <script>
     let gameState;
     let marketData;
@@ -1067,6 +1108,24 @@
 
     ];
 
+    const rivalLabels = ["Eswatini Beats", "Swazi Soundwave", "Mbabane Music Co.", "Lubombo Tunes", "Hlane Harmony"];
+    const marketNews = [
+      "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
+      "Market Update: Vinyl sales spike, boosting traditional music popularity!",
+      "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
+      "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
+      "Media Buzz: A new music festival launches, offering high-profile show opportunities!"
+    ];
+
+    // ... existing code ...
+const artistMoods = [
+  { name: "Excited", demandModifier: 0.9, successModifier: 1.2, happinessPenalty: 5 },
+  { name: "Neutral", demandModifier: 1.0, successModifier: 1.0, happinessPenalty: 10 },
+  { name: "Desperate", demandModifier: 0.8, successModifier: 1.5, happinessPenalty: 15 },
+  { name: "Demanding", demandModifier: 1.2, successModifier: 0.8, happinessPenalty: 20 }
+];
+
+
     // Game state initialization
     function initializeGameState() {
       gameState = {
@@ -1157,6 +1216,7 @@
           </div>
         `)
       ].join('');
+      updateNewsDisplay();
     }
 
     function adjustArtistHappiness(amount) {
@@ -1448,6 +1508,44 @@ function unlockContent() {
       `).join('');
     }
 
+    function updateNewsDisplay() {
+      const newsDiv = document.getElementById('news-updates');
+      newsDiv.innerHTML = gameState.newsUpdates ? gameState.newsUpdates.map(update => `
+        <div class="news-item">${update}</div>
+      `).join('') : '';
+    }
+
+    function generateNews(cashEffect = 0, repChange = 0, isScenario = false, artist = null) {
+      if (!gameState.newsUpdates) gameState.newsUpdates = [];
+      let news = '';
+
+      if (isScenario) {
+        if (cashEffect > 0) {
+          news = `Local News: Swazi Jive Records gains E${Math.abs(cashEffect).toLocaleString()} from a strategic decision, boosting reputation by ${repChange}!`;
+        } else if (cashEffect < 0) {
+          news = `Industry News: Swazi Jive Records spends E${Math.abs(cashEffect).toLocaleString()} on a decision, impacting reputation by ${repChange}!`;
+        } else {
+          news = `Entertainment News: Swazi Jive Records makes a neutral decision, with reputation unchanged at ${gameState.reputation}!`;
+        }
+      } else if (artist) {
+        const popularityThreshold = artist.popularity > 50 ? "skyrockets" : "grows";
+        const happinessThreshold = artist.happiness > 70 ? "thrilled" : artist.happiness < 30 ? "unhappy" : "content";
+        const contractStatus = artist.contractDays <= 5 ? `with only ${artist.contractDays} days left on their contract!` : "under a solid contract.";
+        news = `Entertainment News: ${artist.name}'s ${artist.genre} hit ${popularityThreshold} in popularity, leaving fans ${happinessThreshold} ${contractStatus}`;
+      } else if (Math.random() < 0.2) { // 20% chance for random news
+        const rival = rivalLabels[Math.floor(Math.random() * rivalLabels.length)];
+        const marketUpdate = Math.random() < 0.5 ? marketNews[Math.floor(Math.random() * marketNews.length)] : 
+          `${rival} News: ${rival} poaches a top artist, increasing competition in the market!`;
+        news = marketUpdate;
+      }
+
+      if (news) {
+        gameState.newsUpdates.unshift(news); // Add new news at the top
+        if (gameState.newsUpdates.length > 10) gameState.newsUpdates.pop(); // Limit to 10 updates
+        updateNewsDisplay();
+      }
+    }
+
     function checkBankruptcy() {
       if (gameState.cash < 0) {
         addMessage("💥 Game Over: You've gone bankrupt!");
@@ -1545,13 +1643,20 @@ function unlockContent() {
     }
 
     function startNegotiation(artist, isNewArtist) {
-      currentNegotiationArtist = { ...artist, isNewArtist };
-      currentOffer = isNewArtist ? artist.cost : Math.floor(artist.popularity * 1000);
-      document.getElementById('negotiation-artist-name').textContent = artist.name;
-      document.getElementById('artist-demand').textContent = currentOffer.toLocaleString();
-      document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
-      document.getElementById('negotiation-container').style.display = 'flex';
-    }
+  currentNegotiationArtist = { ...artist, isNewArtist };
+  const mood = artistMoods[Math.floor(Math.random() * artistMoods.length)];
+  currentNegotiationArtist.mood = mood;
+  currentOffer = isNewArtist ? Math.floor(artist.cost * mood.demandModifier) : Math.floor(artist.popularity * 1000 * mood.demandModifier);
+  
+  const container = document.getElementById('negotiation-container');
+  document.getElementById('negotiation-artist-name').textContent = artist.name;
+  document.getElementById('artist-mood').textContent = mood.name;
+  document.getElementById('artist-demand').textContent = currentOffer.toLocaleString();
+  document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+  
+  container.style.display = 'flex';
+  addMessage(`🎭 ${artist.name} enters negotiations with a ${mood.name.toLowerCase()} mood.`);
+}
 
     function acceptDemand() {
       if (currentNegotiationArtist) {
@@ -1568,14 +1673,17 @@ function unlockContent() {
             popularity: currentNegotiationArtist.popularity,
             happiness: 100,
             contractDays: 30,
-            contractCost: currentOffer
+            contractCost: currentOffer,
+            mood: currentNegotiationArtist.mood
           };
           gameState.artists.push(newArtist);
           addMessage(`🎤 Signed ${newArtist.name} for E${currentOffer.toLocaleString()}`);
+          addEmotionalFeedback("pleased");
         } else {
           currentNegotiationArtist.contractDays = 30;
           currentNegotiationArtist.contractCost = currentOffer;
           addMessage(`✨ Renewed contract with ${currentNegotiationArtist.name} for E${currentOffer.toLocaleString()}`);
+          addEmotionalFeedback("pleased");
         }
         adjustReputation(15);
         closeNegotiation();
@@ -1586,15 +1694,24 @@ function unlockContent() {
     function offerLess() {
       if (currentNegotiationArtist) {
         let happiness = currentNegotiationArtist.happiness || 50;
-        let successChance = (happiness + gameState.reputation) / 200;
+        let baseSuccessChance = (happiness + gameState.reputation) / 200;
+        let moodModifier = currentNegotiationArtist.mood.successModifier;
+        let successChance = baseSuccessChance * moodModifier;
         let proposedOffer = Math.floor(currentOffer * 0.8); // Offer 80% of the demand
         if (Math.random() < successChance) {
           currentOffer = proposedOffer;
           addMessage(`${currentNegotiationArtist.name} accepted your lower offer of E${currentOffer.toLocaleString()}`);
           document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+          addEmotionalFeedback("reluctantly pleased");
+          // Check for happiness penalty if Desperate and offer is too low
+          if (currentNegotiationArtist.mood.name === "Desperate" && (currentOffer / currentNegotiationArtist.cost < 0.7 || currentOffer / (currentNegotiationArtist.popularity * 1000) < 0.7)) {
+            adjustArtistHappiness(-currentNegotiationArtist.mood.happinessPenalty);
+            addMessage(`😞 ${currentNegotiationArtist.name} feels unhappy with the low offer, losing ${currentNegotiationArtist.mood.happinessPenalty}% happiness.`);
+          }
         } else {
           addMessage(`${currentNegotiationArtist.name} rejected your lower offer.`);
           declineOffer();
+          addEmotionalFeedback("frustrated");
         }
       }
     }
@@ -1605,14 +1722,46 @@ function unlockContent() {
         currentOffer = proposedOffer;
         addMessage(`${currentNegotiationArtist.name} accepted your higher offer of E${currentOffer.toLocaleString()}`);
         document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+        addEmotionalFeedback("delighted");
+        adjustArtistHappiness(10); // Slight happiness boost for generous offer
       }
     }
 
-    function declineOffer() {
+    function bluff() {
       if (currentNegotiationArtist) {
-        addMessage(`Negotiation with ${currentNegotiationArtist.name} declined.`);
-        if (!currentNegotiationArtist.isNewArtist) {
-          adjustReputation(-5); // Small penalty for declining a renewal
+        let happiness = currentNegotiationArtist.happiness || 50;
+        let baseSuccessChance = 0.1; // Very low 10% chance
+        let moodModifier = currentNegotiationArtist.mood.successModifier;
+        let successChance = baseSuccessChance * moodModifier;
+        let proposedOffer = Math.floor(currentOffer * 0.5); // Offer 50% of the demand
+        if (Math.random() < successChance) {
+          currentOffer = proposedOffer;
+          addMessage(`${currentNegotiationArtist.name} was fooled by your bluff and accepted E${currentOffer.toLocaleString()}!`);
+          document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+          adjustArtistHappiness(10); // Small happiness boost for cleverness
+          adjustReputation(10); // Reputation boost for bold move
+          addEmotionalFeedback("surprised");
+        } else {
+          addMessage(`${currentNegotiationArtist.name} saw through your bluff and walked away angrily.`);
+          declineOffer(true); // Apply penalty for failed bluff
+          adjustArtistHappiness(-20); // Significant happiness drop
+          adjustReputation(-15); // Large reputation penalty
+          addEmotionalFeedback("furious");
+        }
+      }
+    }
+
+    function declineOffer(timedOut = false) {
+      if (currentNegotiationArtist) {
+        if (timedOut) {
+          addMessage(`⏳ Negotiation with ${currentNegotiationArtist.name} timed out, resulting in a -5 reputation penalty.`);
+          adjustReputation(-5);
+        } else {
+          addMessage(`Negotiation with ${currentNegotiationArtist.name} declined.`);
+          if (!currentNegotiationArtist.isNewArtist) {
+            adjustReputation(-5); // Small penalty for declining a renewal
+          }
+          addEmotionalFeedback("disappointed");
         }
         closeNegotiation();
       }
@@ -1620,8 +1769,22 @@ function unlockContent() {
 
     function closeNegotiation() {
       document.getElementById('negotiation-container').style.display = 'none';
+      clearInterval(negotiationTimer);
       currentNegotiationArtist = null;
       currentOffer = 0;
+    }
+
+    function addEmotionalFeedback(emotion) {
+      const emotions = {
+        pleased: "The artist looks pleased.",
+        "reluctantly pleased": "The artist seems reluctantly pleased.",
+        delighted: "The artist looks delighted.",
+        frustrated: "The artist seems frustrated.",
+        surprised: "The artist looks surprised.",
+        furious: "The artist is furious.",
+        disappointed: "The artist looks disappointed."
+      };
+      addMessage(`🎭 ${emotions[emotion] || "The artist shows no clear emotion."}`);
     }
 
     function showActionSummary(cashEffect, repChange) {
@@ -1648,7 +1811,7 @@ function unlockContent() {
     }
 
     function startNewDay() {
-      if (gameState.day >= 50) {
+      if (gameState.day >= 30) {
         endGame();
         return;
       }
@@ -1680,12 +1843,16 @@ function unlockContent() {
         if (artist.contractDays < 0) {
           addMessage(`🎤 Contract expired: ${artist.name} has left the label`);
           adjustReputation(-5);
+          generateNews(0, -5, false, artist); // News about artist leaving
         } else {
           const totalEquipmentQuality = gameState.equipment.reduce((sum, item) => sum + item.quality, 0);
           const happinessBoost = Math.floor(totalEquipmentQuality / 10);
           artist.happiness = Math.min(100, artist.happiness + happinessBoost);
           if (artist.contractDays <= 5) {
             addMessage(`⚠️ ${artist.name}'s contract expires in ${artist.contractDays} day${artist.contractDays > 1 ? 's' : ''}! Click to negotiate renewal.`);
+            generateNews(0, 0, false, artist); // News about contract nearing expiration
+          } else if (Math.random() < 0.3) { // 30% chance daily for artist news
+            generateNews(0, 0, false, artist); // Random artist news
           }
         }
       });
@@ -1702,6 +1869,9 @@ function unlockContent() {
         addMessage(`💰 Total daily revenue: E${dailyRevenue.toLocaleString()}`);
         adjustReputation(Math.floor(dailyRevenue / 10000));
       }
+
+      // Generate random rival/market news (20% chance)
+      generateNews();
 
       selectNewScenario();
       showNextScenario();
@@ -1749,8 +1919,9 @@ function unlockContent() {
       }
 
       showActionSummary(cashEffect, repChange);
+      generateNews(cashEffect, repChange, true); // Generate news based on scenario outcome
 
-      if (gameState.day > 50) {
+      if (gameState.day > 30) {
         endGame();
       } else {
         startNewDay();
@@ -1759,7 +1930,7 @@ function unlockContent() {
     }
 
     function endGame() {
-      addMessage("🏁 Game Over: You've reached the end of 50 days!");
+      addMessage("🏁 Game Over: You've reached the end of 30 days!");
       addMessage(`Final Cash: E${gameState.cash.toLocaleString()}`);
       addMessage(`Final Reputation: ${gameState.reputation}`);
       document.querySelectorAll('.market-item').forEach(item => item.onclick = null);
