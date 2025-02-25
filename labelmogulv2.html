@@ -1970,4 +1970,9 @@ initializeGameState();
 startNewDay();
 updateMarketplaces();
 });
+// Ensure the game initializes when the page loads
+document.addEventListener("DOMContentLoaded", function () {
+    initializeGameState();
+    updateGameDisplay();  // Ensure the UI updates after initialization
+});
 </script>
