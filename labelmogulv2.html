@@ -1,156 +1,171 @@
-<!-- React Component: New UI integrated with required IDs -->
-<script type="text/javascript">
-  // For this example we create simple placeholder components for icons.
-  const DollarSign = (props) => React.createElement('span', { ...props }, '$');
-  const Calendar = (props) => React.createElement('span', { ...props }, '📅');
-  const Award = (props) => React.createElement('span', { ...props }, '🏆');
-  const Music = (props) => React.createElement('span', { ...props }, '🎵');
-  const Users = (props) => React.createElement('span', { ...props }, '👥');
-  const BarChart2 = (props) => React.createElement('span', { ...props }, '📊');
-  const Settings = (props) => React.createElement('span', { ...props }, '⚙️');
-  const Star = (props) => React.createElement('span', { ...props }, '⭐');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Label Mogul Redesign</title>
+  <!-- Suppress favicon 404 error -->
+  <link rel="icon" href="data:,">
+  <!-- Include React and ReactDOM libraries -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</head>
+<body>
+  <!-- Root element for React rendering -->
+  <div id="root"></div>
 
-  function LabelMogulRedesign() {
-    return (
-      React.createElement('div', { className: "flex flex-col h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans" },
-        // Status Bar – includes elements with required IDs for cash, day, and reputation.
-        React.createElement('div', { className: "bg-gray-800 p-3 shadow-lg border-b border-gray-700" },
-          React.createElement('div', { className: "flex justify-between items-center" },
-            React.createElement('div', { className: "flex space-x-4" },
-              React.createElement('div', { className: "flex items-center bg-gray-700 px-3 py-1 rounded-lg" },
-                React.createElement(DollarSign, { size: 18, className: "text-yellow-400 mr-1" }),
-                React.createElement('span', { id: "cash", className: "font-bold" }, "E150,000")
+  <!-- React Component: New UI integrated with required IDs -->
+  <script type="text/javascript">
+    // Placeholder components for icons
+    const DollarSign = (props) => React.createElement('span', { ...props }, '$');
+    const Calendar = (props) => React.createElement('span', { ...props }, '📅');
+    const Award = (props) => React.createElement('span', { ...props }, '🏆');
+    const Music = (props) => React.createElement('span', { ...props }, '🎵');
+    const Users = (props) => React.createElement('span', { ...props }, '👥');
+    const BarChart2 = (props) => React.createElement('span', { ...props }, '📊');
+    const Settings = (props) => React.createElement('span', { ...props }, '⚙️');
+    const Star = (props) => React.createElement('span', { ...props }, '⭐');
+
+    function LabelMogulRedesign() {
+      return (
+        React.createElement('div', { className: "flex flex-col h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans" },
+          // Status Bar
+          React.createElement('div', { className: "bg-gray-800 p-3 shadow-lg border-b border-gray-700" },
+            React.createElement('div', { className: "flex justify-between items-center" },
+              React.createElement('div', { className: "flex space-x-4" },
+                React.createElement('div', { className: "flex items-center bg-gray-700 px-3 py-1 rounded-lg" },
+                  React.createElement(DollarSign, { size: 18, className: "text-yellow-400 mr-1" }),
+                  React.createElement('span', { id: "cash", className: "font-bold" }, "E150,000")
+                ),
+                React.createElement('div', { className: "flex items-center bg-gray-700 px-3 py-1 rounded-lg" },
+                  React.createElement(Calendar, { size: 18, className: "text-blue-400 mr-1" }),
+                  React.createElement('span', { id: "day" }, "Day: 1/50")
+                )
               ),
               React.createElement('div', { className: "flex items-center bg-gray-700 px-3 py-1 rounded-lg" },
-                React.createElement(Calendar, { size: 18, className: "text-blue-400 mr-1" }),
-                React.createElement('span', { id: "day" }, "Day: 1/50")
+                React.createElement(Award, { size: 18, className: "text-yellow-500 mr-1" }),
+                React.createElement('span', { id: "reputation-points" }, "30"),
+                React.createElement('span', { id: "reputation-level", style: { display: "none" } }, "Basic"),
+                React.createElement('div', { className: "ml-2 w-16 bg-gray-600 rounded-full h-2" },
+                  React.createElement('div', { className: "bg-gradient-to-r from-yellow-500 to-yellow-300 h-2 rounded-full w-3/4" })
+                )
               )
-            ),
-            React.createElement('div', { className: "flex items-center bg-gray-700 px-3 py-1 rounded-lg" },
-              React.createElement(Award, { size: 18, className: "text-yellow-500 mr-1" }),
-              React.createElement('span', { id: "reputation-points" }, "30"),
-              React.createElement('span', { id: "reputation-level", style: {display:"none"} }, "Basic"),
-              React.createElement('div', { className: "ml-2 w-16 bg-gray-600 rounded-full h-2" },
-                React.createElement('div', { className: "bg-gradient-to-r from-yellow-500 to-yellow-300 h-2 rounded-full w-3/4" })
-              )
-            )
-          )
-        ),
-        // Main Game Container – now split into a main panel and a side panel.
-        React.createElement('div', { className: "flex flex-1" },
-          // Main Panel – includes log, scenario, and marketplace sections.
-          React.createElement('div', { className: "main-panel flex-1 p-4" },
-            React.createElement('div', { id: "log-container", className: "mb-4 bg-black rounded-xl p-4 shadow-lg border border-green-500 text-green-400" },
-              React.createElement('p', null, "▶ Welcome! You are now officially the Swazi Jive Records President"),
-              React.createElement('p', null, "▶ Sakhile expects you to get the record label back to the top!"),
-              React.createElement('p', null, "▶ You have 50 days to make your impression in the industry!"),
-              React.createElement('p', null, "▶ Start building your music empire, increase your reputation to unlock more content!")
-            ),
-            React.createElement('div', { id: "scenario-container" }),
-            React.createElement('div', { className: "marketplace-container grid grid-cols-2 gap-4 mt-4" },
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3 text-blue-400" }, "Shows"),
-                React.createElement('div', { id: "shows-market" })
-              ),
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3 text-yellow-400" }, "Deals"),
-                React.createElement('div', { id: "deals-market" })
-              ),
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3 text-purple-400" }, "Artists Market"),
-                React.createElement('div', { id: "artists-market" })
-              ),
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3 text-blue-300" }, "Equipment"),
-                React.createElement('div', { id: "equipment-market" })
-              ),
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Training"),
-                React.createElement('div', { id: "training-market" })
-              ),
-              React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
-                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Marketing"),
-                React.createElement('div', { id: "marketing-market" })
-              )
-            ),
-            React.createElement('div', { className: "info-box mt-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
-              React.createElement('h3', { className: "font-bold text-lg mb-3" }, "News Updates"),
-              React.createElement('div', { id: "news-updates", className: "scroll-box" })
             )
           ),
-          // Side Panel – includes Artists, Inventory, and Staff lists.
-          React.createElement('div', { className: "side-panel w-1/3 p-4" },
-            React.createElement('div', { className: "info-box mb-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
-              React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Artists"),
-              React.createElement('div', { id: "artist-roster", className: "scroll-box", style: {height:"300px"} })
+          // Main Game Container
+          React.createElement('div', { className: "flex flex-1" },
+            // Main Panel
+            React.createElement('div', { className: "main-panel flex-1 p-4" },
+              React.createElement('div', { id: "log-container", className: "mb-4 bg-black rounded-xl p-4 shadow-lg border border-green-500 text-green-400" },
+                React.createElement('p', null, "▶ Welcome! You are now officially the Swazi Jive Records President"),
+                React.createElement('p', null, "▶ Sakhile expects you to get the record label back to the top!"),
+                React.createElement('p', null, "▶ You have 50 days to make your impression in the industry!"),
+                React.createElement('p', null, "▶ Start building your music empire, increase your reputation to unlock more content!")
+              ),
+              React.createElement('div', { id: "scenario-container" }),
+              React.createElement('div', { className: "marketplace-container grid grid-cols-2 gap-4 mt-4" },
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3 text-blue-400" }, "Shows"),
+                  React.createElement('div', { id: "shows-market" })
+                ),
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3 text-yellow-400" }, "Deals"),
+                  React.createElement('div', { id: "deals-market" })
+                ),
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3 text-purple-400" }, "Artists Market"),
+                  React.createElement('div', { id: "artists-market" })
+                ),
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3 text-blue-300" }, "Equipment"),
+                  React.createElement('div', { id: "equipment-market" })
+                ),
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Training"),
+                  React.createElement('div', { id: "training-market" })
+                ),
+                React.createElement('div', { className: "marketplace-section p-4 bg-gray-800 rounded-xl shadow-lg border border-gray-700" },
+                  React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Marketing"),
+                  React.createElement('div', { id: "marketing-market" })
+                )
+              ),
+              React.createElement('div', { className: "info-box mt-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
+                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "News Updates"),
+                React.createElement('div', { id: "news-updates", className: "scroll-box" })
+              )
             ),
-            React.createElement('div', { className: "info-box mb-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
-              React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Inventory"),
-              React.createElement('div', { id: "inventory-list", className: "scroll-box", style: {height:"300px"} })
-            ),
-            React.createElement('div', { className: "info-box bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
-              React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Staff"),
-              React.createElement('div', { id: "staff-list", className: "scroll-box", style: {height:"300px"} })
+            // Side Panel
+            React.createElement('div', { className: "side-panel w-1/3 p-4" },
+              React.createElement('div', { className: "info-box mb-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
+                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Artists"),
+                React.createElement('div', { id: "artist-roster", className: "scroll-box", style: { height: "300px" } })
+              ),
+              React.createElement('div', { className: "info-box mb-4 bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
+                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Inventory"),
+                React.createElement('div', { id: "inventory-list", className: "scroll-box", style: { height: "300px" } })
+              ),
+              React.createElement('div', { className: "info-box bg-gray-800 rounded-xl p-4 shadow-lg border border-gray-700" },
+                React.createElement('h3', { className: "font-bold text-lg mb-3" }, "Staff"),
+                React.createElement('div', { id: "staff-list", className: "scroll-box", style: { height: "300px" } })
+              )
             )
-          )
-        ),
-        // Bottom Navigation – styled similarly to the new design.
-        React.createElement('div', { className: "bg-gray-800 p-2 border-t border-gray-700 shadow-lg" },
-          React.createElement('div', { className: "flex justify-between items-center px-4" },
-            React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
-              React.createElement(Users, { size: 24 })
-            ),
-            React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
-              React.createElement(Music, { size: 24 })
-            ),
-            React.createElement('div', { className: "bg-gradient-to-r from-purple-600 to-blue-600 p-3 rounded-full shadow-lg -mt-6" },
-              React.createElement(Star, { size: 24 })
-            ),
-            React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
-              React.createElement(BarChart2, { size: 24 })
-            ),
-            React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
-              React.createElement(Settings, { size: 24 })
+          ),
+          // Bottom Navigation
+          React.createElement('div', { className: "bg-gray-800 p-2 border-t border-gray-700 shadow-lg" },
+            React.createElement('div', { className: "flex justify-between items-center px-4" },
+              React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
+                React.createElement(Users, { size: 24 })
+              ),
+              React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
+                React.createElement(Music, { size: 24 })
+              ),
+              React.createElement('div', { className: "bg-gradient-to-r from-purple-600 to-blue-600 p-3 rounded-full shadow-lg -mt-6" },
+                React.createElement(Star, { size: 24 })
+              ),
+              React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
+                React.createElement(BarChart2, { size: 24 })
+              ),
+              React.createElement('button', { className: "text-gray-400 hover:text-white transition-colors" },
+                React.createElement(Settings, { size: 24 })
+              )
             )
-          )
-        ),
-        // Hidden Negotiation Container – preserved for game logic.
-        React.createElement('div', { id: "negotiation-container", className: "fixed inset-0 flex justify-center items-center bg-black bg-opacity-50", style: { display: "none" } },
-          React.createElement('div', { className: "negotiation-box bg-white p-4 rounded" },
-            React.createElement('h3', null, "Negotiate with ", React.createElement('span', { id: "negotiation-artist-name" })),
-            React.createElement('p', null, "Artist's Mood: ", React.createElement('span', { id: "artist-mood" })),
-            React.createElement('p', null, "Artist's Demand: E", React.createElement('span', { id: "artist-demand" })),
-            React.createElement('p', null, "Your Offer: E", React.createElement('span', { id: "your-offer" })),
-            // Buttons would call the original negotiation functions
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* acceptDemand() */} }, "Confirm"),
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* offerLess() */} }, "Offer Less"),
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* offerMore() */} }, "Offer More"),
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* declineOffer() */} }, "Decline"),
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* bluff() */} }, "Bluff"),
-            React.createElement('button', { className: "negotiation-btn", onClick: () => {/* closeNegotiation() */} }, "Close")
-          )
-        ),
-        // Hidden Staff Advice Container – preserved for game logic.
-        React.createElement('div', { id: "staff-advice-container", className: "fixed inset-0 flex justify-center items-center bg-black bg-opacity-50", style: { display: "none" } },
-          React.createElement('div', { className: "staff-advice-box bg-white p-4 rounded" },
-            React.createElement('h3', null, "Staff Advice from ", React.createElement('span', { id: "staff-member-name" })),
-            React.createElement('p', { id: "staff-advice-content" }, "Advice content..."),
-            React.createElement('button', { className: "decision-btn", onClick: () => {/* closeStaffAdvice() */} }, "Close")
+          ),
+          // Hidden Negotiation Container
+          React.createElement('div', { id: "negotiation-container", className: "fixed inset-0 flex justify-center items-center bg-black bg-opacity-50", style: { display: "none" } },
+            React.createElement('div', { className: "negotiation-box bg-white p-4 rounded" },
+              React.createElement('h3', null, "Negotiate with ", React.createElement('span', { id: "negotiation-artist-name" })),
+              React.createElement('p', null, "Artist's Mood: ", React.createElement('span', { id: "artist-mood" })),
+              React.createElement('p', null, "Artist's Demand: E", React.createElement('span', { id: "artist-demand" })),
+              React.createElement('p', null, "Your Offer: E", React.createElement('span', { id: "your-offer" })),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { acceptDemand() } }, "Confirm"),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { offerLess() } }, "Offer Less"),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { offerMore() } }, "Offer More"),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { declineOffer() } }, "Decline"),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { bluff() } }, "Bluff"),
+              React.createElement('button', { className: "negotiation-btn", onClick: () => { closeNegotiation() } }, "Close")
+            )
+          ),
+          // Hidden Staff Advice Container
+          React.createElement('div', { id: "staff-advice-container", className: "fixed inset-0 flex justify-center items-center bg-black bg-opacity-50", style: { display: "none" } },
+            React.createElement('div', { className: "staff-advice-box bg-white p-4 rounded" },
+              React.createElement('h3', null, "Staff Advice from ", React.createElement('span', { id: "staff-member-name" })),
+              React.createElement('p', { id: "staff-advice-content" }, "Advice content..."),
+              React.createElement('button', { className: "decision-btn", onClick: () => { closeStaffAdvice() } }, "Close")
+            )
           )
         )
-      )
-    );
-  }
+      );
+    }
 
-  ReactDOM.render(React.createElement(LabelMogulRedesign), document.getElementById('root'));
-</script>
+    ReactDOM.render(React.createElement(LabelMogulRedesign), document.getElementById('root'));
+  </script>
 
-<!-- Original Game Logic Script (unchanged) --><script>
-let gameState;
-let marketData;
-let currentNegotiationArtist = null;
-let currentOffer = 0;
-// List of 52 unique scenarios
+  <!-- Original Game Logic Script (unchanged) -->
+  <script>
+    let gameState;
+    let marketData;
+    let currentNegotiationArtist = null;
+    let currentOffer = 0;
 const allScenarios = [
 {
 question: "A social media influencer promotes your artist:",
