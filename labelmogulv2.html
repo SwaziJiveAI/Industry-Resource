@@ -1173,7 +1173,7 @@
     }
     function adjustArtistPopularity(amount) {
       gameState.artists.forEach(artist => {
-        artist.popularity = Math.max(0, artist.popularity + amount));
+        artist.popularity = Math.max(0, artist.popularity + amount);
       });
     }
     const baseMarketData = {
