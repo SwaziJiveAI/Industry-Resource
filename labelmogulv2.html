@@ -331,13 +331,12 @@ adjustReputation(30); return 60000; } },
 ]
 },
 {
-question: "Your artist is invited to an international music conference.",
-options: [
-50000; } },
-{ text: "Attend and network (Cost E40k)", effect: () => { adjustReputation(40); return
-{ text: "Send a representative", effect: () => { adjustReputation(20); return -20000; } },
-{ text: "Decline the invitation", effect: () => { adjustReputation(-25); return -15000; } }
-]
+  question: "Your artist is invited to an international music conference.",
+  options: [
+    { text: "Attend and network (Cost E40k)", effect: () => { adjustReputation(40); return 50000; } },
+    { text: "Send a representative", effect: () => { adjustReputation(20); return -20000; } },
+    { text: "Decline the invitation", effect: () => { adjustReputation(-25); return -15000; } }
+  ]
 },
 {
 question: "A new trend in music production emerges.",
