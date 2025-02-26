@@ -1639,6 +1639,7 @@ function unlockContent() {
       const newsContainer = document.getElementById('news-updates');
   // Combine existing market news with predictions and gossip
   const allNews = [...marketNews, ...marketPredictions, ...artistGossip];
+      setInterval(updateNewsDisplay, 10000); // updates every 10 seconds
     }
 
     function generateNews(cashEffect = 0, repChange = 0, isScenario = false, artist = null) {
