@@ -1636,6 +1636,9 @@ function unlockContent() {
       newsDiv.innerHTML = gameState.newsUpdates ? gameState.newsUpdates.map(update => `
         <div class="news-item">${update}</div>
       `).join('') : '';
+      const newsContainer = document.getElementById('news-updates');
+  // Combine existing market news with predictions and gossip
+  const allNews = [...marketNews, ...marketPredictions, ...artistGossip];
     }
 
     function generateNews(cashEffect = 0, repChange = 0, isScenario = false, artist = null) {
@@ -1651,6 +1654,16 @@ function unlockContent() {
           news = `Entertainment News: Swazi Jive Records makes a neutral decision, with reputation unchanged at ${gameState.reputation}!`;
         }
       } else if (artist) {
+        const marketPredictions = [
+  "Prediction: Streaming trends indicate a surge in electronic music popularity.",
+  "Forecast: Vinyl sales are expected to spike, boosting revenue for classic genres.",
+  "Outlook: Upcoming tech advances may lower production costs significantly."
+];
+        const artistGossip = [
+  "Rumor: 'Electric Echo' is reportedly in talks for a secret collaboration.",
+  "Gossip: Sources say 'Rock Legend' might be negotiating with a rival label.",
+  "Hot Tip: 'Soul Serenade' is rumored to be planning a surprise album drop."
+];
         const popularityThreshold = artist.popularity > 50 ? "skyrockets" : "grows";
         const happinessThreshold = artist.happiness > 70 ? "thrilled" : artist.happiness < 30 ? "unhappy" : "content";
         const contractStatus = artist.contractDays <= 5 ? `with only ${artist.contractDays} days left on their contract!` : "under a solid contract.";
