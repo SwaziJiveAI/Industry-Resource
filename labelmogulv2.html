@@ -2,74 +2,54 @@
 <html>
 <head>
   <title>eSwatini Music Mogul</title>
-   <link rel="stylesheet" href="mordenmogul.css">
+  <style>
+     <link rel="stylesheet" href="mordenmogul.css">
+  </style>
 </head>
-  <div class="header-bar">
-    <a href="#">Label Mogul - Music Industry Simulation</a>
-</div>
 <body>
-<div class="stats-container">
-<div class="stat-item">
-        <span>💰 Cash: <span id="cash">€150,000</span></span>
-    </div>
-    <div class="stat-item">
-        <span>📅 Day: <span id="day">1</span>/<span id="max-days">50</span></span>
-    </div>
-    <div class="stat-item">
-        <span>⭐ Reputation: <span id="reputation">30</span></span>
-        <div class="progress-bar">
-            <div class="progress-fill" id="reputation-bar" style="width: 30%;"></div>
-        </div>
-    </div>
-</div>
+  <div class="status-bar">
+    <div>💰 Cash: <span id="cash">E150,000</span></div>
+    <div>📅 Day: <span id="day">1</span>/50</div>
+    <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
+  </div>
 
-
-
-  <div class="welcome-container">
+  <div class="game-container">
     <div class="main-panel">
       <div id="log-container">
-        <div class="welcome-message">
+        <div class="scenario-box">
           ▶️ Welcome! You are now officially the Swazi Jive Records President<br>
           ▶️ Sakhile expects you to get the record label back to the top!<br>
           ▶️ You have 50 days above to make your impression in the industry!<br>
           ▶️ Start building your music empire, increase your reputation to unlock more content!
         </div>
       </div>
-      <div class="event-container" id="event-section">
-    <div class="event-title" id="event-title">A rival poaches your top producer.</div>
-    <div class="event-options">
-        <!-- Keep your original button elements but add class="button" to each -->
-        <button class="button" id="option1" onclick="handleEvent('option1')">Hire a better replacement</button>
-        <button class="button" id="option2" onclick="handleEvent('option2')">Sue for breach of contract</button>
-        <button class="button" id="option3" onclick="handleEvent('option3')">Let it go</button>
-    </div>
-</div>
+      <div id="scenario-container"></div>
   
-     <div class="game-grid">
+      <div class="marketplace-container">
         
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>🎭 Shows</h3>
-          <div id="shows-market" class="section-title"></div>
+          <div id="shows-market" class="market-scroll"></div>
         </div>
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>📝 Deals</h3>
-          <div id="deals-market" class="section-title"></div>
+          <div id="deals-market" class="market-scroll"></div>
         </div>
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>🎤 Artists Market</h3>
-          <div id="artists-market" class="section-title"></div>
+          <div id="artists-market" class="market-scroll"></div>
         </div>
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>🎛️ Equipment</h3>
-          <div id="equipment-market" class="section-title"></div>
+          <div id="equipment-market" class="market-scroll"></div>
         </div>
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>📚 Training</h3>
-          <div id="training-market" class="section-title"></div>
+          <div id="training-market" class="market-scroll"></div>
         </div>
-        <div class="grid-section">
+        <div class="marketplace-section">
           <h3>📣 Marketing</h3>
-          <div id="marketing-market" class="section-title"></div>
+          <div id="marketing-market" class="market-scroll"></div>
         </div>
       </div>
        <div class="info-box">
