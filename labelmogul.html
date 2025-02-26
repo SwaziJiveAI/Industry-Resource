@@ -1141,13 +1141,19 @@
 
     ];
 
-    const rivalLabels = ["Eswatini Beats", "Swazi Soundwave", "Mbabane Music Co.", "Lubombo Tunes", "Hlane Harmony"];
+    const rivalLabels = ["Eswatini Top Dogs", "Piggs Peak Soundwave Label", "Manzini Music Co.", "Lubombo Recording Studio", "Hlane Harmony House"];
     const marketNews = [
       "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
       "Market Update: Vinyl sales spike, boosting traditional music popularity!",
       "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
       "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
       "Media Buzz: A new music festival launches, offering high-profile show opportunities!"
+      "Rumor: 'Electric Echo' is reportedly in talks for a secret collaboration."
+  "Gossip: Sources say 'Rock Legend' might be negotiating with a rival label."
+  "Hot Tip: 'Soul Serenade' is rumored to be planning a surprise album drop."
+   "Prediction: Streaming trends indicate a surge in electronic music popularity."
+  "Forecast: Vinyl sales are expected to spike, boosting revenue for classic genres."
+  "Outlook: Upcoming tech advances may lower production costs significantly."
     ];
 
     // ... existing code ...
@@ -1182,18 +1188,29 @@ const artistMoods = [
    // Function that triggers when a staff card is clicked; shows context-sensitive advice
    function showStaffHint(role, morale) {
       let advice = "";
-      if (role.toLowerCase().includes("manager")) {
-        advice = "Manager's Advice: Carefully weigh the costs and benefits of each scenario option before deciding.";
-      } else if (role.toLowerCase().includes("publicist")) {
-        advice = "Publicist's Advice: Stay updated with market news and trends—shifts in streaming can influence your strategy.";
-      } else {
-        advice = "Staff Advice: Monitor team morale to ensure their advice is effective.";
-      }
-      if (morale >= 70) {
-        advice += " High morale boosts their effectiveness!";
-      } else if (morale <= 30) {
-        advice += " Consider improving staff morale to enhance their impact.";
-      }
+    if (role.toLowerCase().includes("manager")) {
+      advice = morale > 70 
+        ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
+        : "We should be cautious with our spending and focus on rebuilding our reputation.";
+    } else if (role.toLowerCase().includes("publicist")) {
+      advice = morale > 70
+        ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
+        : "We need to focus on damage control and rebuilding our public image.";
+    } else if (role.toLowerCase().includes("producer")) {
+      advice = morale > 70 
+        ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+        : "We might need to stick with proven formulas until the team's confidence improves.";
+    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("a&r")) {
+      advice = morale > 70
+        ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
+        : "Focus on nurturing our current artists before expanding our talent pool.";
+    } else {
+      advice = "Keep up the great work and adapt as challenges arise.";
+    }
+    
+    if (morale < 30) {
+      advice += " (Note: Low staff morale may affect advice quality)";
+    }
       document.getElementById('staff-hint').textContent = advice;
     }
     function getCurrentReputationLevel() {
