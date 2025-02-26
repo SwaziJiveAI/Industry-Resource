@@ -204,22 +204,6 @@ body {
   color: var(--accent);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .game-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .event-options {
-    flex-direction: column;
-  }
-  
-  .stats-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-}
 
 /* Animations */
 @keyframes pulse {
@@ -426,7 +410,7 @@ body {
   </style>
 </head>
 <body>
-  <div class="status-bar">
+  <div class="stats-container">
     <div>💰 Cash: <span id="cash">E150,000</span></div>
     <div>📅 Day: <span id="day">1</span>/50</div>
     <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
@@ -442,7 +426,7 @@ body {
           ▶️ Start building your music empire, increase your reputation to unlock more content!
         </div>
       </div>
-      <div id="scenario-container"></div>
+      <div id="event-container"></div>
   
       <div class="marketplace-container">
         
