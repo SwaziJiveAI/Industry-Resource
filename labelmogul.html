@@ -1622,26 +1622,36 @@ function unlockContent() {
       container.style.display = 'flex';
       
       // Update with actual advice after a delay
-      setTimeout(() => {
-        let advice = "";
-        if (role.toLowerCase().includes("manager")) {
-          advice = morale > 70 
-            ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
-            : "We should be cautious with our spending and focus on rebuilding our reputation.";
-        } else if (role.toLowerCase().includes("publicist")) {
-          advice = morale > 70
-            ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
-            : "We need to focus on damage control and rebuilding our public image.";
-        }
-        
-        if (morale < 30) {
-          advice += " (Note: Low staff morale may affect advice quality)";
-        }
-        
-        document.getElementById('staff-advice-content').textContent = advice;
-      }, 1000);
+      
+  setTimeout(() => {
+    let advice = "";
+    if (role.toLowerCase().includes("manager")) {
+      advice = morale > 70 
+        ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
+        : "We should be cautious with our spending and focus on rebuilding our reputation.";
+    } else if (role.toLowerCase().includes("publicist")) {
+      advice = morale > 70
+        ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
+        : "We need to focus on damage control and rebuilding our public image.";
+    } else if (role.toLowerCase().includes("producer")) {
+      advice = morale > 70 
+        ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+        : "We might need to stick with proven formulas until the team's confidence improves.";
+    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("a&r")) {
+      advice = morale > 70
+        ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
+        : "Focus on nurturing our current artists before expanding our talent pool.";
+    } else {
+      advice = "Keep up the great work and adapt as challenges arise.";
     }
-
+    
+    if (morale < 30) {
+      advice += " (Note: Low staff morale may affect advice quality)";
+    }
+    
+    document.getElementById('staff-advice-content').textContent = advice;
+  }, 1000);
+}
     function closeStaffAdvice() {
       document.getElementById('staff-advice-container').style.display = 'none';
     }
