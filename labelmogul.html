@@ -1199,7 +1199,7 @@ const artistMoods = [
       advice = morale > 70 
         ? "Now is the perfect time to experiment with innovative sounds and production techniques."
         : "We might need to stick with proven formulas until the team's confidence improves.";
-    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("a&r")) {
+    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("scout")) {
       advice = morale > 70
         ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
         : "Focus on nurturing our current artists before expanding our talent pool.";
@@ -1207,8 +1207,8 @@ const artistMoods = [
       advice = "Keep up the great work and adapt as challenges arise.";
     }
     
-    if (morale < 30) {
-      advice += " (Note: Low staff morale may affect advice quality)";
+    if (morale < 51) {
+      advice += " (Note: Low staff morale may affect advice & quality)";
     }
       document.getElementById('staff-hint').textContent = advice;
     }
