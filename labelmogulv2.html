@@ -1,264 +1,17 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>eSwatini Music Mogul</title>
   <style>
-    :root {
-  --primary: #1db954;
-  --primary-dark: #1aa34a;
-  --secondary: #191414;
-  --accent: #ffb300;
-  --text: #ffffff;
-  --bg-dark: #121212;
-  --bg-card: #282828;
-  --bg-light: #333333;
-  --danger: #e91e63;
-  --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* General Styling */
-body {
-  font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
-}
-
-/* Header Bar */
-.header-bar {
-  background-color: var(--secondary);
-  border-bottom: 3px solid var(--primary);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--box-shadow);
-}
-
-.header-bar a {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-/* Stats Bar */
-.stats-container {
-  background-color: var(--bg-light);
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 20px;
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-}
-
-/* Welcome Section */
-.welcome-container {
-  background-color: var(--bg-card);
-  border-radius: var(--border-radius);
-  padding: 20px;
-  margin: 20px;
-  box-shadow: var(--box-shadow);
-}
-
-.welcome-message {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-left: 4px solid var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.warning-message {
-  padding: 10px;
-  margin-top: 15px;
-  background-color: rgba(255, 179, 0, 0.1);
-  border-left: 4px solid var(--accent);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Event Section */
-.event-container {
-  background-color: var(--bg-card);
-  border-radius: var(--border-radius);
-  padding: 20px;
-  margin: 20px;
-  box-shadow: var(--box-shadow);
-}
-
-.event-title {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.event-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.button {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s;
-}
-
-.button:hover {
-  background-color: var(--primary-dark);
-}
-
-/* Game Section Grid */
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin: 20px;
-}
-
-.grid-section {
-  background-color: var(--bg-card);
-  border-radius: var(--border-radius);
-  padding: 20px;
-  box-shadow: var(--box-shadow);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--primary);
-}
-
-/* Item Cards */
-.item-card {
-  background-color: var(--bg-light);
-  border-radius: var(--border-radius);
-  padding: 15px;
-  margin-bottom: 15px;
-  transition: transform 0.2s;
-}
-
-.item-card:hover {
-  transform: translateY(-5px);
-}
-
-.item-title {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
-.item-detail {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-}
-
-.item-detail span {
-  color: #dddddd;
-}
-
-/* Artist Market */
-.artist-genre {
-  display: inline-block;
-  background-color: rgba(29, 185, 84, 0.2);
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-bottom: 8px;
-}
-
-.contract {
-  color: var(--accent);
-}
-
-
-/* Animations */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.warning-message {
-  animation: pulse 2s infinite;
-}
-
-/* Tooltip Styling */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltip-text {
-  visibility: hidden;
-  width: 200px;
-  background-color: var(--secondary);
-  color: var(--text);
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Progress bar for reputation */
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: var(--bg-light);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: var(--primary);
-  border-radius: 5px;
-}
- 
+    body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+    .game-container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; }
+    .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .side-panel { display: flex; flex-direction: column; gap: 20px; }
+    .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .staff-card { 
+      border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; 
+      border-radius: 5px; cursor: pointer; 
+      transition: background 0.2s;
+    }
     .staff-card:hover { background: #e8e8e8; }
     .decision-btn, .new-game-btn {
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
@@ -406,11 +159,10 @@ body {
     }
 
 
-    
   </style>
 </head>
 <body>
-  <div class="stats-container">
+  <div class="status-bar">
     <div>💰 Cash: <span id="cash">E150,000</span></div>
     <div>📅 Day: <span id="day">1</span>/50</div>
     <div>🌟 Reputation: <span id="reputation-points">0</span> (<span id="reputation-level">Basic</span>)</div>
@@ -426,29 +178,29 @@ body {
           ▶️ Start building your music empire, increase your reputation to unlock more content!
         </div>
       </div>
-      <div id="event-container"></div>
+      <div id="scenario-container"></div>
   
-      <div class="game-grid">
+      <div class="marketplace-container">
         
         <div class="marketplace-section">
           <h3>🎭 Shows</h3>
-          <div id="shows-market" class="grid-section"></div>
+          <div id="shows-market" class="market-scroll"></div>
         </div>
         <div class="marketplace-section">
           <h3>📝 Deals</h3>
-          <div id="deals-market" class="grid-section"></div>
+          <div id="deals-market" class="market-scroll"></div>
         </div>
         <div class="marketplace-section">
           <h3>🎤 Artists Market</h3>
-          <div id="artists-market" class="grid-section"></div>
+          <div id="artists-market" class="market-scroll"></div>
         </div>
         <div class="marketplace-section">
           <h3>🎛️ Equipment</h3>
-          <div id="equipment-market" class="grid-section"></div>
+          <div id="equipment-market" class="market-scroll"></div>
         </div>
         <div class="marketplace-section">
           <h3>📚 Training</h3>
-          <div id="training-market" class="grid-section"></div>
+          <div id="training-market" class="market-scroll"></div>
         </div>
         <div class="marketplace-section">
           <h3>📣 Marketing</h3>
@@ -1389,7 +1141,7 @@ body {
 
     ];
 
-    const rivalLabels = ["Eswatini Beats", "Swazi Soundwave", "Mbabane Music Co.", "Lubombo Tunes", "Hlane Harmony"];
+    const rivalLabels = ["Eswatini Top Dogs", "Piggs Peak Soundwave Label", "Manzini Music Co.", "Lubombo Recording Studio", "Hlane Harmony House"];
     const marketNews = [
       "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
       "Market Update: Vinyl sales spike, boosting traditional music popularity!",
@@ -1416,12 +1168,84 @@ const artistMoods = [
         availableScenarios: [...allScenarios],
         currentScenario: null,
         artists: [],
-        staff: [{ role: "Manager", morale: 50 }, { role: "Publicist", morale: 50 }],
+       staff: [
+  {
+    role: "Manager",
+    morale: 50,
+    salary: 5000,            // Daily salary cost
+    costReduction: 0.05,     // Reduces artist cost by 5%
+    moodBoost: 10,           // Boosts artist mood by 10 points during negotiations
+    reputationMultiplier: 1.1, // Increases reputation gains by 10%
+    skillLevel: 8            // Used for termination penalty calculation
+  },
+  {
+    role: "Publicist",
+    morale: 50,
+    salary: 4500,
+    costReduction: 0.03,
+    moodBoost: 8,
+    reputationMultiplier: 1.05,
+    skillLevel: 6
+  },
+  {
+    role: "Producer",
+    morale: 50,
+    salary: 4800,
+    costReduction: 0.04,
+    moodBoost: 9,
+    reputationMultiplier: 1.07,
+    skillLevel: 7
+  },
+  {
+    role: "Talent Scout",
+    morale: 50,
+    salary: 4200,
+    costReduction: 0.02,
+    moodBoost: 7,
+    reputationMultiplier: 1.03,
+    skillLevel: 5
+  }
+];
         activeDeals: [],
         equipment: []
       };
       updateReputationDisplay();
     }
+
+  // Function to terminate a staff member.
+function terminateStaff(staff, remainingDays) {
+  // Calculate termination cost based on remaining contract days.
+  let terminationCost = staff.salary * remainingDays;
+  gameState.cash = Math.max(0, gameState.cash - terminationCost);
+  
+  // Apply reputation penalty: 10% if high skill, otherwise 5%.
+  let repPenaltyPercent = (staff.skillLevel >= 8) ? 10 : 5;
+  let repPenalty = gameState.reputation * (repPenaltyPercent / 100);
+  gameState.reputation = Math.max(0, gameState.reputation - repPenalty);
+  
+  // Remove the staff member from the game state.
+  gameState.staff = gameState.staff.filter(s => s !== staff);
+  
+  addMessage(`Terminated ${staff.role}. Deducted E${terminationCost.toLocaleString()} and reputation decreased by ${repPenaltyPercent}%.`);
+  updateGameDisplay();
+}
+
+// Helper function to confirm termination from the UI.
+// (Assumes staff roles are unique; if not, consider adding an 'id' property.)
+function confirmTerminateStaff(role) {
+  let staff = gameState.staff.find(s => s.role === role);
+  if (staff) {
+    let input = prompt(`Enter remaining contract days for ${staff.role}:`, "10");
+    let remainingDays = parseInt(input);
+    if (!isNaN(remainingDays) && remainingDays > 0) {
+      if (confirm(`Terminating ${staff.role} will cost E${(staff.salary * remainingDays).toLocaleString()} and reduce reputation by ${(staff.skillLevel >= 8) ? '10%' : '5%'}. Proceed?`)) {
+        terminateStaff(staff, remainingDays);
+      }
+    } else {
+      alert("Invalid input for remaining days.");
+    }
+  }
+}
 
     function adjustReputation(amount) {
       gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
@@ -1430,18 +1254,29 @@ const artistMoods = [
    // Function that triggers when a staff card is clicked; shows context-sensitive advice
    function showStaffHint(role, morale) {
       let advice = "";
-      if (role.toLowerCase().includes("manager")) {
-        advice = "Manager's Advice: Carefully weigh the costs and benefits of each scenario option before deciding.";
-      } else if (role.toLowerCase().includes("publicist")) {
-        advice = "Publicist's Advice: Stay updated with market news and trends—shifts in streaming can influence your strategy.";
-      } else {
-        advice = "Staff Advice: Monitor team morale to ensure their advice is effective.";
-      }
-      if (morale >= 70) {
-        advice += " High morale boosts their effectiveness!";
-      } else if (morale <= 30) {
-        advice += " Consider improving staff morale to enhance their impact.";
-      }
+    if (role.toLowerCase().includes("manager")) {
+      advice = morale > 70 
+        ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
+        : "We should be cautious with our spending and focus on rebuilding our reputation.";
+    } else if (role.toLowerCase().includes("publicist")) {
+      advice = morale > 70
+        ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
+        : "We need to focus on damage control and rebuilding our public image.";
+    } else if (role.toLowerCase().includes("producer")) {
+      advice = morale > 70 
+        ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+        : "We might need to stick with proven formulas until the team's confidence improves.";
+    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("scout")) {
+      advice = morale > 70
+        ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
+        : "Focus on nurturing our current artists before expanding our talent pool.";
+    } else {
+      advice = "Keep up the great work and adapt as challenges arise.";
+    }
+    
+    if (morale < 51) {
+      advice += " (Note: Low staff morale may affect advice & quality)";
+    }
       document.getElementById('staff-hint').textContent = advice;
     }
     function getCurrentReputationLevel() {
@@ -1491,12 +1326,14 @@ const artistMoods = [
           📅 Contract: ${artist.contractDays} days
         </div>
       `).join('');
-      document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
-        <div class="staff-card" onclick="showStaffAdvice('${staff.role}', ${staff.morale})">
-          <strong>${staff.role}</strong><br>
-          😊 Morale: ${staff.morale}%
-        </div>
-      `).join('');
+     document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
+  <div class="staff-card">
+    <strong>${staff.role}</strong><br>
+    😊 Morale: ${staff.morale}%<br>
+    💸 Salary: E${staff.salary}/day<br>
+    <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
+  </div>
+`).join('');
       document.getElementById('inventory-list').innerHTML = [
         ...gameState.equipment.map(item => `
           <div class="market-item">
@@ -1533,6 +1370,167 @@ const artistMoods = [
         artist.popularity = Math.max(0, artist.popularity + amount);
       });
     }
+  // Function to generate a news event for recruiting staff.
+function generateStaffRecruitmentNews() {
+  let newsHeadline = "Top Staff Looking for Jobs – Click to view candidates!";
+  let newsContainer = document.getElementById('news-updates');
+  let newsItem = document.createElement('div');
+  newsItem.className = 'news-item';
+  newsItem.textContent = newsHeadline;
+  newsItem.style.cursor = 'pointer';
+  newsItem.onclick = function() {
+    openStaffRecruitmentInterface();
+  };
+  newsContainer.appendChild(newsItem);
+}
+
+// Function to open a recruitment interface.
+// This example uses a simple confirmation prompt. In a full implementation, you might open a modal.
+function openStaffRecruitmentInterface() {
+  // Example candidate; in a real game, this could be randomized or chosen from a list.
+  let candidate = [
+  {
+    role: "A&R Specialist",
+    morale: 50,
+    salary: 4800,
+    costReduction: 0.04,
+    moodBoost: 12,
+    reputationMultiplier: 1.08,
+    skillLevel: 7
+  },
+  {
+    role: "Senior Producer",
+    morale: 55,
+    salary: 5200,
+    costReduction: 0.05,
+    moodBoost: 10,
+    reputationMultiplier: 1.1,
+    skillLevel: 8
+  },
+  {
+    role: "Assistant Manager",
+    morale: 45,
+    salary: 4300,
+    costReduction: 0.03,
+    moodBoost: 8,
+    reputationMultiplier: 1.05,
+    skillLevel: 6
+  },
+  {
+    role: "Operations Manager",
+    morale: 50,
+    salary: 5000,
+    costReduction: 0.02,
+    moodBoost: 9,
+    reputationMultiplier: 1.07,
+    skillLevel: 7
+  },
+  {
+    role: "Talent Scout",
+    morale: 60,
+    salary: 4000,
+    costReduction: 0.02,
+    moodBoost: 7,
+    reputationMultiplier: 1.03,
+    skillLevel: 5
+  },
+  {
+    role: "Marketing Manager",
+    morale: 55,
+    salary: 5100,
+    costReduction: 0.04,
+    moodBoost: 11,
+    reputationMultiplier: 1.09,
+    skillLevel: 7
+  },
+  {
+    role: "Production Assistant",
+    morale: 40,
+    salary: 3800,
+    costReduction: 0.01,
+    moodBoost: 6,
+    reputationMultiplier: 1.02,
+    skillLevel: 4
+  },
+  {
+    role: "Executive Producer",
+    morale: 65,
+    salary: 6000,
+    costReduction: 0.06,
+    moodBoost: 15,
+    reputationMultiplier: 1.15,
+    skillLevel: 9
+  },
+  {
+    role: "Digital Strategist",
+    morale: 50,
+    salary: 4700,
+    costReduction: 0.03,
+    moodBoost: 10,
+    reputationMultiplier: 1.08,
+    skillLevel: 7
+  },
+  {
+    role: "Event Coordinator",
+    morale: 45,
+    salary: 4200,
+    costReduction: 0.02,
+    moodBoost: 9,
+    reputationMultiplier: 1.06,
+    skillLevel: 6
+  },
+  {
+    role: "Creative Director",
+    morale: 60,
+    salary: 5500,
+    costReduction: 0.05,
+    moodBoost: 12,
+    reputationMultiplier: 1.12,
+    skillLevel: 8
+  },
+  {
+    role: "Financial Manager",
+    morale: 50,
+    salary: 5300,
+    costReduction: 0.03,
+    moodBoost: 8,
+    reputationMultiplier: 1.07,
+    skillLevel: 7
+  },
+  {
+    role: "Artist Liaison",
+    morale: 55,
+    salary: 4900,
+    costReduction: 0.04,
+    moodBoost: 11,
+    reputationMultiplier: 1.1,
+    skillLevel: 7
+  },
+  {
+    role: "Studio Manager",
+    morale: 50,
+    salary: 5200,
+    costReduction: 0.04,
+    moodBoost: 10,
+    reputationMultiplier: 1.08,
+    skillLevel: 7
+  },
+  {
+    role: "Public Relations Coordinator",
+    morale: 48,
+    salary: 4600,
+    costReduction: 0.03,
+    moodBoost: 10,
+    reputationMultiplier: 1.06,
+    skillLevel: 6
+  }
+];
+  if (confirm(`Hire new staff: ${candidate.role} with salary E${candidate.salary} and unique abilities?`)) {
+    gameState.staff.push(candidate);
+    addMessage(`Hired new staff: ${candidate.role}`);
+    updateGameDisplay();
+  }
+}
 
     const baseMarketData = {
       shows: [
@@ -1599,98 +1597,139 @@ marketing: [
 ]
     };
 
-    const unlockableContent = {
-  2: { 
-      newArtists: [
-        { name: "Emerging Star", genre: "Pop", baseCost: 50000, popularity: 240, contractCost: 70000 },
-        { name: "Electric Echo", genre: "Electronic", baseCost: 60000, popularity: 55, contractCost: 6500 },
-  { name: "Soul Serenade", genre: "Soul", baseCost: 32000, popularity: 38, contractCost: 5200 },
-  { name: "Rock Legend", genre: "Rock", baseCost: 70000, popularity: 80, contractCost: 7500 },
-  { name: "Country Roads", genre: "Country", baseCost: 28000, popularity: 32, contractCost: 4500 },
-  { name: "Rhythm Rebellion", genre: "Reggae", baseCost: 40000, popularity: 50, contractCost: 5800 },
-  { name: "Indie Icon", genre: "Indie", baseCost: 45000, popularity: 60, contractCost: 6200 },
-  { name: "R&B Royalty", genre: "R&B", baseCost: 50000, popularity: 70, contractCost: 6800 },
-  { name: "Latin Flame", genre: "Latin", baseCost: 42000, popularity: 48, contractCost: 5600 },
-  { name: "Alternative Visionary", genre: "Alternative", baseCost: 37000, popularity: 42, contractCost: 5300 },
-        { name: "The Dreamers", genre: "Indie Rock", baseCost: 65000, popularity: 290, contractCost: 50000 },
-        { name: "Harmony Heights", genre: "Pop", baseCost: 95000, popularity: 365, contractCost: 75000 },
-        { name: "Rock Legends", genre: "Rock", baseCost: 170000, popularity: 465, contractCost: 110000 },
-        { name: "Soulful Serenades", genre: "R&B", baseCost: 320000, popularity: 500, contractCost: 150000 }
-      ]
-      
-    },
-    
-    
-  3: { 
-      newDeals: [
-        { name: "Global Sponsorship", baseCost: 1500000, revenue: 500000, duration: 10 },
-        { name: "Online Streaming Deal", baseCost: 1000000, revenue: 400000, duration: 12 },
-        { name: "Live Concert Tour Sponsorship", baseCost: 2000000, revenue: 600000, duration: 6 },
-        { name: "Merch Collaboration", baseCost: 800000, revenue: 300000, duration: 8 },
-        { name: "Global Marketing Campaign", baseCost: 1800000, revenue: 550000, duration: 9 }
-      ]
-
-
-      
-    },
-  4: { 
-      newEquipment: [
-        { name: "Advanced Sound System", baseCost: 800000, quality: 40, maintenance: 25000 },
-        { name: "Studio Pro Mic", baseCost: 200000, quality: 30, maintenance: 10000 },
-        { name: "Guitar Amp", baseCost: 12000, quality: 18, maintenance: 600 },
-  { name: "Drum Kit", baseCost: 18000, quality: 22, maintenance: 800 },
-  { name: "Keyboard Synthesizer", baseCost: 22000, quality: 28, maintenance: 900 },
-  { name: "Bass Amplifier", baseCost: 10000, quality: 16, maintenance: 550 },
-  { name: "Acoustic Panels", baseCost: 5000, quality: 12, maintenance: 300 },
-  { name: "DJ Turntable", baseCost: 15000, quality: 20, maintenance: 700 },
-  { name: "Sound Mixer", baseCost: 20000, quality: 23, maintenance: 850 },
-  { name: "Wireless Microphone", baseCost: 9000, quality: 14, maintenance: 450 },
-        { name: "Premium Mixing Desk", baseCost: 1200000, quality: 50, maintenance: 30000 },
-        { name: "Portable Stage Lights", baseCost: 500000, quality: 35, maintenance: 15000 },
-        { name: "Artist Couture Collection", baseCost: 400000, quality: 45, maintenance: 20000 }
-      ]
-    },
-  5: { 
-      newTraining: [
-        { name: "Elite Performance Coaching", baseCost: 600000, skillBoost: 35, duration: 10 },
-        { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
-  { name: "Advanced Production Course", baseCost: 50000, skillBoost: 30, duration: 10 },
-  { name: "Instrument Mastery Program", baseCost: 22000, skillBoost: 19, duration: 4 },
-  { name: "Advanced Vocal Techniques", baseCost: 14000, skillBoost: 17, duration: 3 },
-  { name: "Music Theory Intensive", baseCost: 16000, skillBoost: 20, duration: 5 },
-  { name: "Beat Making Bootcamp", baseCost: 28000, skillBoost: 23, duration: 6 },
-  { name: "Improvisation Lab", baseCost: 13000, skillBoost: 16, duration: 3 },
-  { name: "Sound Engineering Seminar", baseCost: 32000, skillBoost: 27, duration: 8 },
-  { name: "Digital Music Production", baseCost: 40000, skillBoost: 30, duration: 9 },
-  { name: "Live Performance Coaching", baseCost: 26000, skillBoost: 21, duration: 5 },
-  { name: "Song Arrangement Workshop", baseCost: 21000, skillBoost: 19, duration: 4 },
-        { name: "Vocal Technique Workshop", baseCost: 400000, skillBoost: 25, duration: 8 },
-        { name: "Songwriting Masterclass", baseCost: 500000, skillBoost: 30, duration: 12 },
-        { name: "Performance Enhancement Training", baseCost: 700000, skillBoost: 40, duration: 10 },
-        { name: "Instrumental Diversity Course", baseCost: 800000, skillBoost: 45, duration: 15 }
-      ]
-    }
+   // New shuffled and expanded unlockable content
+const unlockableContent = {
+  2: {
+    newArtists: [
+      { name: "Electric Echo", genre: "Electronic", baseCost: 160000, popularity: 155, contractCost: 16500 },
+      { name: "Rock Legend", genre: "Rock", baseCost: 170000, popularity: 180, contractCost: 17500 },
+      { name: "Folk Fusion", genre: "Folk", baseCost: 135000, popularity: 145, contractCost: 15000 } // new
+    ],
+    newDeals: [
+      { name: "Emvasi Streaming Deal", baseCost: 1000000, revenue: 400000, duration: 12 }
+    ],
+    newEquipment: [
+      { name: "Guitar Amp", baseCost: 12000, quality: 18, maintenance: 600 },
+      { name: "Advanced Sound System", baseCost: 800000, quality: 40, maintenance: 25000 }
+    ],
+    newTraining: [
+      { name: "Production Course", baseCost: 30000, skillBoost: 25, duration: 7 },
+      { name: "Advanced Vocal Techniques", baseCost: 14000, skillBoost: 17, duration: 3 },
+      { name: "Social Media Mastery", baseCost: 35000, skillBoost: 22, duration: 5 } // new
+    ]
+  },
+  3: {
+    newArtists: [
+      { name: "Soul Serenade", genre: "Soul", baseCost: 132000, popularity: 138, contractCost: 115200 },
+      { name: "Emerging Star", genre: "Pop", baseCost: 250000, popularity: 240, contractCost: 270000 },
+      { name: "Urban Pulse", genre: "Hip-Hop", baseCost: 155000, popularity: 165, contractCost: 117200 } // new
+    ],
+    newDeals: [
+      { name: "Global Sponsorship", baseCost: 1500000, revenue: 500000, duration: 10 },
+      { name: "Brand Partnership", baseCost: 1100000, revenue: 420000, duration: 8 } // new
+    ],
+    newEquipment: [
+      { name: "LED Backdrop", baseCost: 30000, quality: 20, maintenance: 800 },
+      { name: "Studio Pro Mic", baseCost: 200000, quality: 30, maintenance: 10000 },
+      { name: "Drum Kit", baseCost: 18000, quality: 22, maintenance: 800 }
+    ],
+    newTraining: [
+      { name: "Elite Performance Coaching", baseCost: 600000, skillBoost: 35, duration: 10 },
+      { name: "Instrument Mastery Program", baseCost: 22000, skillBoost: 19, duration: 4 },
+      { name: "Advanced Production Course", baseCost: 50000, skillBoost: 30, duration: 10 },
+      { name: "Music Theory Intensive", baseCost: 16000, skillBoost: 20, duration: 5 }
+    ]
+  },
+  4: {
+    newArtists: [
+      { name: "Indie Icon", genre: "Indie", baseCost: 645000, popularity: 660, contractCost: 666200 },
+      { name: "Country Roads", genre: "Country", baseCost: 828000, popularity: 732, contractCost: 884500 },
+      { name: "R&B Royalty", genre: "R&B", baseCost: 950000, popularity: 870, contractCost: 996800 },
+      { name: "Alternative Visionary", genre: "Alternative", baseCost: 1037000, popularity: 942, contractCost: 1005300 }
+    ],
+    newDeals: [
+      { name: "Merch Collaboration", baseCost: 800000, revenue: 300000, duration: 8 },
+      { name: "Live Concert Tour Sponsorship", baseCost: 2000000, revenue: 600000, duration: 6 }
+    ],
+    newEquipment: [
+      { name: "High-Fidelity Monitor", baseCost: 45000, quality: 25, maintenance: 1200 },
+      { name: "Keyboard Synthesizer", baseCost: 22000, quality: 28, maintenance: 900 },
+      { name: "Bass Amplifier", baseCost: 10000, quality: 16, maintenance: 550 },
+      { name: "Acoustic Panels", baseCost: 5000, quality: 12, maintenance: 300 }
+    ],
+    newTraining: [
+      { name: "Beat Making Bootcamp", baseCost: 28000, skillBoost: 23, duration: 6 },
+      { name: "Improvisation Lab", baseCost: 13000, skillBoost: 16, duration: 3 },
+      { name: "Song Arrangement Workshop", baseCost: 21000, skillBoost: 19, duration: 4 },
+      { name: "Digital Music Production", baseCost: 40000, skillBoost: 30, duration: 9 }
+    ]
+  },
+  5: {
+    newArtists: [
+      { name: "Rhythm Rebellion", genre: "Reggae", baseCost: 1140000, popularity: 1050, contractCost: 115800 },
+      { name: "Latin Flame", genre: "Latin", baseCost: 2242000, popularity: 1148, contractCost: 2225600 },
+      { name: "The Dreamers", genre: "Indie Rock", baseCost: 3365000, popularity: 2290, contractCost: 3350000 }
+    ],
+    newDeals: [
+      { name: "Virtual Concert Deal", baseCost: 1300000, revenue: 450000, duration: 7 }
+    ],
+    newEquipment: [
+      { name: "Virtual Reality Studio", baseCost: 950000, quality: 42, maintenance: 22000 },
+      { name: "DJ Turntable", baseCost: 15000, quality: 20, maintenance: 700 },
+      { name: "Sound Mixer", baseCost: 20000, quality: 23, maintenance: 850 },
+      { name: "Wireless Microphone", baseCost: 9000, quality: 14, maintenance: 450 }
+    ],
+    newTraining: [
+      { name: "Sound Engineering Seminar", baseCost: 32000, skillBoost: 27, duration: 8 },
+      { name: "Live Performance Coaching", baseCost: 26000, skillBoost: 21, duration: 5 },
+      { name: "Vocal Technique Workshop", baseCost: 400000, skillBoost: 25, duration: 8 },
+      { name: "Songwriting Retreat", baseCost: 45000, skillBoost: 28, duration: 7 }, // new
+      { name: "Songwriting Masterclass", baseCost: 500000, skillBoost: 30, duration: 12 }
+    ]
+  },
+  6: {
+    newArtists: [
+      { name: "Harmony Heights", genre: "Pop", baseCost: 3395000, popularity: 1365, contractCost: 3375000 },
+      { name: "Rock Legends", genre: "Rock", baseCost: 4170000, popularity: 1465, contractCost: 4110000 },
+      { name: "Soulful Serenades", genre: "R&B", baseCost: 5320000, popularity: 2800, contractCost: 5150000 }
+    ],
+    newDeals: [
+      { name: "Global Marketing Campaign", baseCost: 1800000, revenue: 550000, duration: 9 }
+    ],
+    newEquipment: [
+      { name: "Portable Stage Lights", baseCost: 500000, quality: 35, maintenance: 15000 },
+      { name: "Artist Couture Collection", baseCost: 400000, quality: 45, maintenance: 20000 },
+      { name: "Premium Mixing Desk", baseCost: 1200000, quality: 50, maintenance: 30000 }
+    ],
+    newTraining: [
+      { name: "Marketing Strategies", baseCost: 55000, skillBoost: 32, duration: 8 }, // new
+      { name: "Performance Enhancement Training", baseCost: 700000, skillBoost: 40, duration: 10 },
+      { name: "Instrumental Diversity Course", baseCost: 800000, skillBoost: 45, duration: 15 },
+      { name: "Stage Presence Workshop", baseCost: 30000, skillBoost: 20, duration: 4 } // new
+    ]
+  }
 };
 
 // Function to unlock content based on reputation level
 function unlockContent() {
-      const level = getCurrentReputationLevel();
-      if (unlockableContent[level]) {
-        if (unlockableContent[level].newArtists) {
-          baseMarketData.artists.push(...unlockableContent[level].newArtists);
-        }
-        if (unlockableContent[level].newDeals) {
-          baseMarketData.deals.push(...unlockableContent[level].newDeals);
-        }
-        if (unlockableContent[level].newEquipment) {
-          baseMarketData.equipment.push(...unlockableContent[level].newEquipment);
-        }
-        if (unlockableContent[level].newTraining) {
-          baseMarketData.training.push(...unlockableContent[level].newTraining);
-        }
-        addMessage(`🎉 New content to shop unlocked at reputation level ${level}!`);
-      }
+  const level = getCurrentReputationLevel();
+  if (unlockableContent[level]) {
+    if (unlockableContent[level].newArtists) {
+      baseMarketData.artists.push(...unlockableContent[level].newArtists);
     }
+    if (unlockableContent[level].newDeals) {
+      baseMarketData.deals.push(...unlockableContent[level].newDeals);
+    }
+    if (unlockableContent[level].newEquipment) {
+      baseMarketData.equipment.push(...unlockableContent[level].newEquipment);
+    }
+    if (unlockableContent[level].newTraining) {
+      baseMarketData.training.push(...unlockableContent[level].newTraining);
+    }
+    addMessage(`🎉 New content to shop unlocked at reputation level ${level}!`);
+  }
+}
+
 
     function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
       const demandFactor = 1 + (popularity / 100);
@@ -1813,26 +1852,36 @@ function unlockContent() {
       container.style.display = 'flex';
       
       // Update with actual advice after a delay
-      setTimeout(() => {
-        let advice = "";
-        if (role.toLowerCase().includes("manager")) {
-          advice = morale > 70 
-            ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
-            : "We should be cautious with our spending and focus on rebuilding our reputation.";
-        } else if (role.toLowerCase().includes("publicist")) {
-          advice = morale > 70
-            ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
-            : "We need to focus on damage control and rebuilding our public image.";
-        }
-        
-        if (morale < 30) {
-          advice += " (Note: Low staff morale may affect advice quality)";
-        }
-        
-        document.getElementById('staff-advice-content').textContent = advice;
-      }, 1000);
+      
+  setTimeout(() => {
+    let advice = "";
+    if (role.toLowerCase().includes("manager")) {
+      advice = morale > 70 
+        ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
+        : "We should be cautious with our spending and focus on rebuilding our reputation.";
+    } else if (role.toLowerCase().includes("publicist")) {
+      advice = morale > 70
+        ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
+        : "We need to focus on damage control and rebuilding our public image.";
+    } else if (role.toLowerCase().includes("producer")) {
+      advice = morale > 70 
+        ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+        : "We might need to stick with proven formulas until the team's confidence improves.";
+    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("a&r")) {
+      advice = morale > 70
+        ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
+        : "Focus on nurturing our current artists before expanding our talent pool.";
+    } else {
+      advice = "Keep up the great work and adapt as challenges arise.";
     }
-
+    
+    if (morale < 30) {
+      advice += " (Note: Low staff morale may affect advice quality)";
+    }
+    
+    document.getElementById('staff-advice-content').textContent = advice;
+  }, 1000);
+}
     function closeStaffAdvice() {
       document.getElementById('staff-advice-container').style.display = 'none';
     }
@@ -1970,6 +2019,14 @@ function unlockContent() {
       addMessage(`📝 Accepted ${name} for E${cost.toLocaleString()}`);
       updateGameDisplay();
     }
+
+  function deductSalaries() {
+  // Sum up daily salaries from all staff members.
+  let totalSalary = gameState.staff.reduce((sum, staff) => sum + staff.salary, 0);
+  gameState.cash = Math.max(0, gameState.cash - totalSalary);
+  addMessage(`Deducted total salaries: E${totalSalary.toLocaleString()}`);
+  updateGameDisplay();
+}
 
     function startNegotiation(artist, isNewArtist) {
   currentNegotiationArtist = { ...artist, isNewArtist };
