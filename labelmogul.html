@@ -211,6 +211,10 @@
         <h3>📰 News Updates</h3>
         <div id="news-updates" class="scroll-box"></div>  
       </div>
+      <div class="marketplace-section">
+        <h3>👥 Job Applications</h3>
+        <div id="job-applications-market" class="market-scroll"></div>
+      </div>
     </div>
    
     <div class="side-panel">
@@ -1169,16 +1173,16 @@ const artistMoods = [
         currentScenario: null,
         artists: [],
         staff: [
-      { role: "Manager", morale: 50 },
-      { role: "Publicist", morale: 50 },
-      { role: "Producer", morale: 50 },
-      { role: "Talent Scout", morale: 50 }
+        { role: "Manager", morale: 45, salary: 4300, costReduction: 0.03, moodBoost: 8, reputationMultiplier: 1.05, skillLevel: 6 },
+    { role: "Marketing Manager", morale: 55, salary: 5100, costReduction: 0.04, moodBoost: 11, reputationMultiplier: 1.09, skillLevel: 7 },
+    { role: "Production Assistant", morale: 40, salary: 3800, costReduction: 0.01, moodBoost: 6, reputationMultiplier: 1.02, skillLevel: 4 },
     ],
         activeDeals: [],
-        equipment: []
-      };
-      updateReputationDisplay();
-    }
+        equipment: [],
+    newsUpdates: ["Breaking News: Swazi Jive Records Appoints New President, Industry Expects Fresh Direction!"] // Add initial news
+  };
+  updateReputationDisplay();
+}
 
     function adjustReputation(amount) {
       gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
@@ -1226,6 +1230,65 @@ const artistMoods = [
       return level;
     }
 
+    // Add these functions to handle job market
+function generateJobCandidates() {
+  const candidates = [
+    { role: "A&R Specialist", morale: 50, salary: 4800, hiring_cost: 14800, moodBoost: 12, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Senior Producer", morale: 55, salary: 5200, hiring_cost: 15200, moodBoost: 10, reputationMultiplier: 1.1, skillLevel: 8 },
+    { role: "Manager", morale: 45, salary: 4300, hiring_cost: 14300, moodBoost: 8, reputationMultiplier: 1.05, skillLevel: 6 },
+    { role: "Marketing Manager", morale: 55, salary: 5100, hiring_cost: 15100, moodBoost: 11, reputationMultiplier: 1.09, skillLevel: 7 },
+    { role: "Production Assistant", morale: 40, salary: 3800, hiring_cost: 13800, moodBoost: 6, reputationMultiplier: 1.02, skillLevel: 4 },
+    { role: "Executive Producer", morale: 65, salary: 6000, hiring_cost: 16000, moodBoost: 15, reputationMultiplier: 1.15, skillLevel: 9 },
+    { role: "Digital Strategist", morale: 50, salary: 4700, hiring_cost: 14700, moodBoost: 10, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Event Coordinator", morale: 45, salary: 4200, hiring_cost: 14200, moodBoost: 9, reputationMultiplier: 1.06, skillLevel: 6 },
+    { role: "Creative Director", morale: 60, salary: 5500, hiring_cost: 15500, moodBoost: 12, reputationMultiplier: 1.12, skillLevel: 8 },
+    { role: "Financial Manager", morale: 50, salary: 5300, hiring_cost: 15300, moodBoost: 8, reputationMultiplier: 1.07, skillLevel: 7 },
+    { role: "Artist Liaison", morale: 55, salary: 4900, hiring_cost: 14900, moodBoost: 11, reputationMultiplier: 1.1, skillLevel: 7 },
+    { role: "Studio Manager", morale: 50, salary: 5200, hiring_cost: 15200, moodBoost: 10, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Talent Scout", morale: 50, salary: 4500, hiring_cost: 14500, moodBoost: 9, reputationMultiplier: 1.06, skillLevel: 6 }
+  ];
+
+  const jobMarket = document.getElementById('job-applications-market');
+  jobMarket.innerHTML = candidates.map(candidate => `
+    <div class="market-item" onclick="hireCandidateFromMarket(${JSON.stringify(candidate).replace(/"/g, '&quot;')})">
+      <strong>${candidate.role}</strong><br>
+      💰 Salary: E${candidate.salary}/day<br>
+      ⭐ Skill Level: ${candidate.skillLevel}<br>
+      📋 Morale: ${candidate.morale}<br>
+      💼 Hiring Cost: E${candidate.hiring_cost}
+    </div>
+  `).join('');
+}
+
+function hireCandidateFromMarket(candidate) {
+  if (gameState.cash < candidate.hiring_cost) {
+    alert("Not enough cash to hire this candidate!");
+    return;
+  }
+
+  const newStaffMember = {
+    role: candidate.role,
+    morale: 75,
+    salary: candidate.salary,
+    costReduction: 0.03,
+    moodBoost: 8,
+    reputationMultiplier: 1.05,
+    skillLevel: 6
+  };
+
+  gameState.cash -= candidate.hiring_cost;
+  gameState.staff.push(newStaffMember);
+  addMessage(`Hired ${candidate.role} for E${candidate.hiring_cost}`);
+  updateGameDisplay();
+}
+
+// Modify your updateMarketplaces function to include job candidates
+function updateMarketplaces() {
+  // ... existing marketplace updates ...
+  generateJobCandidates();
+}
+
+
     function updateReputationDisplay() {
       const level = getCurrentReputationLevel();
       const levelElement = document.getElementById('reputation-level');
@@ -1262,8 +1325,14 @@ const artistMoods = [
       document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
         <div class="staff-card" onclick="showStaffAdvice('${staff.role}', ${staff.morale})">
           <strong>${staff.role}</strong><br>
-          😊 Morale: ${staff.morale}%
-        </div>
+          😊 Morale: ${staff.morale}% <br>
+          💰 Salary:E${staff.salary} <br>
+          📈 Skill: ${staff.skillLevel}<br>
+          ⭐ Boost: ${staff.moodBoost}
+   <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
+    <button onclick="getStaffAdvice('${staff.role}')">Staff Advice</button>
+        
+          </div>
       `).join('');
       document.getElementById('inventory-list').innerHTML = [
         ...gameState.equipment.map(item => `
@@ -1283,6 +1352,41 @@ const artistMoods = [
       ].join('');
       updateNewsDisplay();
     }
+
+// Function to terminate a staff member.
+function terminateStaff(staff, remainingDays) {
+  // Calculate termination cost based on remaining contract days.
+  let terminationCost = staff.salary * remainingDays;
+  gameState.cash = Math.max(0, gameState.cash - terminationCost);
+  
+  // Apply reputation penalty: 10% if high skill, otherwise 5%.
+  let repPenaltyPercent = (staff.skillLevel >= 8) ? 10 : 5;
+  let repPenalty = gameState.reputation * (repPenaltyPercent / 100);
+  gameState.reputation = Math.max(0, gameState.reputation - repPenalty);
+  
+  // Remove the staff member from the game state.
+  gameState.staff = gameState.staff.filter(s => s !== staff);
+  
+  addMessage(`Terminated ${staff.role}. Deducted E${terminationCost.toLocaleString()} and reputation decreased by ${repPenaltyPercent}%.`);
+  updateGameDisplay();
+}
+
+
+
+    function confirmTerminateStaff(role) {
+  let staff = gameState.staff.find(s => s.role === role);
+  if (staff) {
+    let remainingDays = 25; // Default to 25 days
+    let terminationCost = staff.salary * remainingDays;
+    let reputationLoss = (staff.skillLevel >= 8) ? '10%' : '5%';
+
+    if (confirm(`Terminating ${staff.role} will cost E${terminationCost.toLocaleString()} and reduce reputation by ${reputationLoss}. Proceed?`)) {
+      terminateStaff(staff, remainingDays);
+    }
+  }
+}
+
+
 
     function adjustArtistHappiness(amount) {
       gameState.artists.forEach(artist => {
@@ -1539,13 +1643,14 @@ function unlockContent() {
     }
 
     function updateMarketplaces() {
-      updateShowsMarket();
-      updateDealsMarket();
-      updateArtistsMarket();
-      updateEquipmentMarket();
-      updateTrainingMarket();
-      updateMarketingMarket();
-    }
+  updateShowsMarket();
+  updateDealsMarket();
+  updateArtistsMarket();
+  updateEquipmentMarket();
+  updateTrainingMarket();
+  updateMarketingMarket();
+  generateJobCandidates(); // Add this line to include job market updates
+}
 
     function updateShowsMarket() {
       document.getElementById('shows-market').innerHTML = marketData.shows.map(show => `
@@ -2005,6 +2110,14 @@ function unlockContent() {
         }
       });
 
+      // Calculate staff salaries
+  const staffSalaries = gameState.staff.reduce((total, staff) => total + staff.salary, 0);
+  gameState.cash -= staffSalaries;
+
+  // Add staff salary info to daily summary
+  addMessage(`💼 Staff Salaries Paid: E${staffSalaries.toLocaleString()}`);
+
+
       gameState.artists = gameState.artists.filter(artist => artist.contractDays >= 0);
 
       if (maintenanceCost > 0) {
@@ -2069,7 +2182,7 @@ function unlockContent() {
       showActionSummary(cashEffect, repChange);
       generateNews(cashEffect, repChange, true); // Generate news based on scenario outcome
 
-      if (gameState.day > 30) {
+      if (gameState.day >= 50) {
         endGame();
       } else {
         startNewDay();
@@ -2078,7 +2191,7 @@ function unlockContent() {
     }
 
     function endGame() {
-      addMessage("🏁 Game Over: You've reached the end of 30 days!");
+      addMessage("🏁 Game Over: You've reached the end of 50 days!");
       addMessage(`Final Cash: E${gameState.cash.toLocaleString()}`);
       addMessage(`Final Reputation: ${gameState.reputation}`);
       document.querySelectorAll('.market-item').forEach(item => item.onclick = null);
