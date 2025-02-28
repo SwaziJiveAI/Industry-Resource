@@ -17,6 +17,41 @@
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
 
+    .demand-btn {
+  margin-top: 5px;
+  padding: 3px 8px;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+}
+
+.current-demand {
+  margin-top: 5px;
+  padding: 5px;
+  background-color: #fff3e0;
+  border-radius: 3px;
+}
+
+.current-demand button {
+  margin: 3px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.current-demand button:first-of-type {
+  background-color: #4caf50;
+  color: white;
+}
+
+.current-demand button:last-of-type {
+  background-color: #f44336;
+  color: white;
+}
+
     .decision-btn {
       margin: 5px; padding: 10px 15px;
       background: #4CAF50; color: white;
@@ -1177,6 +1212,66 @@ const artistMoods = [
   { name: "Demanding", demandModifier: 1.2, successModifier: 0.8, happinessPenalty: 20 }
 ];
 
+// Add this after your existing artistMoods array
+const artistDemands = [
+  {
+    type: "salary",
+    text: "demands a higher daily payment of E",
+    amount: (artist) => Math.round(artist.contractCost * 0.3),
+    effect: {
+      accept: {
+        reputation: 10,
+        artistHappiness: 15,
+        staffMorale: -5,
+        message: "accepts the increased payment"
+      },
+      reject: {
+        reputation: -15,
+        artistHappiness: -20,
+        staffMorale: 5,
+        message: "is upset about the rejection"
+      }
+    }
+  },
+  {
+    type: "equipment",
+    text: "requests new studio equipment worth E",
+    amount: (artist) => 25000 + Math.round(artist.popularity * 100),
+    effect: {
+      accept: {
+        reputation: 15,
+        artistHappiness: 20,
+        staffMorale: 10,
+        message: "is thrilled with the new equipment"
+      },
+      reject: {
+        reputation: -10,
+        artistHappiness: -15,
+        staffMorale: -5,
+        message: "threatens to leave over poor equipment"
+      }
+    }
+  },
+  {
+    type: "promotion",
+    text: "wants a marketing campaign worth E",
+    amount: (artist) => 20000 + Math.round(artist.popularity * 150),
+    effect: {
+      accept: {
+        reputation: 20,
+        artistHappiness: 15,
+        staffMorale: 5,
+        message: "gains more visibility"
+      },
+      reject: {
+        reputation: -15,
+        artistHappiness: -20,
+        staffMorale: 0,
+        message: "feels unsupported"
+      }
+    }
+  }
+];
 
     // Game state initialization
     function initializeGameState() {
@@ -1354,13 +1449,24 @@ function hireCandidateFromMarket(candidate) {
       document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
       document.getElementById('day').textContent = gameState.day;
       document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
-        <div class="artist-card" onclick='startNegotiation(${JSON.stringify(artist)}, false)'>
-          <strong>${artist.name}</strong> (${artist.genre})<br>
-          📈 Popularity: ${artist.popularity}<br>
-          😊 Happiness: ${artist.happiness}%<br>
-          📅 Contract: ${artist.contractDays} days
-        </div>
-      `).join('');
+    <div class="artist-card">
+      <strong>${artist.name}</strong> (${artist.genre})<br>
+      📈 Popularity: ${artist.popularity}<br>
+      😊 Happiness: ${artist.happiness}%<br>
+      📅 Contract: ${artist.contractDays} days
+      <div class="artist-buttons">
+        <button onclick="generateArtistDemand('${artist.name}')" class="demand-btn">📢 Check Demands</button>
+        <button onclick='startNegotiation(${JSON.stringify(artist)}, false)' class="renegotiate-btn">📝 Renegotiate</button>
+      </div>
+      ${artist.currentDemand ? 
+        `<div class="current-demand">
+          📢 ${artist.name} ${artist.currentDemand.text}${artist.currentDemand.amount}
+          <button onclick="handleDemand('${artist.name}', true)">✅ Accept</button>
+          <button onclick="handleDemand('${artist.name}', false)">❌ Reject</button>
+        </div>` : ''
+      }
+    </div>
+  `).join('');
   document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
   <div class="staff-card">
     <strong>${staff.role}</strong><br>
@@ -1391,6 +1497,43 @@ function hireCandidateFromMarket(candidate) {
       ].join('');
       updateNewsDisplay();
     }
+
+    // Add these new functions
+function generateArtistDemand(artistName) {
+  const artist = gameState.artists.find(a => a.name === artistName);
+  if (!artist || artist.daysSigned < 5) return;
+
+  const demand = artistDemands[Math.floor(Math.random() * artistDemands.length)];
+  artist.currentDemand = {
+    ...demand,
+    amount: demand.amount(artist)
+  };
+  addMessage(`📢 ${artist.name} ${demand.text}${demand.amount.toLocaleString()}`);
+  updateGameDisplay();
+}
+
+function handleDemand(artistName, accepted) {
+  const artist = gameState.artists.find(a => a.name === artistName);
+  if (!artist || !artist.currentDemand) return;
+
+  const effect = accepted ? artist.currentDemand.effect.accept : artist.currentDemand.effect.reject;
+  
+  if (accepted) {
+    if (gameState.cash < artist.currentDemand.amount) {
+      addMessage(`❌ Not enough cash to meet ${artist.name}'s demand!`);
+      return;
+    }
+    gameState.cash -= artist.currentDemand.amount;
+  }
+
+  adjustReputation(effect.reputation);
+  adjustArtistHappiness(effect.artistHappiness);
+  adjustStaffMorale(effect.staffMorale);
+  
+  addMessage(`${artist.name} ${effect.message}`);
+  delete artist.currentDemand;
+  updateGameDisplay();
+}
 
 // Function to terminate a staff member.
 function terminateStaff(staff, remainingDays) {
@@ -1434,10 +1577,11 @@ function terminateStaff(staff, remainingDays) {
     }
 
     function adjustStaffMorale(amount) {
-      gameState.staff.forEach(staff => {
-        staff.morale = Math.max(0, Math.min(100, staff.morale + amount));
-      });
-    }
+  gameState.staff.forEach(staff => {
+    staff.morale = Math.max(0, Math.min(100, staff.morale + amount));
+  });
+  updateGameDisplay();
+}
 
     function adjustArtistPopularity(amount) {
       gameState.artists.forEach(artist => {
@@ -1966,6 +2110,8 @@ function unlockContent() {
             happiness: 100,
             contractDays: 30,
             contractCost: currentOffer,
+            daysSigned: 0,
+            currentDemand: null,
             mood: currentNegotiationArtist.mood
           };
           gameState.artists.push(newArtist);
@@ -2130,6 +2276,7 @@ function unlockContent() {
       gameState.artists.forEach(artist => {
         const artistRevenue = Math.floor(artist.popularity * 1000 * (1 + gameState.reputation / 100));
         dailyRevenue += artistRevenue;
+        
         addMessage(`💫 ${artist.name} generated E${artistRevenue.toLocaleString()} today`);
         artist.contractDays--;
         if (artist.contractDays < 0) {
@@ -2140,12 +2287,12 @@ function unlockContent() {
           const totalEquipmentQuality = gameState.equipment.reduce((sum, item) => sum + item.quality, 0);
           const happinessBoost = Math.floor(totalEquipmentQuality / 10);
           artist.happiness = Math.min(100, artist.happiness + happinessBoost);
-          if (artist.contractDays <= 5) {
-            addMessage(`⚠️ ${artist.name}'s contract expires in ${artist.contractDays} day${artist.contractDays > 1 ? 's' : ''}! Click to negotiate renewal.`);
-            generateNews(0, 0, false, artist); // News about contract nearing expiration
+          if (artist.daysSigned = 0) {
+            artist.daysSigned++;
           } else if (Math.random() < 0.3) { // 30% chance daily for artist news
             generateNews(0, 0, false, artist); // Random artist news
           }
+          
         }
       });
 
