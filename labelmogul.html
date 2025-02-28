@@ -1317,14 +1317,14 @@ function hireCandidateFromMarket(candidate) {
 
   gameState.cash -= candidate.hiring_cost;
   gameState.staff.push(newStaffMember);
+  
+   // Apply one-time reputation boost when hiring
+ const reputationBoost = Math.round((candidate.reputationMultiplier - 1) * 100);
+  adjustReputation(reputationBoost);
+  
   addMessage(`Hired ${candidate.role} for E${candidate.hiring_cost}`);
+  addMessage(`📈 Label reputation increased by ${reputationBoost} points from new hire!`);
   updateGameDisplay();
-}
-
-// Modify your updateMarketplaces function to include job candidates
-function updateMarketplaces() {
-  // ... existing marketplace updates ...
-  generateJobCandidates();
 }
 
 
