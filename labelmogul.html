@@ -4,7 +4,7 @@
   <style>
     body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
     .game-container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; }
-    .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .main-panel { background: #252525; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px #252525; }
     .side-panel { display: flex; flex-direction: column; gap: 20px; }
     .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .staff-card { 
@@ -12,7 +12,7 @@
       border-radius: 5px; cursor: pointer; 
       transition: background 0.2s;
     }
-    .staff-card:hover { background: #e8e8e8; }
+    .staff-card:hover { background: #7B1FA2; }
     .decision-btn, .new-game-btn {
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
@@ -96,12 +96,12 @@
       gap: 15px;
       margin-top: 20px;
       padding: 10px;
-      background: #f0f0f0;
+      background: #1E1E1E;
       border-radius: 8px;
     }
    
     .marketplace-section {
-      background: white;
+      background: rgb(0, 0, 0);
       padding: 10px;
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -110,19 +110,19 @@
       height: 150px;
       overflow-y: auto;
       padding: 5px;
-      border: 1px solid #ddd;
+      border: 1px solid #1E1E1E;
       border-radius: 4px;
     }
     .market-item {
       padding: 8px;
       margin: 5px 0;
-      background: #f8f8f8;
+      background: #252525;
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.2s;
     }
     .market-item:hover {
-      background: #e8e8e8;
+      background: #7B1FA2;
     }
     .reputation-level-basic { background: #FFE5E5 !important; }
     .reputation-level-rising { background: #FFEDCC !important; }
@@ -150,7 +150,7 @@
       border: none; border-radius: 4px;
       cursor: pointer;
     }
-    .negotiation-btn:hover { background: #ff1a40; }
+    .negotiation-btn:hover { background: #7B1FA2; }
 
     #news-container {
       background: white;
@@ -168,7 +168,7 @@
     }
 
     .negotiation-btn:hover { 
-    background: #ff1a40; 
+    background: #7B1FA2; 
 }
 
 #staff-advice-container {
@@ -192,9 +192,377 @@
       width: 400px;
       text-align: center;
     }
+  /* Modern Color Scheme - Can be applied safely */
+  :root {
+        --primary-color: #6200ea;
+        --secondary-color: #03dac6;
+        --background-color: #121212;
+        --surface-color: #1e1e1e;
+        --text-primary: rgba(255, 255, 255, 0.87);
+        --text-secondary: rgba(255, 255, 255, 0.6);
+    }
 
+    body {
+        background-color: var(--background-color);
+        color: var(--text-primary);
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
+        transition: all 0.3s ease;
+    }
 
-  </style>
+    /* Enhanced Title - Won't break existing layout */
+    h1 {
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 800;
+        text-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
+    }
+
+    /* Improved Container - Compatible with existing structure */
+    .panel {
+        background-color: var(--surface-color);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                    0 0 20px rgba(98, 0, 234, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .panel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        z-index: 1;
+    }
+
+    /* Enhanced Input Styling - Works with existing inputs */
+    input {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 10px 15px;
+    }
+
+    input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--secondary-color), 
+                    inset 0 0 10px rgba(0, 0, 0, 0.3);
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Button Styling - Compatible with existing buttons */
+    button {
+        background: linear-gradient(45deg, var(--primary-color), #9d4edd);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(98, 0, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(98, 0, 234, 0.6);
+    }
+
+    button:active {
+        transform: translateY(1px);
+    }
+
+    /* Score Display Enhancement - Works with existing score display */
+    #score {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--secondary-color);
+        animation: scoreFlash 0.5s ease;
+    }
+
+    @keyframes scoreFlash {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Artist Information Enhancement */
+    .artist-info {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+    }
+
+    .artist-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Timer Display Enhancement */
+    #timer {
+        font-size: 1.8rem;
+        text-align: center;
+        margin: 15px 0;
+        color: var(--text-primary);
+        text-shadow: 0 0 10px rgba(3, 218, 198, 0.5);
+    }
+
+    /* Notification Toast - New element that won't interfere */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--surface-color);
+        color: var(--text-primary);
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transform: translateX(150%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        display: none;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+        display: flex;
+    }
+
+    /* Bonus Points Animation - Won't interfere with existing elements */
+    .bonus-points {
+        position: absolute;
+        color: #00c853;
+        font-weight: bold;
+        font-size: 1.2rem;
+        animation: floatUp 2s forwards;
+        pointer-events: none;
+        z-index: 1001;
+    }
+
+    @keyframes floatUp {
+        0% { opacity: 0; transform: translateY(0); }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-100px); }
+    }
+
+/* Color scheme variables */
+:root {
+  --primary-color: #4CAF50;       /* Green for positive actions/money */
+  --secondary-color: #7B1FA2;     /* Purple as accent color */
+  --background-dark: #121212;     /* Dark background */
+  --surface-color: #1E1E1E;       /* Slightly lighter surface */
+  --container-bg: #252525;        /* Container background */
+  --success-text: #4CAF50;        /* Green text for positive numbers */
+  --warning-text: #FF9800;        /* Orange for warnings */
+  --text-primary: rgba(255, 255, 255, 0.87);  /* Main text */
+  --text-secondary: rgba(255, 255, 255, 0.6); /* Less important text */
+  --border-color: rgba(255, 255, 255, 0.12);  /* Subtle borders */
+}
+
+/* Apply dark theme to body and main containers */
+body {
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main UI containers - panels that hold information */
+.panel, .container, [class*="box"], [class*="card"] {
+  background-color: var(--container-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+/* Container hover effect */
+.panel:hover, .container:hover, [class*="box"]:hover, [class*="card"]:hover {
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Money and positive value styling */
+[class*="cash"], [class*="money"], .gained, [class*="revenue"] {
+  color: var(--success-text);
+  font-weight: bold;
+}
+
+/* Header Bar - the top status bar */
+[class*="header"], [class*="status-bar"], [class*="top-bar"] {
+  background-color: #7B1FA2;
+  color: var(--text-primary);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for buttons */
+button, .button, [class*="btn"] {
+  background: linear-gradient(45deg, var(--primary-color), #7B1FA2);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:hover, .button:hover, [class*="btn"]:hover {
+  background: linear-gradient(45deg, #43A047, #66BB6A);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Artist/talent signing messages */
+[class*="signed"], [class*="artist"] {
+  color: #64DD17;
+}
+
+/* Content areas with scrollable content */
+[class*="content-area"], [class*="scroll"] {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Decision buttons - like the ones in the screenshot */
+.decision-btn, #adjust-marketing, #cut-costs, #delay-projects {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 16px;
+  margin: 8px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.decision-btn:hover, #adjust-marketing:hover, #cut-costs:hover, #delay-projects:hover {
+  background-color: #43A047;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Reputation indicator */
+[class*="reputation"] {
+  color: gold;
+  font-weight: bold;
+}
+
+/* Day counter */
+[class*="day"] {
+  background-color: #424242;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Card headers or section titles */
+[class*="card-header"], [class*="section-title"], h3, h4 {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Artist/staff information rows */
+.info-row, [class*="list-item"] {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Icons within the game */
+[class*="icon"] {
+  margin-right: 8px;
+  opacity: 0.87;
+}
+
+/* Action summary text */
+[class*="summary"] {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 6px 0;
+}
+
+/* Artist mood indicators */
+[class*="pleased"], [class*="happy"] {
+  color: #4CAF50;
+}
+
+[class*="neutral"] {
+  color: #FFC107;
+}
+
+[class*="unhappy"], [class*="angry"] {
+  color: #F44336;
+}
+
+/* Specific element for staff salaries */
+[class*="salaries"] {
+  color: #E57373; /* Lighter red for expenses */
+}
+
+/* Enhance check demands button */
+[class*="check-demands"] {
+  background: linear-gradient(45deg, #9C27B0, #673AB7);
+  color: white;
+}
+
+[class*="renegotiate"] {
+  background: linear-gradient(45deg, #2196F3, #03A9F4);
+  color: white;
+}
+
+</style>
 </head>
 <body>
   <div class="status-bar">
@@ -292,6 +660,11 @@
     <p id="staff-advice-content"></p>
     <button class="decision-btn" onclick="closeStaffAdvice()">Close</button>
   </div>
+  <!-- Add this at the end of your body, before the closing body tag -->
+<div class="toast" id="notification-toast">
+  <div id="toast-message">Correct! +100 points</div>
+</div>
+
 </div>
 
 <script>
@@ -1456,6 +1829,8 @@ function hireCandidateFromMarket(candidate) {
       📅 Contract: ${artist.contractDays} days
       <div class="artist-buttons">
         <button onclick="generateArtistDemand('${artist.name}')" class="demand-btn">📢 Check Demands</button>
+        <br>
+
         <button onclick='startNegotiation(${JSON.stringify(artist)}, false)' class="renegotiate-btn">📝 Renegotiate</button>
       </div>
       ${artist.currentDemand ? 
@@ -1476,6 +1851,7 @@ function hireCandidateFromMarket(candidate) {
     ⭐ Boost: ${staff.moodBoost}<br>
     <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
     <br>
+  
     <button onclick="showStaffAdvice('${staff.role}')">Staff Advice</button>
   </div>
 `).join('');
@@ -2376,6 +2752,36 @@ function unlockContent() {
       updateGameDisplay();
     }
 
+      // Function to show toast notification
+      function showToast(message, isSuccess = true) {
+        const toast = document.getElementById('notification-toast');
+        const toastMessage = document.getElementById('toast-message');
+        
+        if (toast && toastMessage) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    }
+    
+    // Function to create bonus points animation
+    function showBonusPoints(amount, x, y) {
+        const bonus = document.createElement('div');
+        bonus.className = 'bonus-points';
+        bonus.textContent = `+${amount}`;
+        bonus.style.left = `${x}px`;
+        bonus.style.top = `${y}px`;
+        
+        document.body.appendChild(bonus);
+        
+        setTimeout(() => {
+            document.body.removeChild(bonus);
+        }, 2000);
+    }
+
     function endGame() {
       addMessage("🏁 Game Over: You've reached the end of 50 days!");
       addMessage(`Final Cash: E${gameState.cash.toLocaleString()}`);
@@ -2390,6 +2796,56 @@ function unlockContent() {
       startNewDay();
       updateMarketplaces();
     });
+// Apply visual enhancements to existing elements
+document.addEventListener('DOMContentLoaded', function() {
+        // Apply panel styling to main game container
+        const gameContainers = document.querySelectorAll('.game, .panel');
+        gameContainers.forEach(container => {
+            if (!container.classList.contains('panel')) {
+                container.classList.add('panel');
+            }
+        });
+        
+        // Apply styling to any score display
+        const scoreElements = document.querySelectorAll('#score, .score');
+        scoreElements.forEach(element => {
+            // Keep existing updates, just add the animation when it changes
+            const originalTextContent = Object.getOwnPropertyDescriptor(
+                Object.getPrototypeOf(element), 'textContent'
+            );
+            
+            if (originalTextContent) {
+                Object.defineProperty(element, 'textContent', {
+                    set: function(value) {
+                        originalTextContent.set.call(this, value);
+                        this.style.animation = 'none';
+                        setTimeout(() => {
+                            this.style.animation = 'scoreFlash 0.5s ease';
+                        }, 10);
+                    },
+                    get: function() {
+                        return originalTextContent.get.call(this);
+                    }
+                });
+            }
+        });
+        
+        // Add artist-info class to artist containers
+        const artistElements = document.querySelectorAll('.artist, .artist-container');
+        artistElements.forEach(element => {
+            if (!element.classList.contains('artist-info')) {
+                element.classList.add('artist-info');
+            }
+        });
+        
+        // Enhance timer display
+        const timerElements = document.querySelectorAll('#timer, .timer');
+        timerElements.forEach(element => {
+            if (!element.id) element.id = 'timer';
+        });
+    });
+
+
   </script>
 </body>
 </html>
