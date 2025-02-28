@@ -17,6 +17,8 @@
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
 
+
+    
     .demand-btn {
   margin-top: 5px;
   padding: 3px 8px;
@@ -364,14 +366,14 @@
 :root {
   --primary-color: #4CAF50;       /* Green for positive actions/money */
   --secondary-color: #7B1FA2;     /* Purple as accent color */
-  --background-dark: #3a3a3a; ;     /* Dark background */
+  --background-dark: #3a3a3a;     /* Dark background */
   --surface-color: #1E1E1E;       /* Slightly lighter surface */
   --container-bg: #252525;        /* Container background */
   --success-text: #4CAF50;        /* Green text for positive numbers */
   --warning-text: #FF9800;        /* Orange for warnings */
   --text-primary: rgba(255, 255, 255, 0.87);  /* Main text */
-  --text-secondary: rgba(255, 255, 255, 0.6); /* Less important text */
-  --border-color: rgba(255, 255, 255, 0.12);  /* Subtle borders */
+  --text-secondary: #ffffff99; /* Less important text */
+  --border-color: #ffffff1f;  /* Subtle borders */
 }
 
 /* Apply dark theme to body and main containers */
@@ -632,6 +634,10 @@ button:hover, .button:hover, [class*="btn"]:hover {
        <div class="info-box">
         <h3>👥 Staff</h3>
         <div id="staff-list" class="scroll-box"></div>
+      </div>
+      <div class="info-box">
+        <h3>🏆 Highscores</h3>
+        <a href="/Industry-Resource/leaderboard.html" class="negotiation-btn" >Top 10 Moguls </a>
       </div>
     </div>
 
@@ -2470,40 +2476,44 @@ function unlockContent() {
   addMessage(`🎭 ${artist.name} enters negotiations with a ${mood.name.toLowerCase()} mood.`);
 }
 
-    function acceptDemand() {
-      if (currentNegotiationArtist) {
-        if (gameState.cash < currentOffer) {
-          addMessage(`❌ Not enough cash to meet ${currentNegotiationArtist.name}'s demand`);
-          return;
-        }
-        gameState.cash -= currentOffer;
-        if (checkBankruptcy()) return;
-        if (currentNegotiationArtist.isNewArtist) {
-          const newArtist = {
-            name: currentNegotiationArtist.name,
-            genre: currentNegotiationArtist.genre,
-            popularity: currentNegotiationArtist.popularity,
-            happiness: 100,
-            contractDays: 30,
-            contractCost: currentOffer,
-            daysSigned: 0,
-            currentDemand: null,
-            mood: currentNegotiationArtist.mood
-          };
-          gameState.artists.push(newArtist);
-          addMessage(`🎤 Signed ${newArtist.name} for E${currentOffer.toLocaleString()}`);
-          addEmotionalFeedback("pleased");
-        } else {
-          currentNegotiationArtist.contractDays = 30;
-          currentNegotiationArtist.contractCost = currentOffer;
-          addMessage(`✨ Renewed contract with ${currentNegotiationArtist.name} for E${currentOffer.toLocaleString()}`);
-          addEmotionalFeedback("pleased");
-        }
-        adjustReputation(15);
-        closeNegotiation();
-        updateGameDisplay();
-      }
+function acceptDemand() {
+  if (currentNegotiationArtist) {
+    if (gameState.cash < currentOffer) {
+      addMessage(`❌ Not enough cash to meet ${currentNegotiationArtist.name}'s demand`);
+      return;
     }
+    gameState.cash -= currentOffer;
+    if (checkBankruptcy()) return;
+    if (currentNegotiationArtist.isNewArtist) {
+      const newArtist = {
+        name: currentNegotiationArtist.name,
+        genre: currentNegotiationArtist.genre,
+        popularity: currentNegotiationArtist.popularity,
+        happiness: 100,
+        contractDays: 30,
+        contractCost: currentOffer,
+        daysSigned: 0,
+        currentDemand: null,
+        mood: currentNegotiationArtist.mood
+      };
+      gameState.artists.push(newArtist);
+      addMessage(`🎤 Signed ${newArtist.name} for E${currentOffer.toLocaleString()}`);
+      addEmotionalFeedback("pleased");
+    } else {
+      // Find the actual artist in the gameState and update their contract
+      const artist = gameState.artists.find(a => a.name === currentNegotiationArtist.name);
+      if (artist) {
+        artist.contractDays = 30;  // Reset contract days
+        artist.contractCost = currentOffer;
+      }
+      addMessage(`✨ Renewed contract with ${currentNegotiationArtist.name} for E${currentOffer.toLocaleString()}`);
+      addEmotionalFeedback("pleased");
+    }
+    adjustReputation(15);
+    closeNegotiation();
+    updateGameDisplay();
+  }
+}
 
     function offerLess() {
       if (currentNegotiationArtist) {
