@@ -4,7 +4,7 @@
   <style>
     body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
     .game-container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; }
-    .main-panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .main-panel { background: #252525; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px #252525; }
     .side-panel { display: flex; flex-direction: column; gap: 20px; }
     .info-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .staff-card { 
@@ -12,10 +12,45 @@
       border-radius: 5px; cursor: pointer; 
       transition: background 0.2s;
     }
-    .staff-card:hover { background: #e8e8e8; }
+    .staff-card:hover { background: #7B1FA2; }
     .decision-btn, .new-game-btn {
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
+
+    .demand-btn {
+  margin-top: 5px;
+  padding: 3px 8px;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+}
+
+.current-demand {
+  margin-top: 5px;
+  padding: 5px;
+  background-color: #fff3e0;
+  border-radius: 3px;
+}
+
+.current-demand button {
+  margin: 3px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.current-demand button:first-of-type {
+  background-color: #4caf50;
+  color: white;
+}
+
+.current-demand button:last-of-type {
+  background-color: #f44336;
+  color: white;
+}
 
     .decision-btn {
       margin: 5px; padding: 10px 15px;
@@ -61,12 +96,12 @@
       gap: 15px;
       margin-top: 20px;
       padding: 10px;
-      background: #f0f0f0;
+      background: #1E1E1E;
       border-radius: 8px;
     }
    
     .marketplace-section {
-      background: white;
+      background: rgb(0, 0, 0);
       padding: 10px;
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -75,19 +110,19 @@
       height: 150px;
       overflow-y: auto;
       padding: 5px;
-      border: 1px solid #ddd;
+      border: 1px solid #1E1E1E;
       border-radius: 4px;
     }
     .market-item {
       padding: 8px;
       margin: 5px 0;
-      background: #f8f8f8;
+      background: #252525;
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.2s;
     }
     .market-item:hover {
-      background: #e8e8e8;
+      background: #7B1FA2;
     }
     .reputation-level-basic { background: #FFE5E5 !important; }
     .reputation-level-rising { background: #FFEDCC !important; }
@@ -115,7 +150,7 @@
       border: none; border-radius: 4px;
       cursor: pointer;
     }
-    .negotiation-btn:hover { background: #ff1a40; }
+    .negotiation-btn:hover { background: #7B1FA2; }
 
     #news-container {
       background: white;
@@ -133,7 +168,7 @@
     }
 
     .negotiation-btn:hover { 
-    background: #ff1a40; 
+    background: #7B1FA2; 
 }
 
 #staff-advice-container {
@@ -157,9 +192,377 @@
       width: 400px;
       text-align: center;
     }
+  /* Modern Color Scheme - Can be applied safely */
+  :root {
+        --primary-color: #6200ea;
+        --secondary-color: #03dac6;
+        --background-color: #121212;
+        --surface-color: #1e1e1e;
+        --text-primary: rgba(255, 255, 255, 0.87);
+        --text-secondary: rgba(255, 255, 255, 0.6);
+    }
 
+    body {
+        background-color: var(--background-color);
+        color: var(--text-primary);
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
+        transition: all 0.3s ease;
+    }
 
-  </style>
+    /* Enhanced Title - Won't break existing layout */
+    h1 {
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 800;
+        text-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
+    }
+
+    /* Improved Container - Compatible with existing structure */
+    .panel {
+        background-color: var(--surface-color);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                    0 0 20px rgba(98, 0, 234, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .panel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        z-index: 1;
+    }
+
+    /* Enhanced Input Styling - Works with existing inputs */
+    input {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 10px 15px;
+    }
+
+    input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--secondary-color), 
+                    inset 0 0 10px rgba(0, 0, 0, 0.3);
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Button Styling - Compatible with existing buttons */
+    button {
+        background: linear-gradient(45deg, var(--primary-color), #9d4edd);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(98, 0, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(98, 0, 234, 0.6);
+    }
+
+    button:active {
+        transform: translateY(1px);
+    }
+
+    /* Score Display Enhancement - Works with existing score display */
+    #score {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--secondary-color);
+        animation: scoreFlash 0.5s ease;
+    }
+
+    @keyframes scoreFlash {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Artist Information Enhancement */
+    .artist-info {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+    }
+
+    .artist-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Timer Display Enhancement */
+    #timer {
+        font-size: 1.8rem;
+        text-align: center;
+        margin: 15px 0;
+        color: var(--text-primary);
+        text-shadow: 0 0 10px rgba(3, 218, 198, 0.5);
+    }
+
+    /* Notification Toast - New element that won't interfere */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--surface-color);
+        color: var(--text-primary);
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transform: translateX(150%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        display: none;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+        display: flex;
+    }
+
+    /* Bonus Points Animation - Won't interfere with existing elements */
+    .bonus-points {
+        position: absolute;
+        color: #00c853;
+        font-weight: bold;
+        font-size: 1.2rem;
+        animation: floatUp 2s forwards;
+        pointer-events: none;
+        z-index: 1001;
+    }
+
+    @keyframes floatUp {
+        0% { opacity: 0; transform: translateY(0); }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-100px); }
+    }
+
+/* Color scheme variables */
+:root {
+  --primary-color: #4CAF50;       /* Green for positive actions/money */
+  --secondary-color: #7B1FA2;     /* Purple as accent color */
+  --background-dark: #3a3a3a; ;     /* Dark background */
+  --surface-color: #1E1E1E;       /* Slightly lighter surface */
+  --container-bg: #252525;        /* Container background */
+  --success-text: #4CAF50;        /* Green text for positive numbers */
+  --warning-text: #FF9800;        /* Orange for warnings */
+  --text-primary: rgba(255, 255, 255, 0.87);  /* Main text */
+  --text-secondary: rgba(255, 255, 255, 0.6); /* Less important text */
+  --border-color: rgba(255, 255, 255, 0.12);  /* Subtle borders */
+}
+
+/* Apply dark theme to body and main containers */
+body {
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main UI containers - panels that hold information */
+.panel, .container, [class*="box"], [class*="card"] {
+  background-color: var(--container-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+/* Container hover effect */
+.panel:hover, .container:hover, [class*="box"]:hover, [class*="card"]:hover {
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Money and positive value styling */
+[class*="cash"], [class*="money"], .gained, [class*="revenue"] {
+  color: var(--success-text);
+  font-weight: bold;
+}
+
+/* Header Bar - the top status bar */
+[class*="header"], [class*="status-bar"], [class*="top-bar"] {
+  background-color: #7B1FA2;
+  color: var(--text-primary);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for buttons */
+button, .button, [class*="btn"] {
+  background: linear-gradient(45deg, var(--primary-color), #7B1FA2);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:hover, .button:hover, [class*="btn"]:hover {
+  background: linear-gradient(45deg, #43A047, #66BB6A);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Artist/talent signing messages */
+[class*="signed"], [class*="artist"] {
+  color: #64DD17;
+}
+
+/* Content areas with scrollable content */
+[class*="content-area"], [class*="scroll"] {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Decision buttons - like the ones in the screenshot */
+.decision-btn, #adjust-marketing, #cut-costs, #delay-projects {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 16px;
+  margin: 8px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.decision-btn:hover, #adjust-marketing:hover, #cut-costs:hover, #delay-projects:hover {
+  background-color: #43A047;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Reputation indicator */
+[class*="reputation"] {
+  color: #9C27B0;
+  font-weight: bold;
+}
+
+/* Day counter */
+[class*="day"] {
+  background-color: #424242;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Card headers or section titles */
+[class*="card-header"], [class*="section-title"], h3, h4 {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Artist/staff information rows */
+.info-row, [class*="list-item"] {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Icons within the game */
+[class*="icon"] {
+  margin-right: 8px;
+  opacity: 0.87;
+}
+
+/* Action summary text */
+[class*="summary"] {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 6px 0;
+}
+
+/* Artist mood indicators */
+[class*="pleased"], [class*="happy"] {
+  color: #4CAF50;
+}
+
+[class*="neutral"] {
+  color: #FFC107;
+}
+
+[class*="unhappy"], [class*="angry"] {
+  color: #F44336;
+}
+
+/* Specific element for staff salaries */
+[class*="salaries"] {
+  color: #E57373; /* Lighter red for expenses */
+}
+
+/* Enhance check demands button */
+[class*="check-demands"] {
+  background: linear-gradient(45deg, #9C27B0, #673AB7);
+  color: white;
+}
+
+[class*="renegotiate"] {
+  background: linear-gradient(45deg, #2196F3, #03A9F4);
+  color: white;
+}
+
+</style>
 </head>
 <body>
   <div class="status-bar">
@@ -211,6 +614,10 @@
         <h3>📰 News Updates</h3>
         <div id="news-updates" class="scroll-box"></div>  
       </div>
+      <div class="marketplace-section">
+        <h3>👥 Job Applications</h3>
+        <div id="job-applications-market" class="market-scroll"></div>
+      </div>
     </div>
    
     <div class="side-panel">
@@ -253,6 +660,11 @@
     <p id="staff-advice-content"></p>
     <button class="decision-btn" onclick="closeStaffAdvice()">Close</button>
   </div>
+  <!-- Add this at the end of your body, before the closing body tag -->
+<div class="toast" id="notification-toast">
+  <div id="toast-message">Correct! +100 points</div>
+</div>
+
 </div>
 
 <script>
@@ -1142,13 +1554,28 @@
     ];
 
     const rivalLabels = ["Eswatini Top Dogs", "Piggs Peak Soundwave Label", "Manzini Music Co.", "Lubombo Recording Studio", "Hlane Harmony House"];
-    const marketNews = [
-      "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
-      "Market Update: Vinyl sales spike, boosting traditional music popularity!",
-      "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
-      "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
-      "Media Buzz: A new music festival launches, offering high-profile show opportunities!"
-    ];
+   const marketNews = [
+  "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
+  "Market Update: Vinyl sales spike, boosting traditional music popularity!",
+  "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
+  "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
+  "Media Buzz: A new music festival launches, offering high-profile show opportunities!",
+  "Tech Update: New sound engineering software revolutionizes production efficiency!",
+  "Global Spotlight: International artists show increased interest in Swazi Jive Records!",
+  "Chart-Topping Update: Local artist breaks streaming records with debut single!",
+  "Investment News: Major sponsor signs on, boosting label’s financial prospects!",
+  "Market Insight: Digital downloads surge as fans embrace online concerts!",
+  "Economic Forecast: Currency fluctuations impact artist touring budgets!",
+  "Industry Trend: Indie labels join forces, sparking a wave of collaboration!",
+  "Production Breakthrough: Innovative recording techniques lower studio costs!",
+  "Fan Frenzy: Social media buzz fuels an unexpected rise in merchandise sales!",
+  "Brand Partnership: A top consumer brand collaborates with Swazi Jive Records!",
+  "Event Update: Pop-up live sessions captivate audiences, driving ticket sales!",
+  "Streaming Stats: Record-breaking listens set new benchmarks on digital platforms!",
+  "Talent Radar: Emerging artists garner nationwide acclaim from critics!",
+  "Collaboration Alert: Iconic producer teams up with local talent for a breakthrough album!",
+  "Revenue Report: Strong album sales contribute to robust quarterly growth!"
+];
 
     // ... existing code ...
 const artistMoods = [
@@ -1158,93 +1585,86 @@ const artistMoods = [
   { name: "Demanding", demandModifier: 1.2, successModifier: 0.8, happinessPenalty: 20 }
 ];
 
+// Add this after your existing artistMoods array
+const artistDemands = [
+  {
+    type: "salary",
+    text: "demands a higher daily payment of E",
+    amount: (artist) => Math.round(artist.contractCost * 0.3),
+    effect: {
+      accept: {
+        reputation: 10,
+        artistHappiness: 15,
+        staffMorale: -5,
+        message: "accepts the increased payment"
+      },
+      reject: {
+        reputation: -15,
+        artistHappiness: -20,
+        staffMorale: 5,
+        message: "is upset about the rejection"
+      }
+    }
+  },
+  {
+    type: "equipment",
+    text: "requests new studio equipment worth E",
+    amount: (artist) => 25000 + Math.round(artist.popularity * 100),
+    effect: {
+      accept: {
+        reputation: 15,
+        artistHappiness: 20,
+        staffMorale: 10,
+        message: "is thrilled with the new equipment"
+      },
+      reject: {
+        reputation: -10,
+        artistHappiness: -15,
+        staffMorale: -5,
+        message: "threatens to leave over poor equipment"
+      }
+    }
+  },
+  {
+    type: "promotion",
+    text: "wants a marketing campaign worth E",
+    amount: (artist) => 20000 + Math.round(artist.popularity * 150),
+    effect: {
+      accept: {
+        reputation: 20,
+        artistHappiness: 15,
+        staffMorale: 5,
+        message: "gains more visibility"
+      },
+      reject: {
+        reputation: -15,
+        artistHappiness: -20,
+        staffMorale: 0,
+        message: "feels unsupported"
+      }
+    }
+  }
+];
 
     // Game state initialization
     function initializeGameState() {
       gameState = {
-        cash: 150000,
+        cash: 163200,
         day: 0,
         reputation: 0,
         availableScenarios: [...allScenarios],
         currentScenario: null,
         artists: [],
-       staff: [
-  {
-    role: "Manager",
-    morale: 50,
-    salary: 5000,            // Daily salary cost
-    costReduction: 0.05,     // Reduces artist cost by 5%
-    moodBoost: 10,           // Boosts artist mood by 10 points during negotiations
-    reputationMultiplier: 1.1, // Increases reputation gains by 10%
-    skillLevel: 8            // Used for termination penalty calculation
-  },
-  {
-    role: "Publicist",
-    morale: 50,
-    salary: 4500,
-    costReduction: 0.03,
-    moodBoost: 8,
-    reputationMultiplier: 1.05,
-    skillLevel: 6
-  },
-  {
-    role: "Producer",
-    morale: 50,
-    salary: 4800,
-    costReduction: 0.04,
-    moodBoost: 9,
-    reputationMultiplier: 1.07,
-    skillLevel: 7
-  },
-  {
-    role: "Talent Scout",
-    morale: 50,
-    salary: 4200,
-    costReduction: 0.02,
-    moodBoost: 7,
-    reputationMultiplier: 1.03,
-    skillLevel: 5
-  }
-]
+        staff: [
+        { role: "Manager", morale: 45, salary: 4300, costReduction: 0.03, moodBoost: 8, reputationMultiplier: 1.05, skillLevel: 6 },
+    { role: "Marketing Manager", morale: 55, salary: 5100, costReduction: 0.04, moodBoost: 11, reputationMultiplier: 1.09, skillLevel: 7 },
+    { role: "Production Assistant", morale: 40, salary: 3800, costReduction: 0.01, moodBoost: 6, reputationMultiplier: 1.02, skillLevel: 4 },
+    ],
         activeDeals: [],
-        equipment: []
-      };
-      updateReputationDisplay();
-    }
-
-  // Function to terminate a staff member.
-function terminateStaff(staff, remainingDays) {
-  // Calculate termination cost based on remaining contract days.
-  let terminationCost = staff.salary * remainingDays;
-  gameState.cash = Math.max(0, gameState.cash - terminationCost);
-  
-  // Apply reputation penalty: 10% if high skill, otherwise 5%.
-  let repPenaltyPercent = (staff.skillLevel >= 8) ? 10 : 5;
-  let repPenalty = gameState.reputation * (repPenaltyPercent / 100);
-  gameState.reputation = Math.max(0, gameState.reputation - repPenalty);
-  
-  // Remove the staff member from the game state.
-  gameState.staff = gameState.staff.filter(s => s !== staff);
-  
-  addMessage(`Terminated ${staff.role}. Deducted E${terminationCost.toLocaleString()} and reputation decreased by ${repPenaltyPercent}%.`);
-  updateGameDisplay();
-}
-
-// Helper function to confirm termination from the UI.
-// (Assumes staff roles are unique; if not, consider adding an 'id' property.)
-function confirmTerminateStaff(role) {
-  let staff = gameState.staff.find(s => s.role === role);
-  if (staff) {
-    let input = prompt(`Enter remaining contract days for ${staff.role}:`, "10");
-    let remainingDays = parseInt(input);
-    if (!isNaN(remainingDays) && remainingDays > 0) {
-      if (confirm(`Terminating ${staff.role} will cost E${(staff.salary * remainingDays).toLocaleString()} and reduce reputation by ${(staff.skillLevel >= 8) ? '10%' : '5%'}. Proceed?`)) {
-        terminateStaff(staff, remainingDays);
-      }
-    } else {
-      alert("Invalid input for remaining days.");
-    }
-  }
+        equipment: [],
+    newsUpdates: ["Breaking News: Swazi Jive Records Appoints New President, Industry Expects Fresh Direction!"] // Add initial news
+  };
+  updateReputationDisplay();
 }
 
     function adjustReputation(amount) {
@@ -1253,32 +1673,56 @@ function confirmTerminateStaff(role) {
     }
    // Function that triggers when a staff card is clicked; shows context-sensitive advice
    function showStaffHint(role, morale) {
+      let roleLower = role.toLowerCase();
       let advice = "";
-    if (role.toLowerCase().includes("manager")) {
-      advice = morale > 70 
-        ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
-        : "We should be cautious with our spending and focus on rebuilding our reputation.";
-    } else if (role.toLowerCase().includes("publicist")) {
-      advice = morale > 70
-        ? "Our public image is strong. Let's capitalize on this with some bold marketing moves!"
-        : "We need to focus on damage control and rebuilding our public image.";
-    } else if (role.toLowerCase().includes("producer")) {
-      advice = morale > 70 
-        ? "Now is the perfect time to experiment with innovative sounds and production techniques."
-        : "We might need to stick with proven formulas until the team's confidence improves.";
-    } else if (role.toLowerCase().includes("talent") || role.toLowerCase().includes("scout")) {
-      advice = morale > 70
-        ? "Our scouting game is strong—let's go after breakthrough talent to keep our roster fresh."
-        : "Focus on nurturing our current artists before expanding our talent pool.";
-    } else {
-      advice = "Keep up the great work and adapt as challenges arise.";
+     
+     if (roleLower.includes("executive producer")) {
+    advice = "As an Executive Producer, leverage your strategic vision and extensive experience to drive high-quality productions and mentor your team.";
+  } else if (roleLower.includes("senior producer")) {
+    advice = "Senior Producers should balance innovation with efficiency—aim for cutting-edge production while guiding junior staff.";
+  } else if (roleLower.includes("producer")) {
+    advice = morale > 70 
+      ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+      : "We might need to stick with proven formulas until the team's confidence improves.";
+  } else if (roleLower.includes("marketing manager")) {
+    advice = "Marketing Managers should focus on creative campaigns and data-driven strategies to enhance brand visibility and fan engagement.";
+  } else if (roleLower.includes("financial manager")) {
+    advice = "Financial Managers are key to label stability—ensure budgets are tight and every expense is justified.";
+  } else if (roleLower.includes("creative director")) {
+    advice = "Creative Directors should push the envelope with bold ideas while staying true to the label’s vision.";
+  } else if (roleLower.includes("artist liaison")) {
+    advice = "Artist Liaisons excel in communication; focus on building strong, lasting relationships with your talent.";
+  } else if (roleLower.includes("studio manager")) {
+    advice = "Studio Managers ensure smooth operations—prioritize efficiency, maintenance, and a well-run facility.";
+  } else if (roleLower.includes("event coordinator")) {
+    advice = "Event Coordinators should design memorable experiences that captivate fans and drive ticket sales.";
+  } else if (roleLower.includes("digital strategist")) {
+    advice = "Digital Strategists need to stay ahead of trends; use social media insights and online analytics to boost the label’s digital presence.";
+  } else if (roleLower.includes("production assistant")) {
+    advice = "Production Assistants support the team—attention to detail and stellar organization skills are essential.";
+  } else if (roleLower.includes("manager")) {
+    advice = morale > 70 
+      ? "A good manager focuses on high-ROI opportunities while maintaining excellent relationships with artists."
+      : "Be cautious with spending and work on rebuilding your reputation.";
+  } else if (roleLower.includes("publicist")) {
+    advice = morale > 70
+      ? "With a strong public image, you can lead bold PR moves!"
+      : "Focus on damage control and restoring the label’s public image.";
+  } else if (roleLower.includes("talent") || roleLower.includes("a&r") || roleLower.includes("scout")) {
+    advice = morale > 70
+      ? "Your talent scouting is on point—go after breakthrough artists to keep the roster fresh."
+      : "Focus on nurturing your current talent before expanding the roster.";
+  } else {
+    advice = "Keep up the great work and adapt as challenges arise.";
+  }
+  
+  if (morale < 30) {
+    advice += " (Note: Low staff morale may affect advice quality)";
+  }
+  
+  document.getElementById('staff-hint').textContent = advice;
     }
-    
-    if (morale < 51) {
-      advice += " (Note: Low staff morale may affect advice & quality)";
-    }
-      document.getElementById('staff-hint').textContent = advice;
-    }
+  
     function getCurrentReputationLevel() {
       let level = 1;
       for (const [key, value] of Object.entries({
@@ -1292,6 +1736,65 @@ function confirmTerminateStaff(role) {
       }
       return level;
     }
+
+    // Add these functions to handle job market
+function generateJobCandidates() {
+  const candidates = [
+    { role: "A&R Specialist", morale: 50, salary: 4800, hiring_cost: 14800, moodBoost: 12, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Senior Producer", morale: 55, salary: 5200, hiring_cost: 15200, moodBoost: 10, reputationMultiplier: 1.1, skillLevel: 8 },
+    { role: "Manager", morale: 45, salary: 4300, hiring_cost: 14300, moodBoost: 8, reputationMultiplier: 1.05, skillLevel: 6 },
+    { role: "Marketing Manager", morale: 55, salary: 5100, hiring_cost: 15100, moodBoost: 11, reputationMultiplier: 1.09, skillLevel: 7 },
+    { role: "Production Assistant", morale: 40, salary: 3800, hiring_cost: 13800, moodBoost: 6, reputationMultiplier: 1.02, skillLevel: 4 },
+    { role: "Executive Producer", morale: 65, salary: 6000, hiring_cost: 16000, moodBoost: 15, reputationMultiplier: 1.15, skillLevel: 9 },
+    { role: "Digital Strategist", morale: 50, salary: 4700, hiring_cost: 14700, moodBoost: 10, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Event Coordinator", morale: 45, salary: 4200, hiring_cost: 14200, moodBoost: 9, reputationMultiplier: 1.06, skillLevel: 6 },
+    { role: "Creative Director", morale: 60, salary: 5500, hiring_cost: 15500, moodBoost: 12, reputationMultiplier: 1.12, skillLevel: 8 },
+    { role: "Financial Manager", morale: 50, salary: 5300, hiring_cost: 15300, moodBoost: 8, reputationMultiplier: 1.07, skillLevel: 7 },
+    { role: "Artist Liaison", morale: 55, salary: 4900, hiring_cost: 14900, moodBoost: 11, reputationMultiplier: 1.1, skillLevel: 7 },
+    { role: "Studio Manager", morale: 50, salary: 5200, hiring_cost: 15200, moodBoost: 10, reputationMultiplier: 1.08, skillLevel: 7 },
+    { role: "Talent Scout", morale: 50, salary: 4500, hiring_cost: 14500, moodBoost: 9, reputationMultiplier: 1.06, skillLevel: 6 }
+  ];
+
+  const jobMarket = document.getElementById('job-applications-market');
+  jobMarket.innerHTML = candidates.map(candidate => `
+    <div class="market-item" onclick="hireCandidateFromMarket(${JSON.stringify(candidate).replace(/"/g, '&quot;')})">
+      <strong>${candidate.role}</strong><br>
+      💰 Salary: E${candidate.salary}/day<br>
+      ⭐ Skill Level: ${candidate.skillLevel}<br>
+      📋 Morale: ${candidate.morale}<br>
+      💼 Hiring Cost: E${candidate.hiring_cost}
+    </div>
+  `).join('');
+}
+
+function hireCandidateFromMarket(candidate) {
+  if (gameState.cash < candidate.hiring_cost) {
+    alert("Not enough cash to hire this candidate!");
+    return;
+  }
+
+  const newStaffMember = {
+    role: candidate.role,
+    morale: 75,
+    salary: candidate.salary,
+    costReduction: 0.03,
+    moodBoost: 8,
+    reputationMultiplier: 1.05,
+    skillLevel: 6
+  };
+
+  gameState.cash -= candidate.hiring_cost;
+  gameState.staff.push(newStaffMember);
+  
+   // Apply one-time reputation boost when hiring
+ const reputationBoost = Math.round((candidate.reputationMultiplier - 1) * 100);
+  adjustReputation(reputationBoost);
+  
+  addMessage(`Hired ${candidate.role} for E${candidate.hiring_cost}`);
+  addMessage(`📈 Label reputation increased by ${reputationBoost} points from new hire!`);
+  updateGameDisplay();
+}
+
 
     function updateReputationDisplay() {
       const level = getCurrentReputationLevel();
@@ -1319,19 +1822,37 @@ function confirmTerminateStaff(role) {
       document.getElementById('cash').textContent = `E${gameState.cash.toLocaleString()}`;
       document.getElementById('day').textContent = gameState.day;
       document.getElementById('artist-roster').innerHTML = gameState.artists.map(artist => `
-        <div class="artist-card" onclick='startNegotiation(${JSON.stringify(artist)}, false)'>
-          <strong>${artist.name}</strong> (${artist.genre})<br>
-          📈 Popularity: ${artist.popularity}<br>
-          😊 Happiness: ${artist.happiness}%<br>
-          📅 Contract: ${artist.contractDays} days
-        </div>
-      `).join('');
-     document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
+    <div class="artist-card">
+      <strong>${artist.name}</strong> (${artist.genre})<br>
+      📈 Popularity: ${artist.popularity}<br>
+      😊 Happiness: ${artist.happiness}%<br>
+      📅 Contract: ${artist.contractDays} days
+      <div class="artist-buttons">
+        <button onclick="generateArtistDemand('${artist.name}')" class="demand-btn">📢 Check Demands</button>
+        <br>
+
+        <button onclick='startNegotiation(${JSON.stringify(artist)}, false)' class="renegotiate-btn">📝 Renegotiate</button>
+      </div>
+      ${artist.currentDemand ? 
+        `<div class="current-demand">
+          📢 ${artist.name} ${artist.currentDemand.text}${artist.currentDemand.amount}
+          <button onclick="handleDemand('${artist.name}', true)">✅ Accept</button>
+          <button onclick="handleDemand('${artist.name}', false)">❌ Reject</button>
+        </div>` : ''
+      }
+    </div>
+  `).join('');
+  document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
   <div class="staff-card">
     <strong>${staff.role}</strong><br>
     😊 Morale: ${staff.morale}%<br>
-    💸 Salary: E${staff.salary}/day<br>
+    💰 Salary: E${staff.salary}<br>
+    📈 Skill: ${staff.skillLevel}<br>
+    ⭐ Boost: ${staff.moodBoost}<br>
     <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
+    <br>
+  
+    <button onclick="showStaffAdvice('${staff.role}')">Staff Advice</button>
   </div>
 `).join('');
       document.getElementById('inventory-list').innerHTML = [
@@ -1353,6 +1874,78 @@ function confirmTerminateStaff(role) {
       updateNewsDisplay();
     }
 
+    // Add these new functions
+function generateArtistDemand(artistName) {
+  const artist = gameState.artists.find(a => a.name === artistName);
+  if (!artist || artist.daysSigned < 5) return;
+
+  const demand = artistDemands[Math.floor(Math.random() * artistDemands.length)];
+  artist.currentDemand = {
+    ...demand,
+    amount: demand.amount(artist)
+  };
+  addMessage(`📢 ${artist.name} ${demand.text}${demand.amount.toLocaleString()}`);
+  updateGameDisplay();
+}
+
+function handleDemand(artistName, accepted) {
+  const artist = gameState.artists.find(a => a.name === artistName);
+  if (!artist || !artist.currentDemand) return;
+
+  const effect = accepted ? artist.currentDemand.effect.accept : artist.currentDemand.effect.reject;
+  
+  if (accepted) {
+    if (gameState.cash < artist.currentDemand.amount) {
+      addMessage(`❌ Not enough cash to meet ${artist.name}'s demand!`);
+      return;
+    }
+    gameState.cash -= artist.currentDemand.amount;
+  }
+
+  adjustReputation(effect.reputation);
+  adjustArtistHappiness(effect.artistHappiness);
+  adjustStaffMorale(effect.staffMorale);
+  
+  addMessage(`${artist.name} ${effect.message}`);
+  delete artist.currentDemand;
+  updateGameDisplay();
+}
+
+// Function to terminate a staff member.
+function terminateStaff(staff, remainingDays) {
+  // Calculate termination cost based on remaining contract days.
+  let terminationCost = staff.salary * remainingDays;
+  gameState.cash = Math.max(0, gameState.cash - terminationCost);
+  
+  // Apply reputation penalty: 10% if high skill, otherwise 5%.
+  let repPenaltyPercent = (staff.skillLevel >= 8) ? 10 : 5;
+  let repPenalty = gameState.reputation * (repPenaltyPercent / 100);
+  gameState.reputation = Math.max(0, gameState.reputation - repPenalty);
+  
+  // Remove the staff member from the game state.
+  gameState.staff = gameState.staff.filter(s => s !== staff);
+  
+  addMessage(`Terminated ${staff.role}. Deducted E${terminationCost.toLocaleString()} and reputation decreased by ${repPenaltyPercent}%.`);
+  updateGameDisplay();
+}
+
+
+
+    function confirmTerminateStaff(role) {
+  let staff = gameState.staff.find(s => s.role === role);
+  if (staff) {
+    let remainingDays = 25; // Default to 25 days
+    let terminationCost = staff.salary * remainingDays;
+    let reputationLoss = (staff.skillLevel >= 8) ? '10%' : '5%';
+
+    if (confirm(`Terminating ${staff.role} will cost E${terminationCost.toLocaleString()} and reduce reputation by ${reputationLoss}. Proceed?`)) {
+      terminateStaff(staff, remainingDays);
+    }
+  }
+}
+
+
+
     function adjustArtistHappiness(amount) {
       gameState.artists.forEach(artist => {
         artist.happiness = Math.max(0, Math.min(100, artist.happiness + amount));
@@ -1360,177 +1953,17 @@ function confirmTerminateStaff(role) {
     }
 
     function adjustStaffMorale(amount) {
-      gameState.staff.forEach(staff => {
-        staff.morale = Math.max(0, Math.min(100, staff.morale + amount));
-      });
-    }
+  gameState.staff.forEach(staff => {
+    staff.morale = Math.max(0, Math.min(100, staff.morale + amount));
+  });
+  updateGameDisplay();
+}
 
     function adjustArtistPopularity(amount) {
       gameState.artists.forEach(artist => {
         artist.popularity = Math.max(0, artist.popularity + amount);
       });
     }
-  // Function to generate a news event for recruiting staff.
-function generateStaffRecruitmentNews() {
-  let newsHeadline = "Top Staff Looking for Jobs – Click to view candidates!";
-  let newsContainer = document.getElementById('news-updates');
-  let newsItem = document.createElement('div');
-  newsItem.className = 'news-item';
-  newsItem.textContent = newsHeadline;
-  newsItem.style.cursor = 'pointer';
-  newsItem.onclick = function() {
-    openStaffRecruitmentInterface();
-  };
-  newsContainer.appendChild(newsItem);
-}
-
-// Function to open a recruitment interface.
-// This example uses a simple confirmation prompt. In a full implementation, you might open a modal.
-function openStaffRecruitmentInterface() {
-  // Example candidate; in a real game, this could be randomized or chosen from a list.
-  let candidate = [
-  {
-    role: "A&R Specialist",
-    morale: 50,
-    salary: 4800,
-    costReduction: 0.04,
-    moodBoost: 12,
-    reputationMultiplier: 1.08,
-    skillLevel: 7
-  },
-  {
-    role: "Senior Producer",
-    morale: 55,
-    salary: 5200,
-    costReduction: 0.05,
-    moodBoost: 10,
-    reputationMultiplier: 1.1,
-    skillLevel: 8
-  },
-  {
-    role: "Assistant Manager",
-    morale: 45,
-    salary: 4300,
-    costReduction: 0.03,
-    moodBoost: 8,
-    reputationMultiplier: 1.05,
-    skillLevel: 6
-  },
-  {
-    role: "Operations Manager",
-    morale: 50,
-    salary: 5000,
-    costReduction: 0.02,
-    moodBoost: 9,
-    reputationMultiplier: 1.07,
-    skillLevel: 7
-  },
-  {
-    role: "Talent Scout",
-    morale: 60,
-    salary: 4000,
-    costReduction: 0.02,
-    moodBoost: 7,
-    reputationMultiplier: 1.03,
-    skillLevel: 5
-  },
-  {
-    role: "Marketing Manager",
-    morale: 55,
-    salary: 5100,
-    costReduction: 0.04,
-    moodBoost: 11,
-    reputationMultiplier: 1.09,
-    skillLevel: 7
-  },
-  {
-    role: "Production Assistant",
-    morale: 40,
-    salary: 3800,
-    costReduction: 0.01,
-    moodBoost: 6,
-    reputationMultiplier: 1.02,
-    skillLevel: 4
-  },
-  {
-    role: "Executive Producer",
-    morale: 65,
-    salary: 6000,
-    costReduction: 0.06,
-    moodBoost: 15,
-    reputationMultiplier: 1.15,
-    skillLevel: 9
-  },
-  {
-    role: "Digital Strategist",
-    morale: 50,
-    salary: 4700,
-    costReduction: 0.03,
-    moodBoost: 10,
-    reputationMultiplier: 1.08,
-    skillLevel: 7
-  },
-  {
-    role: "Event Coordinator",
-    morale: 45,
-    salary: 4200,
-    costReduction: 0.02,
-    moodBoost: 9,
-    reputationMultiplier: 1.06,
-    skillLevel: 6
-  },
-  {
-    role: "Creative Director",
-    morale: 60,
-    salary: 5500,
-    costReduction: 0.05,
-    moodBoost: 12,
-    reputationMultiplier: 1.12,
-    skillLevel: 8
-  },
-  {
-    role: "Financial Manager",
-    morale: 50,
-    salary: 5300,
-    costReduction: 0.03,
-    moodBoost: 8,
-    reputationMultiplier: 1.07,
-    skillLevel: 7
-  },
-  {
-    role: "Artist Liaison",
-    morale: 55,
-    salary: 4900,
-    costReduction: 0.04,
-    moodBoost: 11,
-    reputationMultiplier: 1.1,
-    skillLevel: 7
-  },
-  {
-    role: "Studio Manager",
-    morale: 50,
-    salary: 5200,
-    costReduction: 0.04,
-    moodBoost: 10,
-    reputationMultiplier: 1.08,
-    skillLevel: 7
-  },
-  {
-    role: "Public Relations Coordinator",
-    morale: 48,
-    salary: 4600,
-    costReduction: 0.03,
-    moodBoost: 10,
-    reputationMultiplier: 1.06,
-    skillLevel: 6
-  }
-];
-  if (confirm(`Hire new staff: ${candidate.role} with salary E${candidate.salary} and unique abilities?`)) {
-    gameState.staff.push(candidate);
-    addMessage(`Hired new staff: ${candidate.role}`);
-    updateGameDisplay();
-  }
-}
 
     const baseMarketData = {
       shows: [
@@ -1730,7 +2163,104 @@ function unlockContent() {
   }
 }
 
+// Add this function to your game code
+function sendScoreToLeaderboard(gameData) {
+  // Create a button or modal to submit score
+  const modal = document.createElement('div');
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.backgroundColor = '#2d2d2d';
+  modal.style.padding = '20px';
+  modal.style.borderRadius = '8px';
+  modal.style.zIndex = '1000';
+  modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+  
+  modal.innerHTML = `
+    <h2 style="color: white; margin-top: 0;">Submit to Leaderboard</h2>
+    <p style="color: white;">Your final stats:</p>
+    <ul style="color: white;">
+      <li>Cash: £${gameData.cash.toLocaleString()}</li>
+      <li>Reputation: ${gameData.reputation}</li>
+      <li>Daily Revenue: £${gameData.dailyRevenue.toLocaleString()}</li>
+      <li>Daily Costs: £${gameData.dailyCosts.toLocaleString()}</li>
+    </ul>
+    <div style="margin-top: 15px;">
+      <label style="color: white; display: block; margin-bottom: 5px;">Your Name:</label>
+      <input type="text" id="leaderboard-name" style="padding: 8px; width: 100%;">
+    </div>
+    <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+      <button id="submit-to-leaderboard" style="padding: 8px 15px; background-color: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer;">Submit Score</button>
+      <button id="cancel-leaderboard" style="padding: 8px 15px; background-color: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Handle submissions
+  document.getElementById('submit-to-leaderboard').addEventListener('click', async () => {
+    const playerName = document.getElementById('leaderboard-name').value;
+    if (!playerName) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/submitScore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerName,
+          finalCash: gameData.cash,
+          reputation: gameData.reputation,
+          dailyRevenue: gameData.dailyRevenue,
+          dailyCosts: gameData.dailyCosts
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Score submitted successfully!');
+        window.location.href = '/leaderboard.html';
+      } else {
+        alert('Error submitting score.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error submitting score. Please try again.');
+    }
+    
+    document.body.removeChild(modal);
+  });
+  
+  document.getElementById('cancel-leaderboard').addEventListener('click', () => {
+    document.body.removeChild(modal);
+  });
+}
 
+// Add this to your game's end state or when appropriate
+function gameOver() {
+  // Collect final stats
+  const gameData = {
+    cash: 130441, // Replace with actual game variables
+    reputation: 26,
+    dailyRevenue: 79750,
+    dailyCosts: 34200
+  };
+  
+  // Show score submission modal
+  sendScoreToLeaderboard(gameData);
+}
+
+// Add a button to test the game over state if needed
+// const testButton = document.createElement('button');
+// testButton.textContent = 'Test Game Over';
+// testButton.onclick = gameOver;
+// document.body.appendChild(testButton);
+
+  
     function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
       const demandFactor = 1 + (popularity / 100);
       const volatilityFactor = isVolatile ? 0.5 : 0.2;
@@ -1769,13 +2299,14 @@ function unlockContent() {
     }
 
     function updateMarketplaces() {
-      updateShowsMarket();
-      updateDealsMarket();
-      updateArtistsMarket();
-      updateEquipmentMarket();
-      updateTrainingMarket();
-      updateMarketingMarket();
-    }
+  updateShowsMarket();
+  updateDealsMarket();
+  updateArtistsMarket();
+  updateEquipmentMarket();
+  updateTrainingMarket();
+  updateMarketingMarket();
+  generateJobCandidates(); // Add this line to include job market updates
+}
 
     function updateShowsMarket() {
       document.getElementById('shows-market').innerHTML = marketData.shows.map(show => `
@@ -2020,14 +2551,6 @@ function unlockContent() {
       updateGameDisplay();
     }
 
-  function deductSalaries() {
-  // Sum up daily salaries from all staff members.
-  let totalSalary = gameState.staff.reduce((sum, staff) => sum + staff.salary, 0);
-  gameState.cash = Math.max(0, gameState.cash - totalSalary);
-  addMessage(`Deducted total salaries: E${totalSalary.toLocaleString()}`);
-  updateGameDisplay();
-}
-
     function startNegotiation(artist, isNewArtist) {
   currentNegotiationArtist = { ...artist, isNewArtist };
   const mood = artistMoods[Math.floor(Math.random() * artistMoods.length)];
@@ -2060,6 +2583,8 @@ function unlockContent() {
             happiness: 100,
             contractDays: 30,
             contractCost: currentOffer,
+            daysSigned: 0,
+            currentDemand: null,
             mood: currentNegotiationArtist.mood
           };
           gameState.artists.push(newArtist);
@@ -2224,6 +2749,7 @@ function unlockContent() {
       gameState.artists.forEach(artist => {
         const artistRevenue = Math.floor(artist.popularity * 1000 * (1 + gameState.reputation / 100));
         dailyRevenue += artistRevenue;
+        
         addMessage(`💫 ${artist.name} generated E${artistRevenue.toLocaleString()} today`);
         artist.contractDays--;
         if (artist.contractDays < 0) {
@@ -2234,14 +2760,22 @@ function unlockContent() {
           const totalEquipmentQuality = gameState.equipment.reduce((sum, item) => sum + item.quality, 0);
           const happinessBoost = Math.floor(totalEquipmentQuality / 10);
           artist.happiness = Math.min(100, artist.happiness + happinessBoost);
-          if (artist.contractDays <= 5) {
-            addMessage(`⚠️ ${artist.name}'s contract expires in ${artist.contractDays} day${artist.contractDays > 1 ? 's' : ''}! Click to negotiate renewal.`);
-            generateNews(0, 0, false, artist); // News about contract nearing expiration
+          if (artist.daysSigned = 0) {
+            artist.daysSigned++;
           } else if (Math.random() < 0.3) { // 30% chance daily for artist news
             generateNews(0, 0, false, artist); // Random artist news
           }
+          
         }
       });
+
+      // Calculate staff salaries
+  const staffSalaries = gameState.staff.reduce((total, staff) => total + staff.salary, 0);
+  gameState.cash -= staffSalaries;
+
+  // Add staff salary info to daily summary
+  addMessage(`💼 Staff Salaries Paid: E${staffSalaries.toLocaleString()}`);
+
 
       gameState.artists = gameState.artists.filter(artist => artist.contractDays >= 0);
 
@@ -2307,7 +2841,7 @@ function unlockContent() {
       showActionSummary(cashEffect, repChange);
       generateNews(cashEffect, repChange, true); // Generate news based on scenario outcome
 
-      if (gameState.day > 30) {
+      if (gameState.day >= 50) {
         endGame();
       } else {
         startNewDay();
@@ -2315,8 +2849,38 @@ function unlockContent() {
       updateGameDisplay();
     }
 
+      // Function to show toast notification
+      function showToast(message, isSuccess = true) {
+        const toast = document.getElementById('notification-toast');
+        const toastMessage = document.getElementById('toast-message');
+        
+        if (toast && toastMessage) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    }
+    
+    // Function to create bonus points animation
+    function showBonusPoints(amount, x, y) {
+        const bonus = document.createElement('div');
+        bonus.className = 'bonus-points';
+        bonus.textContent = `+${amount}`;
+        bonus.style.left = `${x}px`;
+        bonus.style.top = `${y}px`;
+        
+        document.body.appendChild(bonus);
+        
+        setTimeout(() => {
+            document.body.removeChild(bonus);
+        }, 2000);
+    }
+
     function endGame() {
-      addMessage("🏁 Game Over: You've reached the end of 30 days!");
+      addMessage("🏁 Game Over: You've reached the end of 50 days!");
       addMessage(`Final Cash: E${gameState.cash.toLocaleString()}`);
       addMessage(`Final Reputation: ${gameState.reputation}`);
       document.querySelectorAll('.market-item').forEach(item => item.onclick = null);
@@ -2329,6 +2893,56 @@ function unlockContent() {
       startNewDay();
       updateMarketplaces();
     });
+// Apply visual enhancements to existing elements
+document.addEventListener('DOMContentLoaded', function() {
+        // Apply panel styling to main game container
+        const gameContainers = document.querySelectorAll('.game, .panel');
+        gameContainers.forEach(container => {
+            if (!container.classList.contains('panel')) {
+                container.classList.add('panel');
+            }
+        });
+        
+        // Apply styling to any score display
+        const scoreElements = document.querySelectorAll('#score, .score');
+        scoreElements.forEach(element => {
+            // Keep existing updates, just add the animation when it changes
+            const originalTextContent = Object.getOwnPropertyDescriptor(
+                Object.getPrototypeOf(element), 'textContent'
+            );
+            
+            if (originalTextContent) {
+                Object.defineProperty(element, 'textContent', {
+                    set: function(value) {
+                        originalTextContent.set.call(this, value);
+                        this.style.animation = 'none';
+                        setTimeout(() => {
+                            this.style.animation = 'scoreFlash 0.5s ease';
+                        }, 10);
+                    },
+                    get: function() {
+                        return originalTextContent.get.call(this);
+                    }
+                });
+            }
+        });
+        
+        // Add artist-info class to artist containers
+        const artistElements = document.querySelectorAll('.artist, .artist-container');
+        artistElements.forEach(element => {
+            if (!element.classList.contains('artist-info')) {
+                element.classList.add('artist-info');
+            }
+        });
+        
+        // Enhance timer display
+        const timerElements = document.querySelectorAll('#timer, .timer');
+        timerElements.forEach(element => {
+            if (!element.id) element.id = 'timer';
+        });
+    });
+
+
   </script>
 </body>
 </html>
