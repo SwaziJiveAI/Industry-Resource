@@ -1146,13 +1146,28 @@
     ];
 
     const rivalLabels = ["Eswatini Top Dogs", "Piggs Peak Soundwave Label", "Manzini Music Co.", "Lubombo Recording Studio", "Hlane Harmony House"];
-    const marketNews = [
-      "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
-      "Market Update: Vinyl sales spike, boosting traditional music popularity!",
-      "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
-      "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
-      "Media Buzz: A new music festival launches, offering high-profile show opportunities!"
-    ];
+   const marketNews = [
+  "Industry News: Streaming platforms see a surge, increasing artist demand by 10%!",
+  "Market Update: Vinyl sales spike, boosting traditional music popularity!",
+  "Economic News: Inflation rises, increasing equipment and training costs by 15%!",
+  "Trend Alert: Afropop dominates charts, enhancing genre-specific artist value!",
+  "Media Buzz: A new music festival launches, offering high-profile show opportunities!",
+  "Tech Update: New sound engineering software revolutionizes production efficiency!",
+  "Global Spotlight: International artists show increased interest in Swazi Jive Records!",
+  "Chart-Topping Update: Local artist breaks streaming records with debut single!",
+  "Investment News: Major sponsor signs on, boosting label’s financial prospects!",
+  "Market Insight: Digital downloads surge as fans embrace online concerts!",
+  "Economic Forecast: Currency fluctuations impact artist touring budgets!",
+  "Industry Trend: Indie labels join forces, sparking a wave of collaboration!",
+  "Production Breakthrough: Innovative recording techniques lower studio costs!",
+  "Fan Frenzy: Social media buzz fuels an unexpected rise in merchandise sales!",
+  "Brand Partnership: A top consumer brand collaborates with Swazi Jive Records!",
+  "Event Update: Pop-up live sessions captivate audiences, driving ticket sales!",
+  "Streaming Stats: Record-breaking listens set new benchmarks on digital platforms!",
+  "Talent Radar: Emerging artists garner nationwide acclaim from critics!",
+  "Collaboration Alert: Iconic producer teams up with local talent for a breakthrough album!",
+  "Revenue Report: Strong album sales contribute to robust quarterly growth!"
+];
 
     // ... existing code ...
 const artistMoods = [
@@ -1190,7 +1205,55 @@ const artistMoods = [
     }
    // Function that triggers when a staff card is clicked; shows context-sensitive advice
    function showStaffHint(role, morale) {
+      let roleLower = role.toLowerCase();
       let advice = "";
+     
+     if (roleLower.includes("executive producer")) {
+    advice = "As an Executive Producer, leverage your strategic vision and extensive experience to drive high-quality productions and mentor your team.";
+  } else if (roleLower.includes("senior producer")) {
+    advice = "Senior Producers should balance innovation with efficiency—aim for cutting-edge production while guiding junior staff.";
+  } else if (roleLower.includes("producer")) {
+    advice = morale > 70 
+      ? "Now is the perfect time to experiment with innovative sounds and production techniques."
+      : "We might need to stick with proven formulas until the team's confidence improves.";
+  } else if (roleLower.includes("marketing manager")) {
+    advice = "Marketing Managers should focus on creative campaigns and data-driven strategies to enhance brand visibility and fan engagement.";
+  } else if (roleLower.includes("financial manager")) {
+    advice = "Financial Managers are key to label stability—ensure budgets are tight and every expense is justified.";
+  } else if (roleLower.includes("creative director")) {
+    advice = "Creative Directors should push the envelope with bold ideas while staying true to the label’s vision.";
+  } else if (roleLower.includes("artist liaison")) {
+    advice = "Artist Liaisons excel in communication; focus on building strong, lasting relationships with your talent.";
+  } else if (roleLower.includes("studio manager")) {
+    advice = "Studio Managers ensure smooth operations—prioritize efficiency, maintenance, and a well-run facility.";
+  } else if (roleLower.includes("event coordinator")) {
+    advice = "Event Coordinators should design memorable experiences that captivate fans and drive ticket sales.";
+  } else if (roleLower.includes("digital strategist")) {
+    advice = "Digital Strategists need to stay ahead of trends; use social media insights and online analytics to boost the label’s digital presence.";
+  } else if (roleLower.includes("production assistant")) {
+    advice = "Production Assistants support the team—attention to detail and stellar organization skills are essential.";
+  } else if (roleLower.includes("manager")) {
+    advice = morale > 70 
+      ? "A good manager focuses on high-ROI opportunities while maintaining excellent relationships with artists."
+      : "Be cautious with spending and work on rebuilding your reputation.";
+  } else if (roleLower.includes("publicist")) {
+    advice = morale > 70
+      ? "With a strong public image, you can lead bold PR moves!"
+      : "Focus on damage control and restoring the label’s public image.";
+  } else if (roleLower.includes("talent") || roleLower.includes("a&r") || roleLower.includes("scout")) {
+    advice = morale > 70
+      ? "Your talent scouting is on point—go after breakthrough artists to keep the roster fresh."
+      : "Focus on nurturing your current talent before expanding the roster.";
+  } else {
+    advice = "Keep up the great work and adapt as challenges arise.";
+  }
+  
+  if (morale < 30) {
+    advice += " (Note: Low staff morale may affect advice quality)";
+  }
+  
+  document.getElementById('staff-advice-content').textContent = advice;
+}
     if (role.toLowerCase().includes("manager")) {
       advice = morale > 70 
         ? "I suggest focusing on high-ROI opportunities and maintaining good relationships with our artists."
@@ -1322,19 +1385,18 @@ function updateMarketplaces() {
           📅 Contract: ${artist.contractDays} days
         </div>
       `).join('');
-      document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
-        <div class="staff-card" onclick="showStaffAdvice('${staff.role}', ${staff.morale})">
-          <strong>${staff.role}</strong><br>
-          😊 Morale: ${staff.morale}% <br>
-          💰 Salary:E${staff.salary} <br>
-          📈 Skill: ${staff.skillLevel}<br>
-          ⭐ Boost: ${staff.moodBoost}
-   <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
-   <br>
-  <button onclick="getStaffAdvice('${staff.role}')">Staff Advice</button>
-        
-          </div>
-      `).join('');
+  document.getElementById('staff-list').innerHTML = gameState.staff.map(staff => `
+  <div class="staff-card">
+    <strong>${staff.role}</strong><br>
+    😊 Morale: ${staff.morale}%<br>
+    💰 Salary: E${staff.salary}<br>
+    📈 Skill: ${staff.skillLevel}<br>
+    ⭐ Boost: ${staff.moodBoost}<br>
+    <button onclick="confirmTerminateStaff('${staff.role}')">Terminate Contract</button>
+    <br>
+    <button onclick="getStaffAdvice('${staff.role}')">Staff Advice</button>
+  </div>
+`).join('');
       document.getElementById('inventory-list').innerHTML = [
         ...gameState.equipment.map(item => `
           <div class="market-item">
