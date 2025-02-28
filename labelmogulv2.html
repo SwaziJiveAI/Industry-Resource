@@ -17,6 +17,8 @@
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
 
+
+    
     .demand-btn {
   margin-top: 5px;
   padding: 3px 8px;
@@ -364,14 +366,14 @@
 :root {
   --primary-color: #4CAF50;       /* Green for positive actions/money */
   --secondary-color: #7B1FA2;     /* Purple as accent color */
-  --background-dark: #3a3a3a; ;     /* Dark background */
+  --background-dark: #3a3a3a;     /* Dark background */
   --surface-color: #1E1E1E;       /* Slightly lighter surface */
   --container-bg: #252525;        /* Container background */
   --success-text: #4CAF50;        /* Green text for positive numbers */
   --warning-text: #FF9800;        /* Orange for warnings */
   --text-primary: rgba(255, 255, 255, 0.87);  /* Main text */
-  --text-secondary: rgba(255, 255, 255, 0.6); /* Less important text */
-  --border-color: rgba(255, 255, 255, 0.12);  /* Subtle borders */
+  --text-secondary: #ffffff99; /* Less important text */
+  --border-color: #ffffff1f;  /* Subtle borders */
 }
 
 /* Apply dark theme to body and main containers */
@@ -632,6 +634,10 @@ button:hover, .button:hover, [class*="btn"]:hover {
        <div class="info-box">
         <h3>👥 Staff</h3>
         <div id="staff-list" class="scroll-box"></div>
+      </div>
+      <div class="info-box">
+        <h3>🏆 Highscores</h3>
+        <a href="/leaderboard.html" class="negotiation-btn" >Top 10 Moguls </a>
       </div>
     </div>
 
@@ -2163,104 +2169,7 @@ function unlockContent() {
   }
 }
 
-// Add this function to your game code
-function sendScoreToLeaderboard(gameData) {
-  // Create a button or modal to submit score
-  const modal = document.createElement('div');
-  modal.style.position = 'fixed';
-  modal.style.top = '50%';
-  modal.style.left = '50%';
-  modal.style.transform = 'translate(-50%, -50%)';
-  modal.style.backgroundColor = '#2d2d2d';
-  modal.style.padding = '20px';
-  modal.style.borderRadius = '8px';
-  modal.style.zIndex = '1000';
-  modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-  
-  modal.innerHTML = `
-    <h2 style="color: white; margin-top: 0;">Submit to Leaderboard</h2>
-    <p style="color: white;">Your final stats:</p>
-    <ul style="color: white;">
-      <li>Cash: £${gameData.cash.toLocaleString()}</li>
-      <li>Reputation: ${gameData.reputation}</li>
-      <li>Daily Revenue: £${gameData.dailyRevenue.toLocaleString()}</li>
-      <li>Daily Costs: £${gameData.dailyCosts.toLocaleString()}</li>
-    </ul>
-    <div style="margin-top: 15px;">
-      <label style="color: white; display: block; margin-bottom: 5px;">Your Name:</label>
-      <input type="text" id="leaderboard-name" style="padding: 8px; width: 100%;">
-    </div>
-    <div style="margin-top: 15px; display: flex; justify-content: space-between;">
-      <button id="submit-to-leaderboard" style="padding: 8px 15px; background-color: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer;">Submit Score</button>
-      <button id="cancel-leaderboard" style="padding: 8px 15px; background-color: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  
-  // Handle submissions
-  document.getElementById('submit-to-leaderboard').addEventListener('click', async () => {
-    const playerName = document.getElementById('leaderboard-name').value;
-    if (!playerName) {
-      alert('Please enter your name');
-      return;
-    }
-    
-    try {
-      const response = await fetch('/api/submitScore', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          playerName,
-          finalCash: gameData.cash,
-          reputation: gameData.reputation,
-          dailyRevenue: gameData.dailyRevenue,
-          dailyCosts: gameData.dailyCosts
-        })
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        alert('Score submitted successfully!');
-        window.location.href = '/leaderboard.html';
-      } else {
-        alert('Error submitting score.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error submitting score. Please try again.');
-    }
-    
-    document.body.removeChild(modal);
-  });
-  
-  document.getElementById('cancel-leaderboard').addEventListener('click', () => {
-    document.body.removeChild(modal);
-  });
-}
 
-// Add this to your game's end state or when appropriate
-function gameOver() {
-  // Collect final stats
-  const gameData = {
-    cash: 130441, // Replace with actual game variables
-    reputation: 26,
-    dailyRevenue: 79750,
-    dailyCosts: 34200
-  };
-  
-  // Show score submission modal
-  sendScoreToLeaderboard(gameData);
-}
-
-// Add a button to test the game over state if needed
-// const testButton = document.createElement('button');
-// testButton.textContent = 'Test Game Over';
-// testButton.onclick = gameOver;
-// document.body.appendChild(testButton);
-
-  
     function fluctuateValue(baseValue, popularity = 0, isVolatile = false) {
       const demandFactor = 1 + (popularity / 100);
       const volatilityFactor = isVolatile ? 0.5 : 0.2;
