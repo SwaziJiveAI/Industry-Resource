@@ -2403,6 +2403,76 @@ function unlockContent() {
   generateJobCandidates(); // Add this line to include job market updates
 }
 
+// First, create the showHighScoreDialog function that properly initializes the modal
+function showHighScoreDialog(finalStats) {
+  // Create modal element
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #424242;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+  `;
+
+  // Set modal content
+  modal.innerHTML = `
+    <h2 style="color: #ffeb3b; margin-top: 0; text-align: center;">HIGH SCORE ACHIEVED!</h2>
+    <p style="color: white; text-align: center;">Congratulations! You've reached E${(finalStats.cash/50000000).toFixed(1)}M</p>
+    <div style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">
+      <h3 style="color: #ffeb3b; margin-top: 0;">Your Final Stats:</h3>
+      <ul style="color: white; list-style-type: none; padding-left: 0;">
+        <li><span style="display: inline-block; width: 140px;">Cash:</span> E${finalStats.cash.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Reputation:</span> ${finalStats.reputation}</li>
+        <li><span style="display: inline-block; width: 140px;">Daily Revenue:</span> E${finalStats.dailyRevenue.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Daily Costs:</span> E${finalStats.dailyCosts.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Profit Margin:</span> ${finalStats.profitMargin}%</li>
+      </ul>
+    </div>
+    <div style="margin-top: 20px;">
+      <label style="color: white; display: block; margin-bottom: 8px; font-weight: bold;">Enter Your Name:</label>
+      <input type="text" id="player-name-input" style="padding: 10px; width: 100%; background-color: #333; color: white; border: 1px solid #666; border-radius: 4px;" maxlength="20" placeholder="Your Mogul Name">
+    </div>
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+      <button id="submit-score-btn" style="padding: 10px 20px; background-color: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Submit Score</button>
+      <button id="cancel-score-btn" style="padding: 10px 20px; background-color: #555; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+    </div>
+  `;
+
+  // Add modal to the DOM
+  document.body.appendChild(modal);
+
+  // Focus on the input field
+  document.getElementById('player-name-input').focus();
+
+  // Handle submit button click
+  document.getElementById('submit-score-btn').addEventListener('click', function() {
+    const playerName = document.getElementById('player-name-input').value.trim();
+    if (!playerName) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    // Submit the score
+    submitHighScore(playerName, finalStats.cash, finalStats.reputation, finalStats.dailyRevenue, finalStats.dailyCosts, finalStats.profitMargin);
+    
+    // Remove the modal
+    document.body.removeChild(modal);
+  });
+
+  // Handle cancel button click
+  document.getElementById('cancel-score-btn').addEventListener('click', function() {
+    document.body.removeChild(modal);
+  });
+}
+
+
     function updateShowsMarket() {
       document.getElementById('shows-market').innerHTML = marketData.shows.map(show => `
         <div class="market-item" onclick="bookShow('${show.name}', ${show.cost}, ${show.popularity}, ${show.duration})">
