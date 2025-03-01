@@ -635,7 +635,10 @@ button:hover, .button:hover, [class*="btn"]:hover {
         <h3>👥 Staff</h3>
         <div id="staff-list" class="scroll-box"></div>
       </div>
-      
+      <div class="info-box">
+        <h3>🏆 Highscores</h3>
+        <a href="/Industry-Resource/leaderboard.html" class="negotiation-btn" >Top 10 Moguls </a>
+      </div>
     </div>
 
   </div>
@@ -1968,6 +1971,35 @@ function terminateStaff(staff, remainingDays) {
       });
     }
 
+  // 1. Function to check score and trigger submission
+function checkHighScore() {
+  // Get current game stats from your simulation
+  const playerCash = getCurrentCash(); // You'll need to implement this to get the current cash value
+  
+  // Check if player meets the minimum threshold
+  if (playerCash >= 100000000) {
+    // Show high score submission dialog
+    showHighScoreDialog(playerCash);
+  }
+}
+
+// 2. Function to show high score submission dialog
+function showHighScoreDialog(cash) {
+  // Create modal dialog
+  const modal = document.createElement('div');
+  modal.className = 'high-score-modal';
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.backgroundColor = 'rgba(45, 45, 45, 0.95)';
+  modal.style.padding = '20px';
+  modal.style.borderRadius = '8px';
+  modal.style.zIndex = '1000';
+  modal.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
+  modal.style.width = '400px';
+  modal.style.maxWidth = '90%';
+  modal.style.border = '2px solid #9c27b0';
   
   // Get other game stats
   const reputation = getReputation(); // Implement this function
@@ -1980,7 +2012,7 @@ function terminateStaff(staff, remainingDays) {
   // Set modal content
   modal.innerHTML = `
     <h2 style="color: #ffeb3b; margin-top: 0; text-align: center;">HIGH SCORE ACHIEVED!</h2>
-    <p style="color: white; text-align: center;">Congratulations! You've reached £${(cash/50000000).toFixed(1)}M</p>
+    <p style="color: white; text-align: center;">Congratulations! You've reached £${(cash/1000000).toFixed(1)}M</p>
     <div style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">
       <h3 style="color: #ffeb3b; margin-top: 0;">Your Final Stats:</h3>
       <ul style="color: white; list-style-type: none; padding-left: 0;">
@@ -2026,6 +2058,7 @@ function terminateStaff(staff, remainingDays) {
   document.getElementById('cancel-score-btn').addEventListener('click', function() {
     document.body.removeChild(modal);
   });
+}
 
 // 3. Function to submit high score to leaderboard
 function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts, profitMargin) {
@@ -2040,7 +2073,7 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
     submissionDate: new Date().toISOString()
   };
   
-  // First, check if this score would make the top 50
+  // First, check if this score would make the top 10
   fetchCurrentScores().then(existingScores => {
     // Add the new score
     existingScores.push(scoreData);
@@ -2048,13 +2081,13 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
     // Sort by cash in descending order
     existingScores.sort((a, b) => b.finalCash - a.finalCash);
     
-    // Check if the new score is in the top 50
+    // Check if the new score is in the top 10
     const scoreIndex = existingScores.findIndex(score => 
       score.playerName === playerName && score.finalCash === cash
     );
     
-    if (scoreIndex < 50) {
-      // Score is in the top 50, save it to the leaderboard
+    if (scoreIndex < 10) {
+      // Score is in the top 10, save it to the leaderboard
       saveScore(scoreData).then(() => {
         // Show confirmation and offer to view leaderboard
         if (confirm('Your high score has been recorded! View the leaderboard?')) {
@@ -2065,8 +2098,8 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
         alert('There was an error saving your score. Please try again.');
       });
     } else {
-      // Not a top 50 score
-      alert('Great game, but your score didn\'t make the top 50 on the leaderboard.');
+      // Not a top 10 score
+      alert('Great game, but your score didn\'t make the top 10 on the leaderboard.');
     }
   }).catch(error => {
     console.error('Error checking leaderboard:', error);
@@ -2155,6 +2188,37 @@ function getDailyCosts() {
   return 0;
 }
 
+// 6. Function to check game state periodically
+function setupHighScoreChecker() {
+  // Check for high score every 10 seconds
+  setInterval(checkHighScore, 10000);
+  
+  // Also add a check at game end if your game has a defined "game over" condition
+  // Example: document.getElementById('end-game-button').addEventListener('click', checkHighScore);
+}
+
+// 7. Initialize when the game loads
+window.addEventListener('load', function() {
+  setupHighScoreChecker();
+  
+  // Add a test button for development (remove in production)
+  const testButton = document.createElement('button');
+  testButton.textContent = 'Test High Score';
+  testButton.style.position = 'fixed';
+  testButton.style.bottom = '10px';
+  testButton.style.right = '10px';
+  testButton.style.zIndex = '999';
+  testButton.style.padding = '5px 10px';
+  testButton.style.backgroundColor = '#9c27b0';
+  testButton.style.color = 'white';
+  testButton.style.border = 'none';
+  testButton.style.borderRadius = '4px';
+  testButton.addEventListener('click', function() {
+    // Simulate a high score for testing
+    showHighScoreDialog(120000000);
+  });
+  document.body.appendChild(testButton);
+});
   
 
     const baseMarketData = {
@@ -2551,71 +2615,15 @@ function unlockContent() {
     }
 
     function checkBankruptcy() {
-  if (gameState.cash < 0) {
-    addMessage("💥 Game Over: You've gone bankrupt!");
-    // Disable all interactions
-    document.querySelectorAll('.market-item, .decision-btn, .demand-btn, .renegotiate-btn').forEach(item => item.onclick = null);
-    
-    const finalStats = {
-      cash: gameState.cash,
-      reputation: gameState.reputation,
-      dailyRevenue: calculateDailyRevenue(),
-      dailyCosts: calculateDailyCosts(),
-      profitMargin: calculateProfitMargin()
-    };
-    
-    showHighScoreDialog(finalStats);
-    showRetryButton();
-    return true;
-  }
-  return false;
-}
-
-function calculateDailyRevenue() {
-  let revenue = 0;
-  // Add up revenue from active deals
-  gameState.activeDeals.forEach(deal => revenue += deal.revenue);
-  // Add up revenue from artists
-  gameState.artists.forEach(artist => revenue += artist.contractCost);
-  return revenue;
-}
-
-function calculateDailyCosts() {
-  let costs = 0;
-  // Add up maintenance costs
-  gameState.equipment.forEach(item => costs += item.maintenance);
-  // Add up staff salaries
-  gameState.staff.forEach(staff => costs += staff.salary);
-  return costs;
-}
-
-function calculateProfitMargin() {
-  const revenue = calculateDailyRevenue();
-  const costs = calculateDailyCosts();
-  return revenue > 0 ? ((revenue - costs) / revenue * 100).toFixed(1) : 0;
-}
-// Add this function to check for game completion
-function checkGameEnd() {
-  if (gameState.day >= 50) {
-    addMessage("🎉 Congratulations! You've completed your 50-day challenge!");
-    // Disable all interactions
-    document.querySelectorAll('.market-item, .decision-btn, .demand-btn, .renegotiate-btn').forEach(item => item.onclick = null);
-    
-    // Calculate final stats
-    const finalStats = {
-      cash: gameState.cash,
-      reputation: gameState.reputation,
-      dailyRevenue: calculateDailyRevenue(), // You'll need to implement this
-      dailyCosts: calculateDailyCosts(), // You'll need to implement this
-      profitMargin: calculateProfitMargin() // You'll need to implement this
-    };
-
-    showHighScoreDialog(finalStats);
-    showRetryButton();
-    return true;
-  }
-  return false;
-}
+      if (gameState.cash < 0) {
+        addMessage("💥 Game Over: You've gone bankrupt!");
+        document.querySelectorAll('.market-item').forEach(item => item.onclick = null);
+        document.querySelectorAll('.decision-btn').forEach(btn => btn.onclick = null);
+        showRetryButton();
+        return true;
+      }
+      return false;
+    }
 
     function showRetryButton() {
       const log = document.getElementById('log-container');
@@ -2877,7 +2885,6 @@ function acceptDemand() {
     }
 
     function startNewDay() {
-  
       if (gameState.day >= 50) {
         endGame();
         return;
@@ -2921,9 +2928,7 @@ function acceptDemand() {
           } else if (Math.random() < 0.3) { // 30% chance daily for artist news
             generateNews(0, 0, false, artist); // Random artist news
           }
-          if (checkGameEnd()) {
-    return;
-  }
+          
         }
       });
 
