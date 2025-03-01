@@ -432,6 +432,27 @@
     fetchLeaderboard();
     document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
   });
+// Set initial value from URL if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortParam = urlParams.get('sort');
+    if (sortParam) {
+      sortBySelect.value = sortParam;
+    }
+  }
+}
+
+// Load leaderboard and set up auto-refresh
+document.addEventListener('DOMContentLoaded', function() {
+  // Initial load
+  updateLeaderboard();
+  
+  // Setup sorting controls
+  setupSortingControls();
+  
+  // Auto-refresh every 30 seconds
+  setInterval(updateLeaderboard, 30000);
+});
+        
 </script>
 </body>
 </html>
