@@ -1971,6 +1971,256 @@ function terminateStaff(staff, remainingDays) {
       });
     }
 
+  // 1. Function to check score and trigger submission
+function checkHighScore() {
+  // Get current game stats from your simulation
+  const playerCash = getCurrentCash(); // You'll need to implement this to get the current cash value
+  
+  // Check if player meets the minimum threshold
+  if (playerCash >= 100000000) {
+    // Show high score submission dialog
+    showHighScoreDialog(playerCash);
+  }
+}
+
+// 2. Function to show high score submission dialog
+function showHighScoreDialog(cash) {
+  // Create modal dialog
+  const modal = document.createElement('div');
+  modal.className = 'high-score-modal';
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.backgroundColor = 'rgba(45, 45, 45, 0.95)';
+  modal.style.padding = '20px';
+  modal.style.borderRadius = '8px';
+  modal.style.zIndex = '1000';
+  modal.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
+  modal.style.width = '400px';
+  modal.style.maxWidth = '90%';
+  modal.style.border = '2px solid #9c27b0';
+  
+  // Get other game stats
+  const reputation = getReputation(); // Implement this function
+  const dailyRevenue = getDailyRevenue(); // Implement this function
+  const dailyCosts = getDailyCosts(); // Implement this function
+  
+  // Calculate profit margin
+  const profitMargin = ((dailyRevenue - dailyCosts) / dailyRevenue * 100).toFixed(1);
+  
+  // Set modal content
+  modal.innerHTML = `
+    <h2 style="color: #ffeb3b; margin-top: 0; text-align: center;">HIGH SCORE ACHIEVED!</h2>
+    <p style="color: white; text-align: center;">Congratulations! You've reached £${(cash/1000000).toFixed(1)}M</p>
+    <div style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">
+      <h3 style="color: #ffeb3b; margin-top: 0;">Your Final Stats:</h3>
+      <ul style="color: white; list-style-type: none; padding-left: 0;">
+        <li><span style="display: inline-block; width: 140px;">Cash:</span> £${cash.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Reputation:</span> ${reputation}</li>
+        <li><span style="display: inline-block; width: 140px;">Daily Revenue:</span> £${dailyRevenue.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Daily Costs:</span> £${dailyCosts.toLocaleString()}</li>
+        <li><span style="display: inline-block; width: 140px;">Profit Margin:</span> ${profitMargin}%</li>
+      </ul>
+    </div>
+    <div style="margin-top: 20px;">
+      <label style="color: white; display: block; margin-bottom: 8px; font-weight: bold;">Enter Your Name:</label>
+      <input type="text" id="player-name-input" style="padding: 10px; width: 100%; background-color: #333; color: white; border: 1px solid #666; border-radius: 4px;" maxlength="20" placeholder="Your Mogul Name">
+    </div>
+    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+      <button id="submit-score-btn" style="padding: 10px 20px; background-color: #9c27b0; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Submit Score</button>
+      <button id="cancel-score-btn" style="padding: 10px 20px; background-color: #555; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+    </div>
+  `;
+  
+  // Add modal to the DOM
+  document.body.appendChild(modal);
+  
+  // Focus on the input field
+  document.getElementById('player-name-input').focus();
+  
+  // Handle submit button click
+  document.getElementById('submit-score-btn').addEventListener('click', function() {
+    const playerName = document.getElementById('player-name-input').value.trim();
+    if (!playerName) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    // Submit the score
+    submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts, profitMargin);
+    
+    // Remove the modal
+    document.body.removeChild(modal);
+  });
+  
+  // Handle cancel button click
+  document.getElementById('cancel-score-btn').addEventListener('click', function() {
+    document.body.removeChild(modal);
+  });
+}
+
+// 3. Function to submit high score to leaderboard
+function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts, profitMargin) {
+  // Create the score data object
+  const scoreData = {
+    playerName: playerName,
+    finalCash: cash,
+    reputation: reputation,
+    dailyRevenue: dailyRevenue,
+    dailyCosts: dailyCosts,
+    profitMargin: parseFloat(profitMargin),
+    submissionDate: new Date().toISOString()
+  };
+  
+  // First, check if this score would make the top 10
+  fetchCurrentScores().then(existingScores => {
+    // Add the new score
+    existingScores.push(scoreData);
+    
+    // Sort by cash in descending order
+    existingScores.sort((a, b) => b.finalCash - a.finalCash);
+    
+    // Check if the new score is in the top 10
+    const scoreIndex = existingScores.findIndex(score => 
+      score.playerName === playerName && score.finalCash === cash
+    );
+    
+    if (scoreIndex < 10) {
+      // Score is in the top 10, save it to the leaderboard
+      saveScore(scoreData).then(() => {
+        // Show confirmation and offer to view leaderboard
+        if (confirm('Your high score has been recorded! View the leaderboard?')) {
+          window.location.href = 'leaderboard.html';
+        }
+      }).catch(error => {
+        console.error('Error saving score:', error);
+        alert('There was an error saving your score. Please try again.');
+      });
+    } else {
+      // Not a top 10 score
+      alert('Great game, but your score didn\'t make the top 10 on the leaderboard.');
+    }
+  }).catch(error => {
+    console.error('Error checking leaderboard:', error);
+    alert('There was an error checking the leaderboard. Please try again.');
+  });
+}
+
+// 4. Function to fetch current scores from the leaderboard
+async function fetchCurrentScores() {
+  try {
+    // This assumes you have an API endpoint to get scores
+    const response = await fetch('/api/getScores');
+    if (!response.ok) {
+      throw new Error('Failed to fetch scores');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching scores:', error);
+    // Return empty array if there's an error
+    return [];
+  }
+}
+
+// 5. Function to save score to the leaderboard
+async function saveScore(scoreData) {
+  try {
+    const response = await fetch('/api/submitScore', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(scoreData)
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to save score');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error saving score:', error);
+    throw error;
+  }
+}
+
+// Helper functions to get game data - implement these based on your game's structure
+function getCurrentCash() {
+  // Example implementation - replace with your actual game data access
+  // This might be available in a global game state object or DOM element
+  const cashElement = document.querySelector('.cash-display') || document.getElementById('cash');
+  if (cashElement) {
+    // Extract the numeric value from the text (removing currency symbols, commas, etc.)
+    const cashText = cashElement.textContent || cashElement.innerText;
+    return parseInt(cashText.replace(/[^0-9]/g, ''));
+  }
+  return 0; // Default if not found
+}
+
+function getReputation() {
+  // Example implementation - replace with your actual game data access
+  const reputationElement = document.querySelector('.reputation-display') || document.getElementById('reputation');
+  if (reputationElement) {
+    const repText = reputationElement.textContent || reputationElement.innerText;
+    return parseInt(repText.replace(/[^0-9]/g, ''));
+  }
+  return 0;
+}
+
+function getDailyRevenue() {
+  // Example implementation - replace with your actual game data access
+  const revenueElement = document.querySelector('.revenue-display') || document.getElementById('revenue');
+  if (revenueElement) {
+    const revenueText = revenueElement.textContent || revenueElement.innerText;
+    return parseInt(revenueText.replace(/[^0-9]/g, ''));
+  }
+  return 0;
+}
+
+function getDailyCosts() {
+  // Example implementation - replace with your actual game data access
+  const costsElement = document.querySelector('.costs-display') || document.getElementById('costs');
+  if (costsElement) {
+    const costsText = costsElement.textContent || costsElement.innerText;
+    return parseInt(costsText.replace(/[^0-9]/g, ''));
+  }
+  return 0;
+}
+
+// 6. Function to check game state periodically
+function setupHighScoreChecker() {
+  // Check for high score every 10 seconds
+  setInterval(checkHighScore, 10000);
+  
+  // Also add a check at game end if your game has a defined "game over" condition
+  // Example: document.getElementById('end-game-button').addEventListener('click', checkHighScore);
+}
+
+// 7. Initialize when the game loads
+window.addEventListener('load', function() {
+  setupHighScoreChecker();
+  
+  // Add a test button for development (remove in production)
+  const testButton = document.createElement('button');
+  testButton.textContent = 'Test High Score';
+  testButton.style.position = 'fixed';
+  testButton.style.bottom = '10px';
+  testButton.style.right = '10px';
+  testButton.style.zIndex = '999';
+  testButton.style.padding = '5px 10px';
+  testButton.style.backgroundColor = '#9c27b0';
+  testButton.style.color = 'white';
+  testButton.style.border = 'none';
+  testButton.style.borderRadius = '4px';
+  testButton.addEventListener('click', function() {
+    // Simulate a high score for testing
+    showHighScoreDialog(120000000);
+  });
+  document.body.appendChild(testButton);
+});
+  
+
     const baseMarketData = {
       shows: [
         { name: "Local Club Show", baseCost: 5000, popularity: 5, duration: 1 },
