@@ -2200,25 +2200,7 @@ function setupHighScoreChecker() {
 // 7. Initialize when the game loads
 window.addEventListener('load', function() {
   setupHighScoreChecker();
-  
-  // Add a test button for development (remove in production)
-  const testButton = document.createElement('button');
-  testButton.textContent = 'Test High Score';
-  testButton.style.position = 'fixed';
-  testButton.style.bottom = '10px';
-  testButton.style.right = '10px';
-  testButton.style.zIndex = '999';
-  testButton.style.padding = '5px 10px';
-  testButton.style.backgroundColor = '#9c27b0';
-  testButton.style.color = 'white';
-  testButton.style.border = 'none';
-  testButton.style.borderRadius = '4px';
-  testButton.addEventListener('click', function() {
-    // Simulate a high score for testing
-    showHighScoreDialog(120000000);
-  });
-  document.body.appendChild(testButton);
-});
+
   
 
     const baseMarketData = {
