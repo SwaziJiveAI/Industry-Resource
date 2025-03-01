@@ -1977,7 +1977,7 @@ function checkHighScore() {
   const playerCash = getCurrentCash(); // You'll need to implement this to get the current cash value
   
   // Check if player meets the minimum threshold
-  if (playerCash >= 100000000) {
+  if (playerCash >=50000000) {
     // Show high score submission dialog
     showHighScoreDialog(playerCash);
   }
@@ -2012,7 +2012,7 @@ function showHighScoreDialog(cash) {
   // Set modal content
   modal.innerHTML = `
     <h2 style="color: #ffeb3b; margin-top: 0; text-align: center;">HIGH SCORE ACHIEVED!</h2>
-    <p style="color: white; text-align: center;">Congratulations! You've reached £${(cash/1000000).toFixed(1)}M</p>
+    <p style="color: white; text-align: center;">Congratulations! You've reached £${(cash/50000000).toFixed(1)}M</p>
     <div style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">
       <h3 style="color: #ffeb3b; margin-top: 0;">Your Final Stats:</h3>
       <ul style="color: white; list-style-type: none; padding-left: 0;">
@@ -2073,7 +2073,7 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
     submissionDate: new Date().toISOString()
   };
   
-  // First, check if this score would make the top 10
+  // First, check if this score would make the top 50
   fetchCurrentScores().then(existingScores => {
     // Add the new score
     existingScores.push(scoreData);
@@ -2081,13 +2081,13 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
     // Sort by cash in descending order
     existingScores.sort((a, b) => b.finalCash - a.finalCash);
     
-    // Check if the new score is in the top 10
+    // Check if the new score is in the top 50
     const scoreIndex = existingScores.findIndex(score => 
       score.playerName === playerName && score.finalCash === cash
     );
     
-    if (scoreIndex < 10) {
-      // Score is in the top 10, save it to the leaderboard
+    if (scoreIndex < 50) {
+      // Score is in the top 50, save it to the leaderboard
       saveScore(scoreData).then(() => {
         // Show confirmation and offer to view leaderboard
         if (confirm('Your high score has been recorded! View the leaderboard?')) {
@@ -2098,8 +2098,8 @@ function submitHighScore(playerName, cash, reputation, dailyRevenue, dailyCosts,
         alert('There was an error saving your score. Please try again.');
       });
     } else {
-      // Not a top 10 score
-      alert('Great game, but your score didn\'t make the top 10 on the leaderboard.');
+      // Not a top 50 score
+      alert('Great game, but your score didn\'t make the top 50 on the leaderboard.');
     }
   }).catch(error => {
     console.error('Error checking leaderboard:', error);
