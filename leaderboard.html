@@ -244,7 +244,6 @@
         <h1>LABEL MOGUL</h1>
         <div class="header-buttons">
             <button onclick="window.location.href='https://swazijiveai.github.io/Industry-Resource/labelmogul.html'">Return to Game</button>
-            <button onclick="window.location.href='#submit-score'">Submit Score</button>
         </div>
     </header>
 
@@ -289,18 +288,18 @@
                         <td class="player-cell">DJTycoon</td>
                         <td>£458,972</td>
                         <td>42</td>
-                        <td class="metric-good">£98,450</td>
-                        <td class="metric-bad">£32,150</td>
+                        <td class="metric-good">E98,450</td>
+                        <td class="metric-bad">E32,150</td>
                         <td>67.3%</td>
                         <td>Feb 25, 2025</td>
                     </tr>
                     <tr>
                         <td class="rank-cell rank-2">2</td>
                         <td class="player-cell">BeatMaster</td>
-                        <td>£412,688</td>
+                        <td>E412,688</td>
                         <td>38</td>
-                        <td class="metric-good">£87,250</td>
-                        <td class="metric-bad">£29,800</td>
+                        <td class="metric-good">E87,250</td>
+                        <td class="metric-bad">E29,800</td>
                         <td>65.8%</td>
                         <td>Feb 27, 2025</td>
                     </tr>
@@ -309,18 +308,18 @@
                         <td class="player-cell">RecordBaron</td>
                         <td>£389,512</td>
                         <td>35</td>
-                        <td class="metric-good">£82,100</td>
-                        <td class="metric-bad">£28,900</td>
+                        <td class="metric-good">E82,100</td>
+                        <td class="metric-bad">E28,900</td>
                         <td>64.8%</td>
                         <td>Feb 21, 2025</td>
                     </tr>
                     <tr>
                         <td class="rank-cell">4</td>
                         <td class="player-cell">MusicMogul</td>
-                        <td>£356,421</td>
+                        <td>E356,421</td>
                         <td>34</td>
-                        <td class="metric-good">£76,500</td>
-                        <td class="metric-bad">£25,750</td>
+                        <td class="metric-good">E76,500</td>
+                        <td class="metric-bad">E25,750</td>
                         <td>66.3%</td>
                         <td>Feb 20, 2025</td>
                     </tr>
@@ -388,61 +387,30 @@
             </table>
         </div>
 
-        <div id="submit-score" class="submit-score">
-            <div class="leaderboard-title">
-                <h2>📊 Submit Your Score</h2>
-            </div>
-            <form id="score-form">
-                <div class="form-group">
-                    <label for="player-name">Player Name</label>
-                    <input type="text" id="player-name" required placeholder="Your mogul name">
-                </div>
-                <div class="form-group">
-                    <label for="final-cash">Final Cash</label>
-                    <input type="number" id="final-cash" required placeholder="Your final cash amount">
-                </div>
-                <div class="form-group">
-                    <label for="reputation">Reputation</label>
-                    <input type="number" id="reputation" required placeholder="Your final reputation score">
-                </div>
-                <div class="form-group">
-                    <label for="daily-revenue">Daily Revenue</label>
-                    <input type="number" id="daily-revenue" required placeholder="Your final daily revenue">
-                </div>
-                <div class="form-group">
-                    <label for="daily-costs">Daily Costs</label>
-                    <input type="number" id="daily-costs" required placeholder="Your final daily costs">
-                </div>
-                <button type="submit" class="submit-button">Submit Score</button>
-            </form>
-        </div>
-    </div>
 
     <script>
-         // Fetch leaderboard data when page loads
+          // Fetch leaderboard data when page loads
   async function fetchLeaderboard(sortBy = 'cash') {
     try {
-      const response = await fetch(`/api/getScores?sortBy=${sortBy}`);
+      // Update this to fetch from your game's data source
+      const response = await fetch(`/api/getGameScores?sortBy=${sortBy}`);
       const data = await response.json();
       
-      // Clear existing rows
+      // Update table with fetched data
       const tableBody = document.querySelector('#leaderboard-table tbody');
       tableBody.innerHTML = '';
       
-      // Add new rows
       data.forEach((score, index) => {
         const row = document.createElement('tr');
-        
-        // Add rank class for top 3
         const rankClass = index < 3 ? ` rank-${index + 1}` : '';
         
         row.innerHTML = `
           <td class="rank-cell${rankClass}">${index + 1}</td>
           <td class="player-cell">${score.playerName}</td>
-          <td>£${Number(score.finalCash).toLocaleString()}</td>
+          <td>E${Number(score.finalCash).toLocaleString()}</td>
           <td>${score.reputation}</td>
-          <td class="metric-good">£${Number(score.dailyRevenue).toLocaleString()}</td>
-          <td class="metric-bad">£${Number(score.dailyCosts).toLocaleString()}</td>
+          <td class="metric-good">E${Number(score.dailyRevenue).toLocaleString()}</td>
+          <td class="metric-bad">E${Number(score.dailyCosts).toLocaleString()}</td>
           <td>${score.profitMargin.toFixed(1)}%</td>
           <td>${new Date(score.submissionDate).toLocaleDateString()}</td>
         `;
@@ -459,47 +427,9 @@
     fetchLeaderboard(this.value);
   });
 
-  // Handle form submission
-  document.getElementById('score-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const formData = {
-      playerName: document.getElementById('player-name').value,
-      finalCash: Number(document.getElementById('final-cash').value),
-      reputation: Number(document.getElementById('reputation').value),
-      dailyRevenue: Number(document.getElementById('daily-revenue').value),
-      dailyCosts: Number(document.getElementById('daily-costs').value),
-    };
-    
-    try {
-      const response = await fetch('/api/submitScore', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        alert('Score submitted successfully!');
-        this.reset();
-        // Refresh leaderboard
-        fetchLeaderboard();
-      } else {
-        alert('Error submitting score: ' + (result.error || 'Unknown error'));
-      }
-    } catch (error) {
-      console.error('Error submitting score:', error);
-      alert('Error submitting score. Please try again.');
-    }
-  });
-
   // Load leaderboard on page load
   document.addEventListener('DOMContentLoaded', () => {
     fetchLeaderboard();
-    // Update last updated date
     document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
   });
 </script>
