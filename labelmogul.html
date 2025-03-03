@@ -17,8 +17,60 @@
       margin: 5px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
     }
 
-
+ /* Style for the Check Demands button */
+ .check-demands {
+      background: linear-gradient(45deg, #9C27B0, #673AB7);
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
     
+ /* Demands dialog container (similar to the renegotiation dialog) */
+ #demands-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    /* Box styling for the demands dialog */
+    .negotiation-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+    /* Style for the demand items in the list */
+    .demand-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      text-align: left;
+    }
+    /* Close button styling */
+    .negotiation-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
     .demand-btn {
   margin-top: 5px;
   padding: 3px 8px;
@@ -667,6 +719,26 @@ button:hover, .button:hover, [class*="btn"]:hover {
       <button class="negotiation-btn" onclick="bluff()">Bluff</button>
       <button class="negotiation-btn" onclick="closeNegotiation()">Close</button>
     </div>
+  </div>
+</div>
+
+<!-- Demands Dialog -->
+<div id="demands-container">
+  <div class="negotiation-box">
+    <h3>Artist Demands</h3>
+    <div id="demand-list" style="max-height: 300px; overflow-y: auto; margin: 10px 0;">
+      <!-- Sample demand items; these can be dynamically generated -->
+      <div class="demand-item" data-cash="-20000" data-happiness="-10" data-reputation="-5">
+        <p><strong>High Fee Demand</strong></p>
+        <p>Cash: -20k | Happiness: -10 | Reputation: -5</p>
+      </div>
+      <div class="demand-item" data-cash="30000" data-happiness="5" data-reputation="10">
+        <p><strong>Bonus Performance Demand</strong></p>
+        <p>Cash: +30k | Happiness: +5 | Reputation: +10</p>
+      </div>
+      <!-- More demand items can be added here -->
+    </div>
+    <button class="negotiation-btn" onclick="closeDemands()">Close</button>
   </div>
 </div>
 
@@ -1995,7 +2067,7 @@ function hireCandidateFromMarket(candidate) {
       😊 Happiness: ${artist.happiness}%<br>
       📅 Contract: ${artist.contractDays} days
       <div class="artist-buttons">
-        <button onclick="generateArtistDemand('${artist.name}')" class="demand-btn">📢 Check Demands</button>
+         <button class="check-demands" onclick="openDemands()">📢Check Demands</button>
         <br>
 
         <button onclick='startNegotiation(${JSON.stringify(artist)}, false)' class="renegotiate-btn">📝 Renegotiate</button>
@@ -3408,7 +3480,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!element.id) element.id = 'timer';
         });
     });
-
+// Function to open the demands dialog
+function openDemands() {
+      // Optionally, you can dynamically populate the demand list here based on your game state
+      document.getElementById('demands-container').style.display = 'flex';
+    }
+    
+    // Function to close the demands dialog
+    function closeDemands() {
+      document.getElementById('demands-container').style.display = 'none';
+    }
 
   </script>
 </body>
