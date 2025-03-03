@@ -567,6 +567,16 @@ button:hover, .button:hover, [class*="btn"]:hover {
 </style>
 </head>
 <body>
+  <div class="save-load-controls" style="text-align: right; padding: 10px; background-color: var(--container-bg); margin-bottom: 10px;">
+    <button onclick="newGame()" class="game-button">New Game</button>
+    <button onclick="saveGame()" class="game-button">Save Game</button>
+    <button onclick="loadGame()" class="game-button">Load Game</button>
+  </div>
+  <div id="load-game-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--container-bg); padding: 20px; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 1000;">
+    <h3>Load Saved Game</h3>
+    <div id="saved-games-list" style="max-height: 300px; overflow-y: auto; margin: 10px 0;"></div>
+    <button onclick="closeLoadGameDialog()" class="game-button">Close</button>
+  </div>
   <div class="status-bar">
     <div>💰 Cash: <span id="cash">E150,000</span></div>
     <div>📅 Day: <span id="day">1</span>/50</div>
@@ -1677,6 +1687,72 @@ const artistDemands = [
       gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
       updateReputationDisplay();
     }
+// Now let's add the UI buttons - this part should be inserted after the existing button html
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the element where we want to add our new buttons (the control panel)
+  const controlPanel = document.querySelector('.game-controls') || document.body;
+  
+  // Create a container for our game management buttons
+  const saveLoadContainer = document.createElement('div');
+  saveLoadContainer.className = 'save-load-controls';
+  saveLoadContainer.style.marginTop = '20px';
+  
+  // Create buttons
+  const newGameBtn = document.createElement('button');
+  newGameBtn.textContent = 'New Game';
+  newGameBtn.className = 'game-button';
+  newGameBtn.addEventListener('click', newGame);
+  
+  const saveGameBtn = document.createElement('button');
+  saveGameBtn.textContent = 'Save Game';
+  saveGameBtn.className = 'game-button';
+  saveGameBtn.addEventListener('click', saveGame);
+  
+  const loadGameBtn = document.createElement('button');
+  loadGameBtn.textContent = 'Load Game';
+  loadGameBtn.className = 'game-button';
+  loadGameBtn.addEventListener('click', loadGame);
+  
+  // Add buttons to container
+  saveLoadContainer.appendChild(newGameBtn);
+  saveLoadContainer.appendChild(saveGameBtn);
+  saveLoadContainer.appendChild(loadGameBtn);
+  
+  // Add container to control panel
+  controlPanel.appendChild(saveLoadContainer);
+});
+
+// If the DOM has already loaded, we need to run the code directly
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  const controlPanel = document.querySelector('.game-controls') || document.body;
+  
+  const saveLoadContainer = document.createElement('div');
+  saveLoadContainer.className = 'save-load-controls';
+  saveLoadContainer.style.marginTop = '20px';
+  
+  const newGameBtn = document.createElement('button');
+  newGameBtn.textContent = 'New Game';
+  newGameBtn.className = 'game-button';
+  newGameBtn.addEventListener('click', newGame);
+  
+  const saveGameBtn = document.createElement('button');
+  saveGameBtn.textContent = 'Save Game';
+  saveGameBtn.className = 'game-button';
+  saveGameBtn.addEventListener('click', saveGame);
+  
+  const loadGameBtn = document.createElement('button');
+  loadGameBtn.textContent = 'Load Game';
+  loadGameBtn.className = 'game-button';
+  loadGameBtn.addEventListener('click', loadGame);
+  
+  saveLoadContainer.appendChild(newGameBtn);
+  saveLoadContainer.appendChild(saveGameBtn);
+  saveLoadContainer.appendChild(loadGameBtn);
+  
+  controlPanel.appendChild(saveLoadContainer);
+}
+
    // Function that triggers when a staff card is clicked; shows context-sensitive advice
    function showStaffHint(role, morale) {
       let roleLower = role.toLowerCase();
@@ -1742,6 +1818,91 @@ const artistDemands = [
       }
       return level;
     }
+
+    function saveGame() {
+  // Create a game state object with all the important variables
+  const gameState = {
+    money: money,
+    fanbase: fanbase,
+    artists: artists,
+    producedAlbums: producedAlbums,
+    daysPassed: daysPassed,
+    hype: hype,
+    saleCount: saleCount,
+    marketingLevel: marketingLevel,
+    marketingCost: marketingCost,
+    productionLevel: productionLevel,
+    productionCost: productionCost,
+    gameSpeed: gameSpeed,
+    isPaused: isPaused
+  };
+  
+  // Save to local storage
+  localStorage.setItem('labelMogulSaveData', JSON.stringify(gameState));
+  
+  // Provide feedback to user
+  alert('Game saved successfully!');
+}
+
+function loadGame() {
+  // Retrieve save data from local storage
+  const savedData = localStorage.getItem('labelMogulSaveData');
+  
+  if (savedData) {
+    // Parse the JSON data
+    const gameState = JSON.parse(savedData);
+    
+    // Restore game variables
+    money = gameState.money;
+    fanbase = gameState.fanbase;
+    artists = gameState.artists;
+    producedAlbums = gameState.producedAlbums;
+    daysPassed = gameState.daysPassed;
+    hype = gameState.hype;
+    saleCount = gameState.saleCount;
+    marketingLevel = gameState.marketingLevel;
+    marketingCost = gameState.marketingCost;
+    productionLevel = gameState.productionLevel;
+    productionCost = gameState.productionCost;
+    gameSpeed = gameState.gameSpeed;
+    isPaused = gameState.isPaused;
+    
+    // Update display
+    updateStats();
+    updateArtistsList();
+    updateProducedAlbumsList();
+    
+    // Provide feedback to user
+    alert('Game loaded successfully!');
+  } else {
+    alert('No saved game found!');
+  }
+}
+
+function newGame() {
+  // Confirm before resetting
+  if (confirm('Are you sure you want to start a new game? Any unsaved progress will be lost.')) {
+    // Reset all game variables to initial values
+    money = 10000;
+    fanbase = 0;
+    artists = [];
+    producedAlbums = [];
+    daysPassed = 0;
+    hype = 0;
+    saleCount = 0;
+    marketingLevel = 1;
+    marketingCost = 1000;
+    productionLevel = 1;
+    productionCost = 5000;
+    gameSpeed = 1000;
+    isPaused = false;
+    
+    // Update display
+    updateStats();
+    updateArtistsList();
+    updateProducedAlbumsList();
+  }
+}
 
     // Add these functions to handle job market
 function generateJobCandidates() {
@@ -2178,6 +2339,148 @@ function getDailyRevenue() {
   return 0;
 }
 
+function loadGame() {
+  const savedGames = getAllSavedGames();
+  const savedGamesList = document.getElementById('saved-games-list');
+  savedGamesList.innerHTML = '';
+
+  if (savedGames.length === 0) {
+    savedGamesList.innerHTML = '<p>No saved games found.</p>';
+  } else {
+    savedGames.forEach(save => {
+      const saveDiv = document.createElement('div');
+      saveDiv.className = 'saved-game-item';
+      saveDiv.style.padding = '10px';
+      saveDiv.style.margin = '5px 0';
+      saveDiv.style.background = 'rgba(0,0,0,0.2)';
+      saveDiv.style.borderRadius = '4px';
+      saveDiv.innerHTML = `
+        <div>Saved on: ${new Date(save.date).toLocaleString()}</div>
+        <div>Cash: E${save.gameState.cash.toLocaleString()}</div>
+        <div>Day: ${save.gameState.day}/50</div>
+        <button onclick="loadSavedGame('${save.date}')" class="game-button">Load</button>
+        <button onclick="deleteSavedGame('${save.date}')" class="game-button" style="background: #f44336;">Delete</button>
+      `;
+      savedGamesList.appendChild(saveDiv);
+    });
+  }
+
+  document.getElementById('load-game-dialog').style.display = 'block';
+}
+
+function getAllSavedGames() {
+  const saves = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('labelMogulSave_')) {
+      const save = JSON.parse(localStorage.getItem(key));
+      saves.push(save);
+    }
+  }
+  return saves.sort((a, b) => b.date - a.date);
+}
+
+function saveGame() {
+  const saveData = {
+    date: Date.now(),
+    gameState: gameState
+  };
+  localStorage.setItem(`labelMogulSave_${saveData.date}`, JSON.stringify(saveData));
+  alert('Game saved successfully!');
+}
+
+function loadSavedGame(date) {
+  const saveData = JSON.parse(localStorage.getItem(`labelMogulSave_${date}`));
+  if (saveData) {
+    gameState = saveData.gameState;
+    
+    // Reinitialize game mechanics
+    gameState.availableScenarios = [...allScenarios];
+    
+    // Reconstruct the current scenario's effect functions if it exists
+    if (gameState.currentScenario) {
+      const originalScenario = allScenarios.find(s => s.question === gameState.currentScenario.question);
+      if (originalScenario) {
+        gameState.currentScenario.options = originalScenario.options;
+      } else {
+        generateNewScenario();
+      }
+    } else {
+      generateNewScenario();
+    }
+    
+    // Update all displays
+    updateGameDisplay();
+    updateMarketplaces();
+    generateJobCandidates();
+    
+    closeLoadGameDialog();
+    addMessage('🎮 Game loaded successfully!');
+  }
+}
+
+function generateNewScenario() {
+  if (gameState.availableScenarios.length === 0) {
+    gameState.availableScenarios = [...allScenarios]; // Refill if empty
+  }
+  const index = Math.floor(Math.random() * gameState.availableScenarios.length);
+  gameState.currentScenario = gameState.availableScenarios.splice(index, 1)[0];
+  displayCurrentScenario();
+}
+
+let negotiationTimer = null;  // Add this at the top with other global variables
+
+function closeNegotiation() {
+  const container = document.getElementById('negotiation-container');
+  container.style.display = 'none';
+  currentNegotiationArtist = null;
+  currentOffer = 0;
+  if (negotiationTimer) {
+    clearTimeout(negotiationTimer);
+    negotiationTimer = null;
+  }
+}
+
+function startNegotiation(artist, isNewArtist) {
+  // Clear any existing timer
+  if (negotiationTimer) {
+    clearTimeout(negotiationTimer);
+  }
+  
+  currentNegotiationArtist = { ...artist, isNewArtist };
+  const mood = artistMoods[Math.floor(Math.random() * artistMoods.length)];
+  currentNegotiationArtist.mood = mood;
+  currentOffer = isNewArtist ? Math.floor(artist.cost * mood.demandModifier) : Math.floor(artist.popularity * 1000 * mood.demandModifier);
+  
+  const container = document.getElementById('negotiation-container');
+  document.getElementById('negotiation-artist-name').textContent = artist.name;
+  document.getElementById('artist-mood').textContent = mood.name;
+  document.getElementById('artist-demand').textContent = currentOffer.toLocaleString();
+  document.getElementById('your-offer').textContent = currentOffer.toLocaleString();
+  
+  container.style.display = 'flex';
+  addMessage(`🎭 ${artist.name} enters negotiations with a ${mood.name.toLowerCase()} mood.`);
+  
+  // Set a timer to auto-close negotiation after 30 seconds
+  negotiationTimer = setTimeout(() => {
+    if (currentNegotiationArtist) {
+      addMessage(`⏰ ${artist.name} left the negotiations due to time out.`);
+      closeNegotiation();
+    }
+  }, 30000);
+}
+
+function deleteSavedGame(date) {
+  if (confirm('Are you sure you want to delete this saved game?')) {
+    localStorage.removeItem(`labelMogulSave_${date}`);
+    loadGame(); // Refresh the saved games list
+  }
+}
+
+function closeLoadGameDialog() {
+  document.getElementById('load-game-dialog').style.display = 'none';
+}
+
 function getDailyCosts() {
   // Example implementation - replace with your actual game data access
   const costsElement = document.querySelector('.costs-display') || document.getElementById('costs');
@@ -2219,6 +2522,7 @@ window.addEventListener('load', function() {
 //  });
  // document.body.appendChild(testButton);
 });
+  
   
 
     const baseMarketData = {
